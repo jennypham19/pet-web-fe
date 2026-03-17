@@ -5,8 +5,12 @@ export const ROUTE_PATH = {
 
   //Manage
   MANAGE: 'manage',
-  MANAGE_HOME: 'home',
-  MANAGE_INFORMATION: 'information',
+  MANAGE_HOME: 'home', // trang chủ
+  MANAGE_INFORMATION: 'information', // hồ sơ người dùng
+  MANAGE_PET: 'pet', // danh sách thú cưng
+  MANAGE_TASK: 'task', // quản lý công việc
+  MANAGE_IMAGE: 'image', // cập nhật hình ảnh
+  MANAGE_ACCOUNT: 'account', // quản lý tài khoản
 
   PRODUCT_CATEGORY: '/products/categories',
   PRODUCT_CATEGORY_CREATE: '/products/categories/create',

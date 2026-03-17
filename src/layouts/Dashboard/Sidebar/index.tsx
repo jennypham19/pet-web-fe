@@ -25,15 +25,18 @@ import Tooltip from '@mui/material/Tooltip';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Logo from './Logo';
 import type { SectionItem } from './Sections';
-import Sections from './Sections';
 import SubMenu from './SubMenu';
 import Scrollbar from '@/components/Scrollbar';
 
 import { MINI_SIDEBAR_WIDTH, SIDEBAR_WIDTH } from '@/constants/layouts';
 import useDerivedState from '@/hooks/useDerivedState';
 import usePrevious from '@/hooks/usePrevious';
-import { useAppSelector } from '@/store';
 import type { MouseEvent } from '@/types/react';
+import { IUser } from '@/types/user';
+import Sidebars from './Sections';
+import { useSidebarTilte } from '@/contexts/SidebarTitleContext';
+import ProfileSection from './ProfileSection';
+import { COLORS } from '@/constants/colors';
 
 export const CollapseContext = createContext<boolean | null>(null);
 export const SidebarContext = createContext<boolean | null>(null);
@@ -43,12 +46,13 @@ interface Props {
   collapsed: boolean;
   onCloseSidebar: () => void;
   onToggleCollapsed: () => void;
+  profile: IUser
 }
 const Sidebar = (props: Props) => {
-  const { openSidebar, collapsed, onCloseSidebar, onToggleCollapsed } = props;
+  const { openSidebar, collapsed, onCloseSidebar, onToggleCollapsed, profile } = props;
   const { pathname } = useLocation();
-  const { t } = useTranslation('section');
-  const sections = useMemo(() => Sections(t), [t]);
+  const sections = useMemo(() => Sidebars(profile.role), [profile.role]);
+
   const theme = useTheme();
   const prevPathName = usePrevious(pathname);
 
@@ -71,15 +75,8 @@ const Sidebar = (props: Props) => {
         <SidebarContext.Provider value={openSidebar}>
           <CollapseContext.Provider value={collapsed}>
             <Scrollbar>
-              <Box
-                sx={{
-                  borderBottom: 'thin solid #E6E8F0',
-                  height: '64px',
-                }}
-              >
-                <Logo />
-              </Box>
-              {sections.map((section, i) => (
+              {!collapsed && <ProfileSection/>}
+              {sections && sections.map((section, i) => (
                 <MenuSection key={i} pathname={pathname} {...section} />
               ))}
             </Scrollbar>
@@ -122,7 +119,7 @@ const Sidebar = (props: Props) => {
               </IconButton>
             </Box>
             <Divider sx={{ mb: 1.5 }} />
-            {sections.map((section, i) => (
+            {sections && sections.map((section, i) => (
               <MenuSection key={i} pathname={pathname} {...section} />
             ))}
           </Scrollbar>
@@ -175,8 +172,13 @@ const MenuItems = (props: MenuItemsProps) => {
       {items.reduce<ReactNode[]>((acc, item, i) => {
         const { title, path, children, info, icon } = item;
         const key = `${title}-${level}-${i}`;
+        console.log("pathname: ", pathname);
+        console.log("path: ", path);
+        
         // const partialMatch = pathname.startsWith(path);
         const exactMatch = pathname === path || pathname.startsWith(`${path}/`);
+        console.log("exactMatch: ", exactMatch);
+
 
         if (children) {
           acc.push(
@@ -243,12 +245,19 @@ const MenuItem: FC<MenuItemProps> = (props) => {
 
   const { pathname } = useLocation();
   const prevPathName = usePrevious(pathname);
+  const { setTitle } = useSidebarTilte();
 
   useEffect(() => {
     if (prevPathName !== pathname && collapsed) {
       setAnchor(null);
     }
   }, [pathname, collapsed, prevPathName]);
+
+  useEffect(() => {
+    if(active && title) {
+      setTitle(title)
+    }
+  }, [active, title, setTitle])
 
   const handleToggle = (): void => {
     setExpanded(!expanded);
@@ -339,7 +348,7 @@ const MenuItem: FC<MenuItemProps> = (props) => {
           size='medium'
           fullWidth
           sx={{
-            color: 'neutral.800',
+            color: COLORS.PRIMARY,
             p: 1.25,
             pl: `${paddingLeft}px`,
             textAlign: 'left',
@@ -390,15 +399,18 @@ const MenuItem: FC<MenuItemProps> = (props) => {
         size='medium'
         fullWidth
         sx={{
-          color: 'neutral.800',
+          color: '#fff',
           p: 1.25,
           pl: `${paddingLeft}px`,
           '&:hover': {
-            bgcolor: alpha('#000', 0.08),
+            color: '#FFF',
+            bgcolor: COLORS.PRIMARY,
+            borderRadius: 8
           },
           ...(active && {
-            color: 'info.main',
-            bgcolor: '#e6f4ff',
+            color: '#fff',
+            bgcolor: COLORS.PRIMARY,
+            borderRadius: 8
           }),
           flexShrink: 0,
         }}
@@ -426,7 +438,7 @@ const CollapsibleDrawer = styled(Drawer, {
   shouldForwardProp: (prop: string) => !['collapsed'].includes(prop),
 })<{ collapsed: boolean }>(({ theme, collapsed }) => ({
   [`& .${drawerClasses.paper}`]: {
-    backgroundColor: theme.palette.common.white,
+    backgroundColor: theme.palette.common.black,
     borderRight: '1px solid #f0f0f0',
     color: theme.palette.common.black,
     flexShrink: 0,

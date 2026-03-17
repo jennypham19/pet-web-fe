@@ -6,14 +6,13 @@ import { ROUTE_PATH } from "@/constants/routes";
 const AuthGuard = () => {
     const { isAuthenticated, isInitialized} = useAppSelector((state) => state.auth);
     const location = useLocation();
-    console.log("isAuthenticated: ", isAuthenticated);
     
     if(!isInitialized) {
         return <LoadingScreen />;
     }
 
     if(!isAuthenticated) {
-        return <Navigate to={`/${ROUTE_PATH.LOGIN}`} state={{ from: location }} replace />
+        return <Navigate to={`/pet/${ROUTE_PATH.LOGIN}`} state={{ from: location }} replace />
     }
 
     return <Outlet />;
