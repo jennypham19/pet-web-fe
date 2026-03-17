@@ -1,11 +1,9 @@
 // Pages
 import { lazy } from 'react';
 import type { RouteObject } from 'react-router-dom';
-import { Navigate, Outlet, useRoutes } from 'react-router-dom';
+import { Navigate, useRoutes } from 'react-router-dom';
 
-import Customers from './Customers';
 import Loadable from '@/components/Loadable';
-import ProtectedRoute from '@/components/ProtectedRoute';
 import PublicRoute from '@/components/PublicRoute';
 
 import AuthLayout from '@/layouts/Auth/AuthLayout';
@@ -14,9 +12,8 @@ import ChangePassword from '@/views/Auth/ChangePassword';
 import ForgotPassword from '@/views/Auth/ForgotPassword';
 import Login from '@/views/Auth/Login';
 import Registration from '@/views/Auth/Registration';
-
-// Home
-const Home = Loadable(lazy(() => import('@/views/Home')));
+import AuthGuard from '@/components/AuthGuard';
+import manageRoutes from './Manage';
 
 // Error
 const NotFound = Loadable(lazy(() => import('@/views/Errors/NotFound')));
@@ -25,37 +22,45 @@ const PermissionDenied = Loadable(lazy(() => import('@/views/Errors/PermissionDe
 // Auth
 
 const routes: RouteObject[] = [
+  // --- NHÁNH 1: CÁC TRANG ĐƯỢC BẢO VỆ (PRIVATE) ---
+  {
+    path: '/pet/manage',
+    element: <AuthGuard/>,
+    children: [
+      {
+        element: <DashboardLayout/>,
+        children: manageRoutes
+      }
+    ]
+  },
+
+  // chỉ để xử lý trường hợp truy cập vào root path, sẽ tự động chuyển hướng đến trang đăng nhập
+
   {
     path: '/',
-    element: (
-      <ProtectedRoute>
-        <DashboardLayout />
-      </ProtectedRoute>
-    ),
-    children: [{ index: true, element: <Home /> }, Customers],
+    element: <Navigate to="login" replace />,
   },
+
+  // --- NHÁNH 2: CÁC TRANG XÁC THỰC (CHỈ DÀNH CHO NGƯỜI CHƯA ĐĂNG NHẬP) ---
   {
-    path: 'auth',
-    element: (
-      <PublicRoute>
-        <AuthLayout />
-      </PublicRoute>
-    ),
+    path: '/',
+    element: <PublicRoute/>,
     children: [
-      { index: true, element: <Navigate to={'login'} replace /> },
-      { path: 'login', element: <Login /> },
-      { path: 'registration', element: <Registration /> },
-      { path: 'forgot-password', element: <ForgotPassword /> },
-      { path: 'change-password', element: <ChangePassword /> },
+      {
+        element: <AuthLayout/>,
+        children: [
+          { index: true, element: <Navigate to={'login'} replace /> },
+          { path: 'login', element: <Login /> },
+          { path: 'registration', element: <Registration /> },
+          { path: 'forgot-password', element: <ForgotPassword /> },
+          { path: 'change-password', element: <ChangePassword /> },
+        ]
+      }
     ],
   },
   {
     path: '*',
-    element: <Outlet />,
-    children: [
-      { index: true, element: <NotFound /> },
-      { path: '*', element: <NotFound /> },
-    ],
+    element: <NotFound />,
   },
   {
     path: '/403',

@@ -28,11 +28,13 @@ import { getCurrentUser } from '@/services/user-service';
 import { setIsAuth } from '@/slices/auth';
 import { setProfile } from '@/slices/user';
 import { useAppDispatch } from '@/store';
-import { setStorageToken } from '@/utils/AuthHelper';
+import { setAccessToken } from '@/utils/AuthHelper';
 import Logger from '@/utils/Logger';
 
+export const ID_USER = 'user_id'
+
 interface LoginFormInputs {
-  username: string;
+  account: string;
   password: string;
 }
 
@@ -56,38 +58,39 @@ export default function Login() {
   const [remember, setRemember] = useState(false);
 
   useEffect(() => {
-    setFocus('username');
+    setFocus('account');
   }, [setFocus]);
 
   const onSubmit = async (values: LoginFormInputs) => {
     setLoading.on();
     try {
       const respAuth = await signIn({
-        username: values.username,
+        account: values.account,
         password: values.password,
       });
+      const accessToken = respAuth.data?.accessToken;
+      const userProfile = respAuth.data?.user;
+      if (accessToken && userProfile) {
+        setAccessToken(accessToken);
+        // Xét trường is_change_type
+        if(userProfile.isReset && userProfile.isDefaultType === -1){
+          localStorage.setItem(ID_USER, String(userProfile.id));
+          navigate('/' + ROUTE_PATH.CHANGE_PASSWORD)
+        }else{
+          // 3. Cập nhật state của Redux/Context
+          // Thông tin user đã có sẵn từ response login, không cần gọi /me nữa
+          dispatch(setProfile(userProfile));
+          dispatch(setIsAuth(true));
+          // 4. Thông báo và chuyển hướng
+          notify({
+            message: t('login_success'),
+            severity: 'success',
+          });
 
-      if (respAuth.data?.accessToken) {
-        setStorageToken(remember)
-          .accessToken(respAuth.data.accessToken)
-          .refreshToken(respAuth.data.refreshToken);
-        const respUser = await getCurrentUser();
-        dispatch(setProfile(respUser.data));
-        dispatch(setIsAuth(true));
-        setError('');
-        notify({
-          message: t('login_success'),
-          severity: 'success',
-        });
-        let route = ROUTE_PATH.HOME;
-        if (!_.isNull(location.state) && location.state !== ROUTE_PATH.LOGIN) {
-          route = location.state;
+          navigate('/pet/' + ROUTE_PATH.MANAGE, { replace: true });   
         }
-        navigate(route);
       } else {
-        setFocus('username');
-        setError(respAuth.message);
-        throw new Error(respAuth.message);
+        setError(respAuth.message || 'Login failed, no access token returned.');
       }
     } catch (error: any) {
       Logger.log(error);
@@ -97,7 +100,7 @@ export default function Login() {
   };
 
   return (
-    <Page title='Login'>
+    <Page title='Đăng nhập'>
       <Box>
         <Typography
           component='h1'
@@ -125,14 +128,14 @@ export default function Login() {
       >
         <ControllerTextField<LoginFormInputs>
           controllerProps={{
-            name: 'username',
+            name: 'account',
             defaultValue: '',
             control: control,
           }}
           textFieldProps={{
-            label: 'Username',
-            error: !!errors.username,
-            helperText: errors.username?.message,
+            label: 'Account',
+            error: !!errors.account,
+            helperText: errors.account?.message,
             sx: { ariaLabel: 'username' },
           }}
           prefixIcon={Email}

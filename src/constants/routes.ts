@@ -3,6 +3,11 @@ export const ROUTE_PATH = {
   PRODUCTS: '/products',
   TO_PROFILE: '/profile',
 
+  //Manage
+  MANAGE: 'manage',
+  MANAGE_HOME: 'home',
+  MANAGE_INFORMATION: 'information',
+
   PRODUCT_CATEGORY: '/products/categories',
   PRODUCT_CATEGORY_CREATE: '/products/categories/create',
   PRODUCT_CATEGORY_UPDATE: '/products/categories/:id/update',
