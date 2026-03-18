@@ -1,6 +1,6 @@
 import { COLORS } from "@/constants/colors";
 import CardData from "@/views/components/CardData";
-import SearchBox from "@/views/Manage/components/SearchBox";
+import SearchBox from "@/views/components/SearchBox";
 import { Add } from "@mui/icons-material";
 import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
