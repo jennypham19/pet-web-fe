@@ -74,7 +74,7 @@ const Profile = () => {
             src={profile?.avatarUrl || avatar1}
             sx={{ width: 32, height: 32, borderRadius: '100%' }}
           />
-          <Typography variant='subtitle1'>{profile?.fullName}</Typography>
+          <Typography variant='subtitle1'>{profile?.name}</Typography>
         </Stack>
       </ButtonBase>
       <Popper

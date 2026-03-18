@@ -37,13 +37,13 @@ const routes: RouteObject[] = [
   // chỉ để xử lý trường hợp truy cập vào root path, sẽ tự động chuyển hướng đến trang đăng nhập
 
   {
-    path: '/',
+    path: '/pet',
     element: <Navigate to="login" replace />,
   },
 
   // --- NHÁNH 2: CÁC TRANG XÁC THỰC (CHỈ DÀNH CHO NGƯỜI CHƯA ĐĂNG NHẬP) ---
   {
-    path: '/',
+    path: '/pet',
     element: <PublicRoute/>,
     children: [
       {

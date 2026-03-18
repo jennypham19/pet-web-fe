@@ -12,4 +12,8 @@ export const COLORS = {
     CANCEL: grey[600],
   },
   NEED_TO_PAY: yellow[600],
+  BUTTON: '#416327',
+  ACTIVED: green[600],
+  DEACTIVED: red[600],
+  PRIMARY: '#32ADE6'
 };

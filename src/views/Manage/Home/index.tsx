@@ -1,8 +1,11 @@
+import Page from "@/components/Page"
 import { Box } from "@mui/material"
 
 const ManagementHome = () => {
     return(
-        <Box>Trang chủ</Box>
+        <Page title="Trang chủ">
+            <Box>Trang chủ</Box>
+        </Page>
     )
 }
 
