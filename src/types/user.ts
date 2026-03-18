@@ -1,3 +1,14 @@
+// Input
+export interface FormDataAccount{
+    name: string,
+    account: string,
+    password: string,
+    role: string
+}
+
+// Body
+
+//Output
 export interface IUser{
     id: string,
     name: string,

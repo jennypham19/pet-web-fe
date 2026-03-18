@@ -15,201 +15,53 @@ export const ROLE_LABELS: { [key in RoleUser]: string } = {
 
 }
 
-export const RenderUser = {
+export const GenderUser = {
     FEMALE: 'female',
     MALE: 'male'
 };
 
-export type RenderUser = typeof RenderUser[keyof typeof RenderUser];
+export type GenderUser = typeof GenderUser[keyof typeof GenderUser];
 
-export const RENDER_LABELS: { [key in RenderUser]: string } = {
-    [RenderUser.FEMALE]: 'Nữ giới',
-    [RenderUser.MALE]: 'Nam giới',
+export const GENDER_LABELS: { [key in GenderUser]: string } = {
+    [GenderUser.FEMALE]: 'Nữ giới',
+    [GenderUser.MALE]: 'Nam giới',
 
 }
 
-/* Order */
-export const ProccessOrder = {
-    NOT_START_0: 'not_started_0%',
-    IN_PROGRESS_25: 'in_progress_25%',
-    IN_PROGRESS_50: 'in_progress_50%',
-    IN_PROGRESS_75: 'in_progress_75%',
-    COMPLETED_100: 'completed_100%',
+// Pets
+export const GenderPet = {
+    FEMALE: 'female',
+    MALE: 'male'
+};
+
+export type GenderPet = typeof GenderPet[keyof typeof GenderPet];
+
+export const GENDER_PET_LABELS: { [key in GenderPet]: string } = {
+    [GenderPet.FEMALE]: 'Cái',
+    [GenderPet.MALE]: 'Đực',
+
 }
 
-export type ProccessOrder = typeof ProccessOrder[keyof typeof ProccessOrder];
+export const TypePet = {
+    DOG: 'dog',
+    CAT: 'cat'
+};
 
-export const PROCCESS_ORDER_LABELS: { [key in ProccessOrder]: string } = {
-    [ProccessOrder.NOT_START_0]: 'Chưa hoạt động 0%',
-    [ProccessOrder.IN_PROGRESS_25]: 'Đang hoạt động 25%',
-    [ProccessOrder.IN_PROGRESS_50]: 'Đang hoạt động 50%',
-    [ProccessOrder.IN_PROGRESS_75]: 'Đang hoạt động 75%',
-    [ProccessOrder.COMPLETED_100]: 'Đã hoàn thành 100%',
+export type TypePet = typeof TypePet[keyof typeof TypePet];
+
+export const TYPE_PET_LABELS: { [key in TypePet]: string } = {
+    [TypePet.DOG]: 'Chó',
+    [TypePet.CAT]: 'Mèo',
+
 }
 
-export const StatusOrder = {
-    PENDING: 'pending',
-    IN_PROGRESS: 'in_progress',
-    COMPLETED: 'completed',
-}
+export const SpeciesPet = {
+    POODLE: 'poodle',
+};
 
-export type StatusOrder = typeof StatusOrder[keyof typeof StatusOrder];
+export type SpeciesPet = typeof SpeciesPet[keyof typeof SpeciesPet];
 
-export const STATUS_ORDER_LABELS: { [key in StatusOrder]: string } = {
-    [StatusOrder.PENDING]: 'Chưa hoạt động',
-    [StatusOrder.IN_PROGRESS]: 'Đang hoạt động',
-    [StatusOrder.COMPLETED]: 'Hoàn thành',
-}
+export const SPECIES_PET_LABELS: { [key in SpeciesPet]: string } = {
+    [SpeciesPet.POODLE]: 'Poodle',
 
-
-/* Machine */
-export const StatusMachine = {
-    OPERATING: 'operating',
-    PAUSED: 'paused',
-    STOPPED: 'stopped',
-    UNDER_MAINTENANCE: 'under_maintenance',
-    UNDER_REPAIR: 'under_repair',
-    FAULTY: 'faulty',
-}
-
-export type StatusMachine = typeof StatusMachine[keyof typeof StatusMachine];
-
-export const STATUS_MACHINE_LABELS: { [key in StatusMachine]: string } = {
-    [StatusMachine.OPERATING]: 'Đang hoạt động',
-    [StatusMachine.PAUSED]: 'Tạm dừng',
-    [StatusMachine.STOPPED]: 'Ngừng hoạt động',
-    [StatusMachine.UNDER_MAINTENANCE]: 'Đang bảo dưỡng',
-    [StatusMachine.UNDER_REPAIR]: 'Đang sửa chữa',
-    [StatusMachine.FAULTY]: 'Gặp sự cố',
-}
-
-/* Design Request */
-export const PriorityDesignRequest = {
-    LOW: 'low',
-    MEDIUM: 'medium',
-    HIGH: 'high',
-    URGENT: 'urgent'
-}
-
-export type PriorityDesignRequest = typeof PriorityDesignRequest[keyof typeof PriorityDesignRequest];
-
-export const PRIORITY_DESIGN_REQUEST_LABELS: { [key in PriorityDesignRequest]: string } = {
-    [PriorityDesignRequest.LOW]: 'Thấp',
-    [PriorityDesignRequest.MEDIUM]: 'Trung bình',
-    [PriorityDesignRequest.HIGH]: 'Cao',
-    [PriorityDesignRequest.URGENT]: 'Khẩn cấp',
-}
-
-export const StatusDesignRequest = {
-    PENDING: 'pending',
-    DONE: 'done',
-}
-
-export type StatusDesignRequest = typeof StatusDesignRequest[keyof typeof StatusDesignRequest];
-
-export const STATUS_DESIGN_REQUEST_LABELS: { [key in StatusOrder]: string } = {
-    [StatusDesignRequest.PENDING]: 'Đang thiết kế',
-    [StatusDesignRequest.DONE]: 'Đã hoàn thành',
-}
-
-
-// Product
-export const ProccessProduct = {
-    NOT_START_0: 'not_started_0%',
-    IN_PROGRESS_25: 'in_progress_25%',
-    IN_PROGRESS_50: 'in_progress_50%',
-    IN_PROGRESS_75: 'in_progress_75%',
-    COMPLETED_100: 'completed_100%',
-}
-
-export type ProccessProduct = typeof ProccessProduct[keyof typeof ProccessProduct];
-
-export const PROCCESS_PRODUCT_LABELS: { [key in ProccessProduct]: string } = {
-    [ProccessProduct.NOT_START_0]: 'Chưa hoạt động 0%',
-    [ProccessProduct.IN_PROGRESS_25]: 'Đang hoạt động 25%',
-    [ProccessProduct.IN_PROGRESS_50]: 'Đang hoạt động 50%',
-    [ProccessProduct.IN_PROGRESS_75]: 'Đang hoạt động 75%',
-    [ProccessProduct.COMPLETED_100]: 'Đã hoàn thành 100%',
-}
-
-export const StatusProduct = {
-    PENDING: 'pending',
-    IN_PROGRESS: 'in_progress',
-    COMPLETED: 'completed',
-}
-
-export type StatusProduct = typeof StatusProduct[keyof typeof StatusProduct];
-
-export const STATUS_PRODUCT_LABELS: { [key in StatusProduct]: string } = {
-    [StatusProduct.PENDING]: 'Chưa hoạt động',
-    [StatusProduct.IN_PROGRESS]: 'Đang hoạt động',
-    [StatusProduct.COMPLETED]: 'Hoàn thành',
-}
-
-// WorkOrder
-export const ProgressWorkOrder = {
-    NOT_START_0: '0%',
-    IN_PROGRESS_20: '20%',
-    IN_PROGRESS_40: '40%',
-    IN_PROGRESS_60: '60%',
-    IN_PROGRESS_80: '80%',
-    COMPLETED_100: '100%'
-}
-
-export type ProgressWorkOrder = typeof ProgressWorkOrder[keyof typeof ProgressWorkOrder];
-
-export const PROGRESS_WORK_ORDER_LABELS: { [key in ProgressWorkOrder]: string } = {
-    [ProgressWorkOrder.NOT_START_0]: '0%',
-    [ProgressWorkOrder.IN_PROGRESS_20]: '20%',
-    [ProgressWorkOrder.IN_PROGRESS_40]: '40%',
-    [ProgressWorkOrder.IN_PROGRESS_60]: '60%',
-    [ProgressWorkOrder.IN_PROGRESS_80]: '80%',
-    [ProgressWorkOrder.COMPLETED_100]: '100%',
-}
-
-export const ProccessWorkOrder = {
-    PENDING: 'pending',
-    IN_PROGRESS: 'in_progress',
-    COMPLETED: 'completed',
-}
-
-export type ProccessWorkOrder = typeof ProccessWorkOrder[keyof typeof ProccessWorkOrder];
-
-export const PROCCESS_WORK_ORDER_LABELS: { [key in ProccessWorkOrder]: string } = {
-    [StatusProduct.PENDING]: 'Chưa hoạt động',
-    [StatusProduct.IN_PROGRESS]: 'Đang hoạt động',
-    [StatusProduct.COMPLETED]: 'Hoàn thành',
-}
-
-export const EvaluatedStatusWorkOrder = {
-    PENDING: 'pending',
-    REWORK: 'rework',
-    APPROVED: 'approved',
-}
-
-export type EvaluatedStatusWorkOrder = typeof EvaluatedStatusWorkOrder[keyof typeof EvaluatedStatusWorkOrder];
-
-export const EVALUATED_STATUS_WORK_ORDER_LABELS: { [key in EvaluatedStatusWorkOrder]: string } = {
-    [EvaluatedStatusWorkOrder.PENDING]: 'Chờ đánh giá',
-    [EvaluatedStatusWorkOrder.REWORK]: 'Cần làm lại',
-    [EvaluatedStatusWorkOrder.APPROVED]: 'Đạt',
-}
-
-/* Work Milestone */
-export const EvaluatedStatusWorkMilestone = {
-    NOT_REVIEWED: 'not_reviewed',
-    PENDING: 'pending',
-    REWORK: 'rework',
-    APPROVED: 'approved',
-    OVERDUE: 'overdue'
-}
-
-export type EvaluatedStatusWorkMilestone = typeof EvaluatedStatusWorkMilestone[keyof typeof EvaluatedStatusWorkMilestone];
-
-export const EVALUATED_STATUS_WORK_MILESTONE_LABELS: { [key in EvaluatedStatusWorkMilestone]: string } = {
-    [EvaluatedStatusWorkMilestone.NOT_REVIEWED]: 'Chưa đánh giá',
-    [EvaluatedStatusWorkMilestone.PENDING]: 'Chờ đánh giá',
-    [EvaluatedStatusWorkMilestone.REWORK]: 'Cần làm lại',
-    [EvaluatedStatusWorkMilestone.APPROVED]: 'Đạt',
-    [EvaluatedStatusWorkMilestone.OVERDUE]: 'Quá hạn',
 }
