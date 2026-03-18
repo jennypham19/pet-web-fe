@@ -1,4 +1,4 @@
-import { GENDER_LABELS, GENDER_PET_LABELS, GenderPet, GenderUser, ROLE_LABELS, RoleUser, SPECIES_PET_LABELS, SpeciesPet, TYPE_PET_LABELS, TypePet } from "@/constants/status";
+import { GENDER_LABELS, GENDER_PET_LABELS, GenderPet, GenderUser, ROLE_LABELS, RoleUser, SPECIES_PET_LABELS, SpeciesPet, TYPE_PET_LABELS, TypePet, StatusTask, STATUS_TASK_LABELS } from "@/constants/status";
 
 export const getRoleLabel = (role: RoleUser | null | undefined) : string => {
     if(!role) return "Chưa xác định";
@@ -24,4 +24,10 @@ export const getTypePetLabel = (type: TypePet | null | undefined) : string => {
 export const getSpeciesPetLabel = (species: SpeciesPet | null | undefined) : string => {
     if(!species) return "Chưa xác định";
     return SPECIES_PET_LABELS[species] || species;
+}
+
+// Task
+export const getStatusTaskLabel = (status: StatusTask | null | undefined) : string => {
+    if(!status) return "Chưa xác định";
+    return STATUS_TASK_LABELS[status] || status;
 }

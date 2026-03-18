@@ -65,3 +65,18 @@ export const SPECIES_PET_LABELS: { [key in SpeciesPet]: string } = {
     [SpeciesPet.POODLE]: 'Poodle',
 
 }
+
+// Task
+export const StatusTask = {
+    PENDING: 'pending',
+    IN_PROGRESS: 'in_progress',
+    COMPLETED: 'completed'
+};
+
+export type StatusTask = typeof StatusTask[keyof typeof StatusTask];
+
+export const STATUS_TASK_LABELS: { [key in StatusTask]: string } = {
+    [StatusTask.PENDING]: 'Chưa hoạt động',
+    [StatusTask.IN_PROGRESS]: 'Đang hoạt động',
+    [StatusTask.COMPLETED]: 'Hoàn thành'
+}
