@@ -1,12 +1,13 @@
 import ViewData from "@/views/components/ViewData";
-import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Typography, useMediaQuery, useTheme, Tooltip, Avatar }from "@mui/material";
 import dog from "@/assets/images/users/dog.png";
 import dog_1 from "@/assets/images/users/alaska.png";
 import dog_2 from "@/assets/images/users/soc.png";
 import dayjs from "dayjs";
 import CardData from "@/views/components/CardData";
 import Grid from "@mui/material/Grid2";
-import Header from "@/layouts/Dashboard/Header";
+import { getStatusTaskLabel } from "@/utils/labelEntoVni"
+
 
 const DATA_PET = [
     {
@@ -30,28 +31,28 @@ const DATA_TASKS_PROCESS = [
     {
         id: 1,
         name: 'Cho chó ăn sáng',
-        pet: DATA_PET,
+        pets: DATA_PET,
         status: 'pending',
         date: dayjs()
     },
     {
         id: 2,
         name: 'Cho chó ăn sáng',
-        pet: DATA_PET,
+        pets: DATA_PET,
         status: 'in_progress',
         date: dayjs()
     },
     {
         id: 3,
         name: 'Cho chó ăn sáng',
-        pet: DATA_PET,
+        pets: DATA_PET,
         status: 'in_progress',
         date: dayjs()
     },
     {
         id: 4,
         name: 'Cho chó ăn sáng',
-        pet: DATA_PET,
+        pets: DATA_PET,
         status: 'completed',
         date: dayjs()
     },
@@ -67,13 +68,41 @@ const CardListPets = () => {
 
 const TableListPets = () => {
     return(
+        <>
         <Grid sx={{ mt: 1, bgcolor: '#fff', p: 1, borderRadius: 3 }} container spacing={2}>
             {['Công việc', 'Thú cưng', 'Trạng thái', 'Thời gian', 'Thao tác'].map((header) => (
-                <Grid size={{ md: 2.4 }}>
-                    <Typography variant="subtitle2" fontWeight={500} align="center">{header}</Typography>
+                <Grid key={header} sx={{ flex: 1, textAlign: 'center' }}>
+                    <Typography variant="subtitle2" fontWeight={500}>{header}</Typography>
                 </Grid>
             ))}
         </Grid>
+        {DATA_TASKS_PROCESS.map((task, index) => (
+        <Grid sx={{ mt:1, bgcolor: '#fff', p: 2, borderRadius: 3 }} container spacing={2}>
+            <Grid sx={{ flex: 1, textAlign: 'center' }}>
+                <Typography variant="subtitle2">{task.name}</Typography>
+            </Grid>
+            <Grid sx={{ flex: 1, textAlign: 'center' }}>
+                <Box display='flex' flexDirection='row' justifyContent='center'>
+                    {task.pets.map((pet, idx) => (
+                        <Tooltip key={idx} title={pet.name}>
+                            <Avatar
+                                src={pet.image}
+                                sx={{ borderRadius: '50%' }}
+                            />
+                        </Tooltip>
+                    ))}
+                </Box>
+            </Grid>
+            <Grid sx={{ flex: 1, textAlign: 'center' }}>
+                <Typography variant="subtitle2">{getStatusTaskLabel(task.status)}</Typography>
+            </Grid>
+            <Grid sx={{ flex: 1, textAlign: 'center' }}></Grid>
+            <Grid sx={{ flex: 1, textAlign: 'center' }}>
+                
+            </Grid>
+        </Grid>
+        ))}
+        </>
     )
 }
 
