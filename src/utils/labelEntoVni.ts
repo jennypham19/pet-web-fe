@@ -1,16 +1,8 @@
-import { EVALUATED_STATUS_WORK_MILESTONE_LABELS, EVALUATED_STATUS_WORK_ORDER_LABELS, EvaluatedStatusWorkMilestone, EvaluatedStatusWorkOrder, PRIORITY_DESIGN_REQUEST_LABELS, PriorityDesignRequest, PROCCESS_ORDER_LABELS, PROCCESS_PRODUCT_LABELS, PROCCESS_WORK_ORDER_LABELS, ProccessOrder, ProccessProduct, ProccessWorkOrder, PROGRESS_WORK_ORDER_LABELS, ProgressWorkOrder, RENDER_LABELS, RenderUser, ROLE_CODES, ROLE_DEPARTMENT, ROLE_LABELS, RoleUser, STATUS_DESIGN_REQUEST_LABELS, STATUS_MACHINE_LABELS, STATUS_ORDER_LABELS, STATUS_PRODUCT_LABELS, StatusDesignRequest, StatusMachine, StatusOrder, StatusProduct } from "@/constants/status";
+import { EVALUATED_STATUS_WORK_MILESTONE_LABELS, EVALUATED_STATUS_WORK_ORDER_LABELS, EvaluatedStatusWorkMilestone, EvaluatedStatusWorkOrder, PRIORITY_DESIGN_REQUEST_LABELS, PriorityDesignRequest, PROCCESS_ORDER_LABELS, PROCCESS_PRODUCT_LABELS, PROCCESS_WORK_ORDER_LABELS, ProccessOrder, ProccessProduct, ProccessWorkOrder, PROGRESS_WORK_ORDER_LABELS, ProgressWorkOrder, RENDER_LABELS, RenderUser, ROLE_LABELS, RoleUser, STATUS_DESIGN_REQUEST_LABELS, STATUS_MACHINE_LABELS, STATUS_ORDER_LABELS, STATUS_PRODUCT_LABELS, StatusDesignRequest, StatusMachine, StatusOrder, StatusProduct } from "@/constants/status";
 
 export const getRoleLabel = (role: RoleUser | null | undefined) : string => {
     if(!role) return "Chưa xác định";
     return ROLE_LABELS[role] || role;
-}
-
-export const getRoleCode = (role: RoleUser): string => {
-    return ROLE_CODES[role] || role;
-}
-
-export const getRoleDepartment = (role: RoleUser): string => {
-    return ROLE_DEPARTMENT[role] || role;
 }
 
 export const getRenderLabel = (gender: RenderUser | null | undefined) : string => {

@@ -16,7 +16,7 @@ const ProfileSection = () => {
     } 
 
     return (
-        <Box sx={{ p: 2, textAlign: 'center', mt: 5}}>
+        <Box sx={{ p: 2, textAlign: 'center', mt: {xs: 0, lg: 5 }}}>
             <Avatar
                 alt={profile.name}
                 src={profile.avatarUrl || avatar1}

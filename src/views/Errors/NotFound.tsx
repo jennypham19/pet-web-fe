@@ -4,6 +4,7 @@ import Container from '@mui/material/Container';
 import Image from '@/components/Image';
 import LinkButton from '@/components/LinkButton';
 import Page from '@/components/Page';
+import { ROUTE_PATH } from '@/constants/routes';
 
 const NotFound = () => {
   return (
@@ -25,7 +26,7 @@ const NotFound = () => {
         >
           <Image sx={{ width: '400px' }} src='/static/imgs/404.svg' alt='Not found' />
           <LinkButton
-            to='/'
+            to={`/pet/${ROUTE_PATH.MANAGE}`}
             variant='contained'
             startIcon={<ArrowBackIcon />}
             color='error'

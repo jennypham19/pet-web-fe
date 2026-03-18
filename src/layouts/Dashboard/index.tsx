@@ -29,13 +29,15 @@ const DashboardLayout = () => {
     <Box>
       <SidebarTitleContext.Provider value={{ title, setTitle }}>
       <Box sx={{ display: 'flex' }}>
-        <Sidebar
-          profile={profile}
-          collapsed={collapsed}
-          openSidebar={openSidebar}
-          onCloseSidebar={handleToggleSidebar}
-          onToggleCollapsed={handleToggleCollapsed}
-        />
+        {profile && (
+          <Sidebar
+            profile={profile}
+            collapsed={collapsed}
+            openSidebar={openSidebar}
+            onCloseSidebar={handleToggleSidebar}
+            onToggleCollapsed={handleToggleCollapsed}
+          />
+        )}
         <Box
           sx={{
             flexGrow: 1,

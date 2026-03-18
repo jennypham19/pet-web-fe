@@ -95,13 +95,12 @@ const Sidebar = (props: Props) => {
       sx={{
         zIndex: 999,
       }}
-      PaperProps={{ sx: { width: SIDEBAR_WIDTH, bgcolor: '#fff' } }}
+      PaperProps={{ sx: { width: SIDEBAR_WIDTH, bgcolor: '#000' } }}
     >
       <SidebarContext.Provider value={openSidebar}>
         <CollapseContext.Provider value={false}>
           <Scrollbar sx={{ height: 1 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Logo />
               <IconButton
                 onClick={onToggleCollapsed}
                 edge='start'
@@ -118,7 +117,7 @@ const Sidebar = (props: Props) => {
                 <CloseIcon />
               </IconButton>
             </Box>
-            <Divider sx={{ mb: 1.5 }} />
+            <ProfileSection/>
             {sections && sections.map((section, i) => (
               <MenuSection key={i} pathname={pathname} {...section} />
             ))}
@@ -158,6 +157,7 @@ const MenuSection: FC<MenuSectionProps> = (props) => {
   );
 };
 
+
 // Menu section items
 interface MenuItemsProps {
   items: SectionItem[];
@@ -166,19 +166,14 @@ interface MenuItemsProps {
 }
 const MenuItems = (props: MenuItemsProps) => {
   const { items, pathname, level } = props;
-
   return (
     <List disablePadding>
       {items.reduce<ReactNode[]>((acc, item, i) => {
         const { title, path, children, info, icon } = item;
         const key = `${title}-${level}-${i}`;
-        console.log("pathname: ", pathname);
-        console.log("path: ", path);
         
         // const partialMatch = pathname.startsWith(path);
         const exactMatch = pathname === path || pathname.startsWith(`${path}/`);
-        console.log("exactMatch: ", exactMatch);
-
 
         if (children) {
           acc.push(
@@ -299,13 +294,13 @@ const MenuItem: FC<MenuItemProps> = (props) => {
                 to: path,
               })}
             sx={{
-              color: 'neutral.800',
+              color: '#fff',
               '&:hover': {
-                bgcolor: alpha('#FFFFFF', 0.08),
+                bgcolor: alpha(COLORS.PRIMARY, 0.08),
               },
               ...(active && {
                 color: 'info.main',
-                bgcolor: alpha('#FFFFFF', 0.08),
+                bgcolor: alpha(COLORS.PRIMARY, 0.08),
               }),
             }}
           >
@@ -387,7 +382,7 @@ const MenuItem: FC<MenuItemProps> = (props) => {
       sx={{
         display: 'flex',
         ...(level === 0 && {
-          px: 1.5,
+          pr: 4,
           pb: 0.5,
         }),
       }}
@@ -405,12 +400,12 @@ const MenuItem: FC<MenuItemProps> = (props) => {
           '&:hover': {
             color: '#FFF',
             bgcolor: COLORS.PRIMARY,
-            borderRadius: 8
+            borderRadius: '0 25px 25px 0'
           },
           ...(active && {
             color: '#fff',
             bgcolor: COLORS.PRIMARY,
-            borderRadius: 8
+            borderRadius: '0 25px 25px  0'
           }),
           flexShrink: 0,
         }}
