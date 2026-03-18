@@ -36,8 +36,6 @@ const ManagementAccount = () => {
         setOpenSidebarEmp({ open: open, type: value })
     }
 
-    console.log("openSidebarEmp: ", openSidebarEmp);
-    
     return(
         <Page title="Quản lý tài khoản">
             <Grid sx={{ m: 2 }} container spacing={2}>

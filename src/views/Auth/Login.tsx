@@ -108,7 +108,7 @@ export default function Login() {
           fontWeight={500}
           sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
         >
-          Welcome to Telecom!
+          Welcome to PET!
         </Typography>
       </Box>
       {_error && (
