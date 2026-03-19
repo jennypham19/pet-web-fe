@@ -1,15 +1,19 @@
-import React from 'react';
-import { TextField, TextFieldProps } from '@mui/material';
-import { SxProps, Theme } from '@mui/material/styles';
-import {
-  DatePicker,
-  DatePickerProps,
-  DateTimePicker,
-  DateTimePickerProps,
-} from '@mui/x-date-pickers';
 import dayjs, { Dayjs } from 'dayjs';
-import weekday from 'dayjs/plugin/weekday';
 import localeData from 'dayjs/plugin/localeData';
+import weekday from 'dayjs/plugin/weekday';
+import React from 'react';
+
+
+
+import { CalendarMonthOutlined, Close } from '@mui/icons-material';
+import { IconButton as IconButtonMui, InputAdornment, TextField, TextFieldProps } from '@mui/material';
+import { SxProps, Theme } from '@mui/material/styles';
+import { DatePicker, DatePickerProps, DateTimePicker, DateTimePickerProps } from '@mui/x-date-pickers';
+import IconButton from './../IconButton/IconButton';
+
+
+
+
 
 dayjs.extend(weekday);
 dayjs.extend(localeData);
@@ -99,8 +103,16 @@ const InputText: React.FC<CustomInputProps> = ({
     name, label, required, error, helperText, fullWidth, margin, variant, disabled,
   };
 
-  
 
+  const hasValue = value !== null && value !== undefined && !(typeof value === 'string' && value.trim() === '');
+
+  const handleClear = () => {
+    if (type === 'date' || type === 'datetime') {
+      onChange(name, null);
+    } else {
+      onChange(name, '');
+    }
+  };
 
   if (type === 'date') {
     return (
@@ -112,19 +124,41 @@ const InputText: React.FC<CustomInputProps> = ({
         maxDate={maxDate}
         sx={sx}
         slotProps={{
-          textField: {
-            sx:{
-                mt: mt,
-                "& .MuiOutlinedInput-notchedOutline":{
-                    border:"1px solid rgb(53, 50, 50)",
-                    borderRadius:"8px",
-                },
-                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    border:"1px solid rgb(53, 50, 50)"
-                },
+          textField: (params) => ({
+            ...params,
+            sx: {
+              mt: mt,
+              '& .MuiOutlinedInput-notchedOutline': {
+                border: '1px solid rgb(53, 50, 50)',
+                borderRadius: '8px',
+              },
+              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                border: '1px solid rgb(53, 50, 50)',
+              },
             },
-            ...commonSlotTextFieldProps
-           },
+            InputProps: {
+              ...params.InputProps,
+              endAdornment: (
+                <>
+                  {hasValue && (
+                    <InputAdornment position='end'>
+                      <IconButtonMui
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleClear();
+                        }}
+                      >
+                        <Close />
+                      </IconButtonMui>
+                    </InputAdornment>
+                  )}
+                  {params.InputProps?.endAdornment}
+                </>
+              )
+            },
+            ...commonSlotTextFieldProps,
+          }),
           //  popper: {
           //     modifiers: [
           //       {
@@ -167,7 +201,7 @@ const InputText: React.FC<CustomInputProps> = ({
           //     },
           //   },
         }}
-        format="DD/MM/YYYY"
+        format='DD/MM/YYYY'
         {...datePickerProps}
       />
     );
@@ -248,7 +282,14 @@ const InputText: React.FC<CustomInputProps> = ({
                 color: 'black'
             },
             startAdornment: startAdornment,
-            endAdornment: endAdornment
+            endAdornment: hasValue ? (
+              <InputAdornment position='end'>
+                <IconButton
+                  handleFunt={handleClear}
+                  icon={<Close/>}
+                />
+              </InputAdornment>
+            ) : endAdornment
         }}
         InputLabelProps={{
           sx: {
