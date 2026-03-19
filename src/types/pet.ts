@@ -5,7 +5,7 @@ export interface FormDataInfoPet{
     avartar: File | null,
     name: string,
     sex: string,
-    dob: string,
+    dob: Dayjs | null,
     species: string,
     type: string,
     breedingStatus: string 
@@ -48,4 +48,31 @@ export interface FormDataSpecialNutritionalPlan{
 
 // body
 
+export interface PayloadPet{
+    pet: {
+        name: string,
+        sex: string,
+        dob: Dayjs | null,
+        species: string,
+        type: string,
+        breedingStatus: string,
+        nameAvatar: string,
+        urlAvatar: string 
+    }
+}
+
 // output
+
+export interface IPet{
+    id: string,
+    name: string,
+    sex: string,
+    dob: string,
+    species: string,
+    type: string,
+    breedingStatus: string,
+    createdAt: string,
+    updatedAt: string,
+    nameAvatar: string,
+    urlAvatar: string
+}
