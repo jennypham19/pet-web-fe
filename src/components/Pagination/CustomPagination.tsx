@@ -131,7 +131,7 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({
                   px: '6px',
                   py: '4px',
                   fontWeight: isActive ? 'bold' : 'normal',
-                  boxShadow: isActive ? theme.shadows[2] : 'none',
+                  adow: isActive ? theme.shadows[2] : 'none',
                 }}
               >
                 {pageNumber}
