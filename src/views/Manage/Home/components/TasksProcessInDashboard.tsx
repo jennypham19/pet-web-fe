@@ -1,31 +1,46 @@
-import ViewData from "@/views/components/ViewData";
-import { Box, Typography, useMediaQuery, useTheme, Tooltip, Avatar }from "@mui/material";
-import dog from "@/assets/images/users/dog.png";
-import dog_1 from "@/assets/images/users/alaska.png";
-import dog_2 from "@/assets/images/users/soc.png";
 import dayjs from "dayjs";
-import CardData from "@/views/components/CardData";
+
+
+
+import { BorderColorOutlined, VisibilityOutlined } from "@mui/icons-material";
+import { Avatar, Box, Button, IconButton as IconButtonMui, Tooltip, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { getStatusTaskLabel } from "@/utils/labelEntoVni"
+import IconButton from "@/components/IconButton/IconButton";
+
+
+
+import dog_1 from "@/assets/images/users/alaska.png";
+import dog from "@/assets/images/users/dog.png";
+import dog_2 from "@/assets/images/users/soc.png";
+import { COLORS } from "@/constants/colors";
+import DateTime from "@/utils/DateTime";
+import { getStatusTaskLabel } from "@/utils/labelEntoVni";
+import CardData from "@/views/components/CardData";
+import ViewData from "@/views/components/ViewData";
 
 
 const DATA_PET = [
     {
         id: 1,
         name: 'Milo',
-        image: dog
+        image: dog,
     },
     {
         id: 2,
         name: 'Sữa',
-        image: dog_1
+        image: dog_1,
     },
     {
         id: 3,
         name: 'Bơ',
-        image: dog_2
-    }
-]
+        image: dog_2,
+    },
+    {
+        id: 4,
+        name: 'Bơ',
+        image: dog_2,
+    },
+];
 
 const DATA_TASKS_PROCESS = [
     {
@@ -67,43 +82,71 @@ const CardListPets = () => {
 }
 
 const TableListPets = () => {
-    return(
-        <>
+    return (
+      <>
         <Grid sx={{ mt: 1, bgcolor: '#fff', p: 1, borderRadius: 3 }} container spacing={2}>
-            {['Công việc', 'Thú cưng', 'Trạng thái', 'Thời gian', 'Thao tác'].map((header) => (
-                <Grid key={header} sx={{ flex: 1, textAlign: 'center' }}>
-                    <Typography variant="subtitle2" fontWeight={500}>{header}</Typography>
-                </Grid>
-            ))}
+          {['Công việc', 'Thú cưng', 'Trạng thái', 'Thời gian', 'Thao tác'].map((header) => (
+            <Grid key={header} sx={{ flex: 1, textAlign: 'center' }}>
+              <Typography variant='subtitle2' fontWeight={500}>
+                {header}
+              </Typography>
+            </Grid>
+          ))}
         </Grid>
         {DATA_TASKS_PROCESS.map((task, index) => (
-        <Grid sx={{ mt:1, bgcolor: '#fff', p: 2, borderRadius: 3 }} container spacing={2}>
+          <Grid
+            key={index}
+            sx={{ mt: 1, bgcolor: '#fff', p: 2, borderRadius: 3 }}
+            container
+            spacing={2}
+          >
             <Grid sx={{ flex: 1, textAlign: 'center' }}>
-                <Typography variant="subtitle2">{task.name}</Typography>
+              <Typography variant='subtitle2'>{task.name}</Typography>
             </Grid>
             <Grid sx={{ flex: 1, textAlign: 'center' }}>
-                <Box display='flex' flexDirection='row' justifyContent='center'>
-                    {task.pets.map((pet, idx) => (
-                        <Tooltip key={idx} title={pet.name}>
-                            <Avatar
-                                src={pet.image}
-                                sx={{ borderRadius: '50%' }}
-                            />
-                        </Tooltip>
-                    ))}
-                </Box>
+              <Box display='flex' flexDirection='row' justifyContent='center'>
+                {task.pets.slice(0, 3).map((pet, idx) => (
+                  <Tooltip key={idx} title={pet.name}>
+                    <Avatar src={pet.image} sx={{ borderRadius: '50%' }} />
+                  </Tooltip>
+                ))}
+                <Tooltip title='Xem thêm'>
+                  <IconButtonMui
+                    sx={{
+                      border: '1px solid #000',
+                      borderRadius: '50%',
+                      bgcolor: 'rgba(0,0,0,0.1)',
+                      width: 40,
+                      height: 40
+                    }}
+                  >
+                    <Typography variant='subtitle2' fontWeight={500}>+{task.pets.length - 3}</Typography>
+                  </IconButtonMui>
+                </Tooltip>
+              </Box>
             </Grid>
             <Grid sx={{ flex: 1, textAlign: 'center' }}>
-                <Typography variant="subtitle2">{getStatusTaskLabel(task.status)}</Typography>
+              <Typography variant='subtitle2'>{getStatusTaskLabel(task.status)}</Typography>
             </Grid>
-            <Grid sx={{ flex: 1, textAlign: 'center' }}></Grid>
+            <Grid sx={{ flex: 1, textAlign: 'center' }}>{DateTime.FormatHour(task.date)}</Grid>
             <Grid sx={{ flex: 1, textAlign: 'center' }}>
-                
+              <IconButton
+                tooltip='Chỉnh sửa'
+                handleFunt={() => {}}
+                icon={<BorderColorOutlined sx={{ color: COLORS.PRIMARY }} />}
+                sx={{ boxShadow: '2px 2px 4px 1px rgba(0,0,0,0.3)', mr: 1 }}
+              />
+              <IconButton
+                tooltip='Xem chi tiết'
+                handleFunt={() => {}}
+                icon={<VisibilityOutlined sx={{ color: COLORS.PRIMARY }} />}
+                sx={{ boxShadow: '2px 2px 4px 1px rgba(0,0,0,0.3)' }}
+              />
             </Grid>
-        </Grid>
+          </Grid>
         ))}
-        </>
-    )
+      </>
+    );
 }
 
 const TasksProcessInDashboard = () => {
