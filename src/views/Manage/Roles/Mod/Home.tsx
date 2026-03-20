@@ -6,7 +6,7 @@ import IconButton from "@/components/IconButton/IconButton";
 import ListPetsInDashboard from "../../Home/components/ListPetsInDashboard";
 import TasksProcessInDashboard from "../../Home/components/TasksProcessInDashboard";
 import { useState } from "react";
-import CreateTask from "../../Home/components/CreateTask";
+import CreateTask from "../../Tasks/components/CreateTask";
 
 const DashboardInMod = () => {
     const [openTask, setOpenTask] = useState<{ open: boolean, type: string }>({ open: false, type: '' });

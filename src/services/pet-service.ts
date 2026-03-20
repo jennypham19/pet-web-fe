@@ -1,7 +1,13 @@
 import type { HttpResponse } from '@/types/common';
 import { IPet, PayloadPet } from '@/types/pet';
 import HttpClient from '@/utils/HttpClient';
-import { GetParams, PaginatedResponse } from './base-service';
+import { PaginatedResponse } from './base-service';
+
+export interface GetParams {
+    page: number,
+    limit: number,
+    searchTerm?: string,
+}
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'; 
 const prefix = `${API_BASE_URL}/api/pets`;
