@@ -22,9 +22,11 @@ export interface AutocompleteComponentProps<T>{
     onChange: (value: T[]) => void;
     getOptionKey: (option: T) => string | number;
     debounceTime?: number;
+    error?: boolean;
+    helperText?: React.ReactNode;
 }
 export default function AutocompleteComponent<T>(props: AutocompleteComponentProps<T>){
-    const { label, placeholder, fetchOptions, getOptionLabel, getRenderOption, onChange, getOptionKey, debounceTime = 400 } = props;
+    const { label, placeholder, fetchOptions, getOptionLabel, getRenderOption, onChange, getOptionKey, debounceTime = 400, error, helperText } = props;
     const [options, setOptions] = useState<T[]>([]);
     const [value, setValue] = useState<T[]>([]);
     const [inputValue, setInputValue] = useState("");
@@ -210,7 +212,8 @@ export default function AutocompleteComponent<T>(props: AutocompleteComponentPro
                             zIndex: 1,
                             bgcolor: (theme) =>
                                 isAll ? theme.palette.background.paper : "inherit",
-                            borderBottom: isAll ? "1px solid #eee" : "none"
+                            borderBottom: isAll ? "1px solid #eee" : "none",
+                            mb: isAll ? 1 : 0
                         }}
                     >
                         <Checkbox
@@ -226,8 +229,19 @@ export default function AutocompleteComponent<T>(props: AutocompleteComponentPro
                     {...params}
                     label={label}
                     placeholder={value.length === 0 ? placeholder : ""}
+                    error={error}
+                    helperText={helperText}
                     InputProps={{
                         ...params.InputProps,
+                        sx: {
+                            '& .MuiOutlinedInput-notchedOutline': {
+                                border: '1px solid rgb(53, 50, 50)',
+                                borderRadius: '8px',
+                            },
+                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                border: '1px solid rgb(53, 50, 50)',
+                            },
+                        },
                         endAdornment: (
                             <>
                                 <Typography sx={{ mr: 1, fontSize: 12 }}>
