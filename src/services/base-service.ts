@@ -10,5 +10,4 @@ export interface GetParams {
     limit: number,
     searchTerm?: string,
     status?: string,
-    id?: string
 }

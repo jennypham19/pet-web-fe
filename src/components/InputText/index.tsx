@@ -6,9 +6,9 @@ import React from 'react';
 
 
 import { CalendarMonthOutlined, Close } from '@mui/icons-material';
-import { IconButton as IconButtonMui, InputAdornment, TextField, TextFieldProps } from '@mui/material';
-import { SxProps, Theme } from '@mui/material/styles';
-import { DatePicker, DatePickerProps, DateTimePicker, DateTimePickerProps } from '@mui/x-date-pickers';
+import { IconButton as IconButtonMui, InputAdornment, TextField, TextFieldProps, useMediaQuery } from '@mui/material';
+import { SxProps, Theme, useTheme } from '@mui/material/styles';
+import { DatePicker, DatePickerProps, DateTimePicker, DateTimePickerProps, TimePicker, TimePickerProps } from '@mui/x-date-pickers';
 import IconButton from './../IconButton/IconButton';
 
 
@@ -27,7 +27,8 @@ type CustomInputType =
   | 'number'
   | 'tel'
   | 'date'
-  | 'datetime';
+  | 'datetime'
+  | 'time';
 
 interface CustomInputProps {
   type: CustomInputType;
@@ -60,6 +61,9 @@ interface CustomInputProps {
     DateTimePickerProps<Dayjs>,
     | 'value' | 'onChange' | 'label' | 'disabled' | 'slotProps' | 'sx' 
   >;
+  timePickerProps?: Omit<
+    TimePickerProps<Dayjs>, | 'value' | 'onChange' | 'label' | 'disabled' | 'slotProps' | 'sx'
+  >;
   onlyPositiveNumber?: boolean;
   from?: string;
   startAdornment?: React.ReactNode;
@@ -87,6 +91,7 @@ const InputText: React.FC<CustomInputProps> = ({
   textFieldProps = {},
   datePickerProps = {},
   dateTimePickerProps = {},
+  timePickerProps = {},
   onlyPositiveNumber = false,
   maxDate,
   from,
@@ -94,6 +99,8 @@ const InputText: React.FC<CustomInputProps> = ({
   endAdornment,
   mt
 }) => {
+  const theme = useTheme();
+  const md = useMediaQuery(theme.breakpoints.down('md'));
 
   const commonSlotTextFieldProps = {
     name, label, required, error, helperText, fullWidth, margin, variant, disabled,
@@ -107,7 +114,7 @@ const InputText: React.FC<CustomInputProps> = ({
   const hasValue = value !== null && value !== undefined && !(typeof value === 'string' && value.trim() === '');
 
   const handleClear = () => {
-    if (type === 'date' || type === 'datetime') {
+    if (type === 'date' || type === 'datetime' || type === 'time') {
       onChange(name, null);
     } else {
       onChange(name, '');
@@ -223,6 +230,64 @@ const InputText: React.FC<CustomInputProps> = ({
         {...dateTimePickerProps}
       />
     );
+  }
+
+  if(type === 'time'){
+    return(
+      <TimePicker
+        label={label}
+        value={value as Dayjs | null}
+        onChange={(newValue: Dayjs | null) => onChange(name, newValue)}
+        disabled={disabled}
+        sx={sx}
+        ampm // bật AM/PM
+        views={['hours', 'minutes']}
+        // hiện nut OK/ Cancel
+        slotProps={{
+          actionBar: {
+            actions: ['cancel', 'accept'],    
+          },
+          textField: (params) => ({
+            ...params,
+            sx: {
+              mt: mt,
+              '& .MuiOutlinedInput-notchedOutline': {
+                border: '1px solid rgb(53, 50, 50)',
+                borderRadius: '8px',
+              },
+              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                border: '1px solid rgb(53, 50, 50)',
+              },
+              
+            },
+            InputProps: {
+              ...params.InputProps,
+              placeholder: placeholder,
+              endAdornment: (
+                <>
+                  {hasValue && (
+                    <InputAdornment position='end'>
+                      <IconButtonMui
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleClear();
+                        }}
+                      >
+                          <Close />
+                        </IconButtonMui>
+                      </InputAdornment>
+                  )}
+                  {params.InputProps?.endAdornment}
+                </>
+              )
+            },
+            ...commonSlotTextFieldProps,
+          }),
+        }}
+        {...timePickerProps}
+      />
+    )
   }
 
   const finalTextFieldProps: TextFieldProps = {
