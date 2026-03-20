@@ -12,8 +12,10 @@ import InputText from "@/components/InputText";
 
 import { getPets } from "@/services/pet-service";
 import { IPet } from "@/types/pet";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { COLORS } from "@/constants/colors";
+import AutocompleteComponent from "./AutocompleteComponent";
+import AutocompleteComponentPet from "./AutocomplePet";
 
 
 interface CreateTaskProps{
@@ -23,20 +25,8 @@ interface CreateTaskProps{
 
 const CreateTask = (props: CreateTaskProps) => {
     const { open, onClose } = props;
-    const [pets, setPets] = useState<IPet[]>([]);
     const [hour, setHour] = useState<string>('')
 
-    useEffect(() => {
-        if(open){
-            const getListPets = async() => {
-                const res = await getPets({ page: 1, limit: 20 });
-                const data = res.data?.data as any as IPet[];
-                setPets(data)
-            }
-
-            getListPets();
-        }
-    }, [open])
     const handleClose = () => {
         onClose()
     }
@@ -63,19 +53,26 @@ const CreateTask = (props: CreateTaskProps) => {
             />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
-            <InputSelect
-              label=''
-              onChange={handleInputChange}
-              name='pets'
-              options={pets}
-              value={''}
-              transformOptions={(data) =>
-                data.map((item) => ({
-                  label: item.name,
-                  value: item.id,
-                }))
-              }
-              placeholder='Thú cưng *'
+            <AutocompleteComponent<IPet>
+              placeholder="Thú cưng *"
+              fetchOptions={getPets}
+              getOptionLabel={(option) => option.name}
+              getOptionKey={(option) => option.id}
+              onChange={(value) => {
+                console.log("Value: ", value);
+                        
+              }}
+              getRenderOption={(option) => (
+                <>
+                  <img
+                    alt=""
+                    loading="lazy"
+                    width="20" height={20}
+                    src={option.urlAvatar}
+                  />
+                  <Typography variant="subtitle2">{option.name}</Typography>
+                </>
+              )}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
