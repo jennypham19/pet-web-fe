@@ -177,15 +177,15 @@ export default function Login() {
               to={`/${ROUTE_PATH.AUTH}/${ROUTE_PATH.FORGOT_PASSWORD}`}
               sx={{ textAlign: 'end', display: 'block' }}
             >
-              Forgot password?
+              Quên mật khẩu?
             </Typography>
           </Box>
-          <FormControlLabel
+          {/* <FormControlLabel
             label={'Remember me'}
             control={
               <Checkbox checked={remember} onChange={(e) => setRemember(e.target.checked)} />
             }
-          />
+          /> */}
         </div>
         <LoadingButton loading={_loading} type='submit' variant='contained' fullWidth>
           Login

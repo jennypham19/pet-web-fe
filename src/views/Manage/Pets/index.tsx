@@ -28,7 +28,6 @@ const ManagementPets = () => {
     return (
         <Page title='Danh sách thú cưng'>
             {!openCreateProfilePet.open && (
-                <Box>
                     <Box p={1} bgcolor='#fff'>
                         <SearchBox
                             initialValue=''
@@ -60,7 +59,6 @@ const ManagementPets = () => {
                             </Button>
                         </SearchBox>
                     </Box>
-                </Box>
             )}
             {openCreateProfilePet.open && openCreateProfilePet.type === 'create' && (
                 <CreateProfilePet

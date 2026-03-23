@@ -31,3 +31,15 @@ export const getStatusTaskLabel = (status: StatusTask | null | undefined) : stri
     if(!status) return "Chưa xác định";
     return STATUS_TASK_LABELS[status] || status;
 }
+
+export const getStatusTaskColor = (status: string | null) => {
+  switch (status) {
+    case 'completed':
+      return { color: 'success' as const };
+    case 'in_progress':
+      return { color: 'warning' as const };
+    case 'pending':
+    default:
+      return { color: 'error' as const };
+  }
+};

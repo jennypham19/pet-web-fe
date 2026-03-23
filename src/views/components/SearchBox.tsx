@@ -1,6 +1,7 @@
 import InputSearch from "@/components/SearchBar";
 import { Box } from "@mui/material";
 import { ReactNode } from "react";
+import Grid from "@mui/material/Grid2"
 
 interface SearchBoxProps{
     children?: ReactNode,
@@ -17,12 +18,15 @@ const SearchBox = ({
     detailPanel
 } : SearchBoxProps) => {
     return (
-        <Box display='flex' flexDirection={{ xs: 'column', md: 'row'}} justifyContent={{ xs: 'flex-start', md: 'space-between'}}>
-            {children && (
-                <Box>
-                    {children}
-                </Box>
-            )}   
+        <Grid container spacing={2}>
+            <Grid size={{ xs: 12, md: 6 }}>
+                {children && (
+                    <Box>
+                        {children}
+                    </Box>
+                )}                
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
                 <Box mt={{ xs: 1, md: 0 }} gap={1.5} display='flex' flexDirection='row'>        
                     <InputSearch
                         style={{ width: '100%' }}
@@ -34,7 +38,8 @@ const SearchBox = ({
                     />
                     {detailPanel}
                 </Box> 
-        </Box>
+            </Grid>    
+        </Grid>
     )
 }
 
