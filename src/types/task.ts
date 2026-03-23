@@ -19,7 +19,29 @@ export interface PayloadTask{
     hour: Dayjs | null,
     frequency: string,
     otherFrequency: string | null,
-    requiredNote: string
+    requiredNote: string,
+    createdBy: string | null
 }
 
 // output
+export interface ITask {
+    id: string,
+    name: string,
+    time: string,
+    hour: string,
+    frequency: string,
+    otherFrequency: string | null,
+    requiredNote: string,
+    manager: {
+        name: string,
+        role: string,
+        phone: string | null
+    },
+    status: string,
+    isUpdatedImage: boolean,
+    pets: {
+        name: string,
+        sex: string,
+        urlAvatar: string
+    }[]
+}

@@ -22,6 +22,7 @@ import { FormErrorsTask } from "@/types/errors";
 import useNotification from "@/hooks/useNotification";
 import { createTask } from "@/services/task-service";
 import Backdrop from "@/components/Backdrop";
+import useAuth from "@/hooks/useAuth";
 
 
 interface CreateTaskProps{
@@ -31,6 +32,7 @@ interface CreateTaskProps{
 
 const CreateTask = (props: CreateTaskProps) => {
     const { open, onClose } = props;
+    const { profile } = useAuth();
     const notify = useNotification();
     const [otherFrequency, setOtherFrequency] = useState('');
     const [errorOtherFrequency, setErrorOtherFrequency] = useState<string | null>(null);
@@ -92,9 +94,9 @@ const CreateTask = (props: CreateTaskProps) => {
           hour: formDataTask.hour,
           frequency: formDataTask.frequency,
           otherFrequency: otherFrequency ? otherFrequency : null,
-          requiredNote: formDataTask.requiredNote
+          requiredNote: formDataTask.requiredNote,
+          createdBy: profile ? profile.id : null
         }
-        console.log("payload: ", payload);
         const res = await createTask(payload);
         notify({
           message: res.message,
@@ -202,7 +204,7 @@ const CreateTask = (props: CreateTaskProps) => {
                 { id: 9, label: 'Hằng tháng', value: 'everymonth' },
                 { id: 10, label: 'Khác', value: 'others' },
               ]}
-              placeholder='Tuần suất'
+              placeholder='Tần suất'
               error={!!errorsTask.frequency}
               helperText={errorsTask.frequency}
             />
@@ -218,7 +220,7 @@ const CreateTask = (props: CreateTaskProps) => {
                   setOtherFrequency(value);
                   setErrorOtherFrequency(null)
                 }}
-                placeholder="Nhập tuần suất khác"
+                placeholder="Nhập tần suất khác"
                 error={!!errorOtherFrequency}
                 helperText={errorOtherFrequency}
               />
