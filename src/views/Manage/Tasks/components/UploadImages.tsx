@@ -12,6 +12,7 @@ import DialogComponent from "@/components/DialogComponent";
 import { COLORS } from "@/constants/colors";
 import { getPhotoTime, resizeImage } from "@/utils/common";
 import { Dayjs } from "dayjs";
+import DateTime from "@/utils/DateTime";
 
 
 interface UploadImagesProps{
@@ -24,7 +25,7 @@ const UploadImages = (props: UploadImagesProps) => {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [errorFiles, setErrorFiles] = useState('');
     const [imageFiles, setImageFiles] = useState<File[]>([]);
-    const [images, setImages] = useState<{url: string, time: string | null}[]>([]);
+    const [images, setImages] = useState<{url: string, time: Date | null}[]>([]);
 
 
     const handleChangeImages = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -107,7 +108,7 @@ const UploadImages = (props: UploadImagesProps) => {
                     <Close fontSize='small' />
                   </IconButton>
                 </Box>
-                <Typography mt={1.5} variant="caption">{img.time}</Typography>
+                <Typography mt={1.5} variant="caption">{DateTime.Format(img.time)}</Typography>
               </Grid>
             ))}
         <Grid size={{ xs: 6 }}>
