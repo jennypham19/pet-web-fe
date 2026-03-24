@@ -11,6 +11,7 @@ import DialogComponent from "@/components/DialogComponent";
 
 import { COLORS } from "@/constants/colors";
 import { getPhotoTime, resizeImage } from "@/utils/common";
+import { Dayjs } from "dayjs";
 
 
 interface UploadImagesProps{
@@ -23,7 +24,7 @@ const UploadImages = (props: UploadImagesProps) => {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [errorFiles, setErrorFiles] = useState('');
     const [imageFiles, setImageFiles] = useState<File[]>([]);
-    const [imagesUrl, setImagesUrl] = useState<string[]>([]);
+    const [images, setImages] = useState<{url: string, time: string | null}[]>([]);
 
 
     const handleChangeImages = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -48,15 +49,19 @@ const UploadImages = (props: UploadImagesProps) => {
 
       const resizedFiles = resized.map((r) => r.file);
       setImageFiles((prev) => [...prev, ...resizedFiles]);
-      const urls = resized.map((file) => file.previewUrl);
-      setImagesUrl((prev) => [...prev, ...urls]);
+      const urls = resized.map((file) => ({
+        url: file.previewUrl,
+        time: file.takenAt ? file.takenAt : null
+      }));
+      setImages((prev) => ([...prev, ...urls]));
+
       setErrorFiles('');
       // reset input để có thể chọn lại cùng 1 file
       event.target.value = '';
     };
 
     const handleRemove = (index: number) => {
-      setImagesUrl((prev) => prev.filter((_, i) => i !== index));
+      setImages((prev) => prev.filter((_, i) => i !== index));
       setImageFiles((prev) => prev.filter((_, i) => i !== index));
     };
 
@@ -74,8 +79,8 @@ const UploadImages = (props: UploadImagesProps) => {
         isActiveHeader={false}
       >
         <Grid container spacing={2}>
-          {imagesUrl.length > 0 &&
-            imagesUrl.map((img, idx) => (
+          {images.length > 0 &&
+            images.map((img, idx) => (
               <Grid size={{ xs: 6 }}>
                 <Box
                   sx={{
@@ -84,7 +89,7 @@ const UploadImages = (props: UploadImagesProps) => {
                   }}
                 >
                   <img
-                    src={img}
+                    src={img.url}
                     alt={`upload-${idx}`}
                     style={{ width: '100%', height: 200, objectFit: 'fill' }}
                   />
@@ -102,6 +107,7 @@ const UploadImages = (props: UploadImagesProps) => {
                     <Close fontSize='small' />
                   </IconButton>
                 </Box>
+                <Typography mt={1.5} variant="caption">{img.time}</Typography>
               </Grid>
             ))}
         <Grid size={{ xs: 6 }}>
@@ -130,8 +136,8 @@ const UploadImages = (props: UploadImagesProps) => {
             >
                 <Box sx={{ margin: 'auto 0' }}>
                 <CameraAlt sx={{ fontSize: 48, color: 'text.secondary' }} />
-                <Typography fontSize='14px'>Thêm HÌNH ẢNH cập nhật công việc tại đây.</Typography>
-                <Typography fontSize='14px'>{`Hình ảnh dưới dạng PNG, JPG....`}</Typography>
+                <Typography fontSize='13px'>Thêm HÌNH ẢNH cập nhật công việc tại đây.</Typography>
+                <Typography fontSize='13px'>{`Hình ảnh dưới dạng PNG, JPG....`}</Typography>
                 </Box>
             </Box>
             <Box mt={2} display='flex' justifyContent='center'>
