@@ -11,15 +11,14 @@ import UploadImages from "./components/UploadImages";
 import Backdrop from "@/components/Backdrop";
 import IconButton from "@/components/IconButton/IconButton";
 import Page from "@/components/Page";
-
-
-
 import { COLORS } from "@/constants/colors";
 import { useFetchData } from "@/hooks/useFetchData";
 import useNotification from "@/hooks/useNotification";
 import { getTasks, updateStatus } from "@/services/task-service";
 import { ITask } from "@/types/task";
 import SearchBox from "@/views/components/SearchBox";
+import DialogViewDetail from "./components/DialogViewDetail";
+import dayjs, { Dayjs } from "dayjs";
 
 
 const ManagementTasks = () => {
@@ -27,10 +26,12 @@ const ManagementTasks = () => {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [openUpload, setOpenUpload] = useState(false);
+    const [openViewDetail, setOpenViewDetail] = useState(false);
     const theme = useTheme();
     const md = useMediaQuery(theme.breakpoints.down('md'));
     const { listData, searchTerm, handleSearch, fetchData, page, rowsPerPage } = useFetchData<ITask>(getTasks)
     const queryData = md ? listData.slice(0,1) : listData.slice(0,4);
+    const [taskId, setTaskId] = useState<string | null>(null)
 
     const groupTasks = (tasks: ITask[]) => {
         return {
@@ -54,37 +55,41 @@ const ManagementTasks = () => {
 
     const handleUploadAndUpdate = async(id: string, type: string) => {
         let res: any;
-        let payload: { status: string };
+        let payload: { status: string, finishedDate?: Dayjs | null, type: string };
         setIsSubmitting(true);
         try {
-        switch (type) {
-            case 'completed':
-                payload = {
-                    status: 'completed',
-                };
-                res = await updateStatus(id, payload);
-                break;
-            case 'start':
-                payload = {
-                    status: 'in_progress',
-                };
-                res = await updateStatus(id, payload);
-                break;
-            default:
-                break;
-        }
-        notify({
-            message: res.message,
-            severity: 'success',
-        });
-        fetchData(page, rowsPerPage);
+            switch (type) {
+                case 'completed':
+                    payload = {
+                        status: 'completed',
+                        finishedDate: dayjs(),
+                        type: 'completed'
+                    };
+                    res = await updateStatus(id, payload);
+                    break;
+                case 'start':
+                    payload = {
+                        status: 'in_progress',
+                        finishedDate: null,
+                        type: 'start'
+                    };
+                    res = await updateStatus(id, payload);
+                    break;
+                default:
+                    break;
+            }
+            notify({
+                message: res.message,
+                severity: 'success',
+            });
+            fetchData(page, rowsPerPage);
         } catch (error: any) {
-        notify({
-            message: error.messgae,
-            severity: 'error',
-        });
+            notify({
+                message: error.messgae,
+                severity: 'error',
+            });
         } finally {
-        setIsSubmitting(false);
+            setIsSubmitting(false);
         }
     }
 
@@ -95,6 +100,11 @@ const ManagementTasks = () => {
                 break
             case 'updated':
                 setOpenUpload(true);
+                setTaskId(id)
+                break;
+            case 'view':
+                setOpenViewDetail(true)
+                setTaskId(id)
                 break;
             case 'start':
                 handleUploadAndUpdate(id, type);
@@ -157,10 +167,19 @@ const ManagementTasks = () => {
                 </Grid>
             </Grid>
             {isSubmitting && <Backdrop open={isSubmitting}/>} 
-            {openUpload && (
+            {openUpload && taskId && (
                 <UploadImages
+                    id={taskId}
                     open={openUpload}
-                    onClose={() => { setOpenUpload(false) }}
+                    onClose={() => { setOpenUpload(false); fetchData(page, rowsPerPage); }}
+                />
+            )}
+            {openViewDetail && taskId && (
+                <DialogViewDetail
+                    onUploadAndUpdate={handleUploadAndUpdate}
+                    id={taskId}
+                    open={openViewDetail}
+                    onClose={() => { setOpenViewDetail(false) }}
                 />
             )}      
         </Page>

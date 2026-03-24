@@ -1,4 +1,4 @@
-import { Box, Typography, Chip, Stack, IconButton, Tooltip } from "@mui/material";
+import { Box, Typography, Chip, Stack, IconButton, Tooltip, useTheme, useMediaQuery } from "@mui/material";
 import PetsAvatar from "@/views/components/PetsAvatar";
 import { ITask } from "@/types/task";
 import { getStatusTaskColor, getStatusTaskLabel } from "@/utils/labelEntoVni";
@@ -6,6 +6,8 @@ import DateTime from "@/utils/DateTime";
 import { CameraAltOutlined, CheckCircleOutline, PlayCircleOutline, Visibility, VisibilityOutlined } from "@mui/icons-material";
 
 const RenderButtonByStatus = ({task, handleButton} : { task: ITask, handleButton: (id: string, type: string) => void }) => {
+    const theme = useTheme();
+    const md = useMediaQuery(theme.breakpoints.down('md'));
     switch (task.status) {
         case 'completed':
             return(
@@ -25,11 +27,14 @@ const RenderButtonByStatus = ({task, handleButton} : { task: ITask, handleButton
                             </IconButton>
                         </Tooltip>
                     )}
-                    <Tooltip title="Cập nhật">
-                        <IconButton onClick={() => handleButton(task.id, 'updated')}>
-                            <CameraAltOutlined sx={{ color: '#000', width: 25, height: 25 }}/>
-                        </IconButton>
-                    </Tooltip>
+                    
+                    {!task.isUpdatedImage && md && (
+                        <Tooltip title="Cập nhật">
+                            <IconButton onClick={() => handleButton(task.id, 'updated')}>
+                                <CameraAltOutlined sx={{ color: '#000', width: 25, height: 25 }}/>
+                            </IconButton>
+                        </Tooltip>
+                    )}
                 </Stack>
             )
         case 'pending':
@@ -72,11 +77,11 @@ const TaskCard = ({ task, handleButton}: { task: ITask, handleButton: (id: strin
                 <Typography fontSize={13} color="gray">
                     Thời gian bắt đầu
                 </Typography>  
-                <Typography fontWeight={500}>
-                    {DateTime.FormatHour(task.hour)}
+                <Typography variant="subtitle2" fontWeight={500}>
+                    {DateTime.FormatDateHour(task.hour)}
                 </Typography>                              
             </Stack>
-            <PetsAvatar pets={task.pets} height={32} width={32}/>            
+            <PetsAvatar pets={task.pets} height={30} width={30}/>            
         </Box>
         <Box mt={1} display='flex' justifyContent='space-between'>
             <Chip

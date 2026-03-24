@@ -11,6 +11,7 @@ export interface FormDataTask{
     requiredNote: string
 }
 
+
 // body
 export interface PayloadTask{
     name: string,
@@ -21,6 +22,15 @@ export interface PayloadTask{
     otherFrequency: string | null,
     requiredNote: string,
     createdBy: string | null
+}
+
+export interface PayloadTaskImages{
+    images: {
+        nameImage: string,
+        urlImage: string,
+        uploadedDate: Date        
+    }[]
+    uploadedBy: string | undefined
 }
 
 // output
@@ -43,5 +53,15 @@ export interface ITask {
         name: string,
         sex: string,
         urlAvatar: string
+    }[],
+    finishedDate: string,
+    images: {
+        id: string,
+        nameImage: string,
+        urlImage: string,
+        uploadedDate: string,
+        createdAt: string,
+        updatedAt: string,
+        uploadedBy: string
     }[]
 }

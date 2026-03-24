@@ -1,7 +1,8 @@
 import type { HttpResponse } from '@/types/common';
 import HttpClient from '@/utils/HttpClient';
 import { GetParams, PaginatedResponse } from './base-service';
-import { ITask, PayloadTask } from '@/types/task';
+import { ITask, PayloadTask, PayloadTaskImages } from '@/types/task';
+import { Dayjs } from 'dayjs';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'; 
 const prefix = `${API_BASE_URL}/api/tasks`;
@@ -33,6 +34,16 @@ export const getTasks = async(getParams: GetParams): Promise<HttpResponse<Pagina
 }
 
 // cập nhập trạng thái
-export const updateStatus = (id: string, payload: { status: string }) => {
+export const updateStatus = (id: string, payload: { status: string, finishedDate?: Dayjs | null, type: string }) => {
     return HttpClient.patch(`${prefix}/status-updated/${id}`, payload)
+}
+
+// cập nhật hình ảnh cho công việc
+export const updateImagesForTask = (id: string, payload: PayloadTaskImages) => {
+    return HttpClient.put(`${prefix}/images-task-uploaded/${id}`, payload)
+}
+
+// lấy chi tiết công việc
+export const getDetailTask = (id: string) => {
+    return HttpClient.get<HttpResponse<ITask>>(`${prefix}/detail-task/${id}`)
 }
