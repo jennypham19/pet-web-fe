@@ -75,7 +75,7 @@ const UploadImages = (props: UploadImagesProps) => {
       setIsSubmitting(true);
       try {
         let uploadResponses: any;
-        uploadResponses = await uploadImages(imageFiles!, 'pet/task/images');
+        uploadResponses = await uploadImages(imageFiles!, 'tasks/images');
         if(!uploadResponses.success || !uploadResponses.data.files){
           throw new Error('Upload ảnh thất bại hoặc không nhận được URL ảnh'); 
         }

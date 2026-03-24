@@ -145,6 +145,7 @@ const InputText: React.FC<CustomInputProps> = ({
             },
             InputProps: {
               ...params.InputProps,
+              placeholder: placeholder,
               endAdornment: (
                 <>
                   {hasValue && (

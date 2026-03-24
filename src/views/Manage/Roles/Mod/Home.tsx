@@ -13,9 +13,11 @@ import IconButton from "@/components/IconButton/IconButton";
 
 
 import { COLORS } from "@/constants/colors";
+import { useNavigate } from "react-router-dom";
 
 
 const DashboardInMod = () => {
+    const navigate = useNavigate();
     const [openTask, setOpenTask] = useState<{ open: boolean, type: string }>({ open: false, type: '' });
     const [isReload, setIsReload] = useState(false);
     const handleCloseOpenTask = () => {
@@ -57,7 +59,7 @@ const DashboardInMod = () => {
             </Button>
           </SearchBox>
         </Box>
-        <ListPetsInDashboard />
+        <ListPetsInDashboard onClick={() => { navigate('/pet/manage/pet')}} onDetailPet={() => {}}/>
         <TasksProcessInDashboard isReload={isReload}/>
         {openTask.open && openTask.type === 'add' && (
           <CreateTask open={openTask.open} onClose={handleCloseOpenTask} />

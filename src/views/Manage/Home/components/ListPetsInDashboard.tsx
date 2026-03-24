@@ -1,57 +1,31 @@
 import ViewData from "@/views/components/ViewData";
-import { Avatar, Box, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Avatar, Box, Button, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import dog from "@/assets/images/users/dog.png"
 import CardData from "@/views/components/CardData";
 import { getGenderPetLabel, getSpeciesPetLabel, getTypePetLabel } from "@/utils/labelEntoVni";
+import { useFetchData } from "@/hooks/useFetchData";
+import { IPet } from "@/types/pet";
+import { getPets } from "@/services/pet-service";
+import { COLORS } from "@/constants/colors";
 
-const DATA_PETS = [
-    {
-        id: 1,
-        image: dog,
-        name: 'Milo',
-        type: 'dog',
-        sex: 'male',
-        species: 'poodle'
-    },
-    {
-        id: 2,
-        image: dog,
-        name: 'Milo',
-        type: 'dog',
-        sex: 'male',
-        species: 'poodle'
-    },
-    {
-        id: 3,
-        image: dog,
-        name: 'Milo',
-        type: 'dog',
-        sex: 'male',
-        species: 'poodle'
-    },
-    {
-        id: 4,
-        image: dog,
-        name: 'Milo',
-        type: 'dog',
-        sex: 'male',
-        species: 'poodle'
-    },
-]
+interface ListPetsInDashboardProps{
+    onClick: () => void;
+    label?: string,
+    onDetailPet: (id: string) => void;
+}
 
-const ListPetsInDashboard = () => {
-    const navigate = useNavigate();
+const ListPetsInDashboard = (props: ListPetsInDashboardProps) => {
+    const { label = "Danh sách thú cưng", onClick, onDetailPet } = props;
     const theme = useTheme();
     const md = useMediaQuery(theme.breakpoints.down('md'));
-
-    const petsList = md ? DATA_PETS.slice(0,1) : DATA_PETS.slice(0,4)
+    const { listData } = useFetchData<IPet>(getPets)
+    const petsList = md ? listData.slice(0,1) : listData.slice(0,4)
     return(
         <Box p={2}>
             <ViewData
-                label="Danh sách thú cưng"
-                onClick={() => { navigate('/pet/manage/pet')}}
+                label={label}
+                onClick={onClick}
             />
             <Grid sx={{ mt: 1 }} container spacing={2}>
                 {petsList.map((pet, idx) => (
@@ -59,7 +33,7 @@ const ListPetsInDashboard = () => {
                         <CardData>
                             <Box display='flex' justifyContent='center' alignItems='center' flexDirection='column'>
                                 <Avatar
-                                    src={pet.image}
+                                    src={pet.urlAvatar}
                                     sx={{ borderRadius: '50%', width: 100, height: 100 }}
                                 />
                                 <Typography mt={0.5} variant="subtitle2" fontWeight={500}>{pet.name}</Typography>
@@ -78,6 +52,13 @@ const ListPetsInDashboard = () => {
                                     </Stack>
                                 </Box>
                             </Box>
+                            <Button
+                                onClick={() => onDetailPet(pet.id)}
+                                fullWidth
+                                sx={{ mt: 1, borderRadius: 2, bgcolor: COLORS.PRIMARY }}
+                            >
+                                Xem chi tiết
+                            </Button>
                         </CardData>
                     </Grid>
                 ))}

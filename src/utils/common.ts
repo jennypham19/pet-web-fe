@@ -59,6 +59,13 @@ export const findDuplicateKey = (data: any, iteratee: string) => {
   return result;
 };
 
+// check rỗng trước khi gửi
+export const isEmptyObject = (obj: any) => {
+  return Object.values(obj).every(
+    (v) => v === null || v === undefined || v === '' || v?.toString().trim() === ''
+  );
+};
+
 // lấy thời gian chụp ảnh
 
 export const getPhotoTime = async (file: File): Promise<Date | null> => {

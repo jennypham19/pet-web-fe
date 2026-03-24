@@ -30,7 +30,7 @@ const SpecialNutritionalPlan = (props: SpecialNutritionalPlanProps) => {
             type='text'
             name='food'
             onChange={onInputChange}
-            placeholder='Thức ăn *'
+            placeholder='Thức ăn'
             error={!!errorSpecialNutritionalPlan.food}
             helperText={errorSpecialNutritionalPlan.food}
           />
@@ -42,7 +42,7 @@ const SpecialNutritionalPlan = (props: SpecialNutritionalPlanProps) => {
             type='text'
             name='amount'
             onChange={onInputChange}
-            placeholder='Số lượng *'
+            placeholder='Số lượng'
             error={!!errorSpecialNutritionalPlan.amount}
             helperText={errorSpecialNutritionalPlan.amount}
           />
@@ -72,7 +72,7 @@ const SpecialNutritionalPlan = (props: SpecialNutritionalPlanProps) => {
             type='text'
             name='nutritionalSupplements'
             onChange={onInputChange}
-            placeholder='Bổ sung thêm dinh dưỡng *'
+            placeholder='Bổ sung thêm dinh dưỡng'
             multiline
             rows={3}
             error={!!errorSpecialNutritionalPlan.nutritionalSupplements}

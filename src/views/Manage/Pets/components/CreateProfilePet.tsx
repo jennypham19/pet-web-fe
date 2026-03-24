@@ -2,8 +2,8 @@ import { ChangeEvent, useRef, useState } from "react";
 
 
 
-import { PhotoCamera } from "@mui/icons-material";
-import { Avatar, Box, Button, Paper, Typography } from "@mui/material";
+import { Close, PhotoCamera } from "@mui/icons-material";
+import { Avatar, Box, Button, IconButton, Paper, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import Deworming from "./InformationDetails/Deworming";
 import PetHealthInformation from "./InformationDetails/PetHealthInformation";
@@ -20,10 +20,10 @@ import image_pet from "@/assets/images/users/image-pet.jpg";
 import { COLORS } from "@/constants/colors";
 import useNotification from "@/hooks/useNotification";
 import { createPet } from "@/services/pet-service";
-import { uploadImage } from "@/services/upload-service";
+import { uploadImage, uploadImages } from "@/services/upload-service";
 import { FormErrorsDeworming, FormErrorsHealthPet, FormErrorsInfoPet, FormErrorsRegularVetCheckup, FormErrorsSpecialNutritionalPlan, FormErrorsVaccination } from "@/types/errors";
 import { FormDataDeworming, FormDataInfoHealthPet, FormDataInfoPet, FormDataRegularVetCheckup, FormDataSpecialNutritionalPlan, FormDataVaccination, PayloadPet } from "@/types/pet";
-import { resizeImage } from "@/utils/common";
+import { isEmptyObject, resizeImage } from "@/utils/common";
 import NavigateBack from "@/views/components/NavigateBack";
 
 
@@ -37,6 +37,10 @@ const CreateProfilePet = (props: CreateProfilePetProps) => {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [urlImage, setUrlImage] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const filesInputRef = useRef<HTMLInputElement | null>(null);
+    const [imageFiles, setImageFiles] = useState<File[]>([]);
+    const [images, setImages] = useState<string[]>([])
 
     const [formDataInfoPet, setFormDataInfoPet] = useState<FormDataInfoPet>({ avartar: null, name: '', sex: '', dob: null, species: '', type: '', breedingStatus: '' });
     const [formDataInfoHealthPet, setFormDataInfoHealthPet] = useState<FormDataInfoHealthPet>({ clinicName: '', address: '', phone: '', attendingVet: '' });
@@ -65,6 +69,8 @@ const CreateProfilePet = (props: CreateProfilePetProps) => {
         setErrorDeworming({});
         setErrorRegularVetCheckup({});
         setErrorSpecialNutritionalPlan({});
+        setImageFiles([]);
+        setImages([])
     }
 
     const handleClose = () => {
@@ -91,6 +97,32 @@ const CreateProfilePet = (props: CreateProfilePetProps) => {
       if(fileInputRef.current){
         fileInputRef.current.value = "";
       }
+    }
+
+    // upload images
+    const handleChangeImages = async(event: ChangeEvent<HTMLInputElement>) => {
+      const files = event.target.files;
+      if (!files) return;
+      const resized = await Promise.all(
+        Array.from(files).map(async (file) => {
+          return resizeImage(file, 800);
+        }),
+      );
+
+      const resizedFiles = resized.map((r) => new File([r.blob], r.name!, { type: "image/*" }));
+      setImageFiles((prev) => [...prev, ...resizedFiles]);
+      const urls = resized.map((file) => file.previewUrl);
+      setImages((prev) => [...prev, ...urls]);
+      event.target.value = '';
+    }
+
+    const handleRemove = (index: number) => {
+      setImages((prev) => prev.filter((_, i) => i !== index));
+      setImageFiles((prev) => prev.filter((_, i) => i !== index));
+    };
+
+    const handleBoxClick = () => {
+        filesInputRef.current?.click();
     }
 
     // info pet
@@ -142,6 +174,7 @@ const CreateProfilePet = (props: CreateProfilePetProps) => {
     };
 
     const validate = (): boolean => {
+      // Thông tin thú cưng
       const newErrorInfoPet: FormErrorsInfoPet = {};
       if (!formDataInfoPet.avartar) newErrorInfoPet.avartar = 'Vui lòng chọn ảnh thú cưng';
       if (!formDataInfoPet.name) newErrorInfoPet.name = 'Vui lòng nhập tên thú cưng';
@@ -149,9 +182,33 @@ const CreateProfilePet = (props: CreateProfilePetProps) => {
       if (!formDataInfoPet.type) newErrorInfoPet.type = 'Vui lòng chọn loại thú cưng';
       if (!formDataInfoPet.species) newErrorInfoPet.species = 'Vui lòng nhập loài thú cưng';
       if (!formDataInfoPet.breedingStatus) newErrorInfoPet.breedingStatus = 'Vui lòng nhập tình trạng sinh sản của thú cưng';
-
       setErrorInfoPet(newErrorInfoPet);
-      return Object.keys(newErrorInfoPet).length === 0;
+
+      // Thông tin y tế thú cưng
+      const newErrorInfoHealthPet: FormErrorsHealthPet = {};
+      if(!formDataInfoHealthPet.clinicName) newErrorInfoHealthPet.clinicName = 'Vui lòng nhập tên phòng khám';
+      if(!formDataInfoHealthPet.address) newErrorInfoHealthPet.address = 'Vui lòng nhập địa chỉ';
+      if(!formDataInfoHealthPet.phone) newErrorInfoHealthPet.phone = 'Vui lòng nhập số điện thoại';
+      if(!formDataInfoHealthPet.attendingVet) newErrorInfoHealthPet.attendingVet = 'Vui lòng nhập bác sĩ điều trị';
+      setErrorInfoHealthPet(newErrorInfoHealthPet);
+
+      // Tiêm phòng
+      const newErrorVaccination: FormErrorsVaccination = {};
+      if(!formDataVaccination.medicationName) newErrorVaccination.medicationName = 'Vui lòng nhập tên thuốc';
+      if(!formDataVaccination.firstDoseDate) newErrorVaccination.firstDoseDate = 'Vui lòng chọn ngày bắt đầu tiêm';
+      if(!formDataVaccination.boosterDate) newErrorVaccination.boosterDate = 'Vui lòng chọn ngày tiêm nhắc lại';
+      if(!formDataVaccination.adverseReaction) newErrorVaccination.adverseReaction = 'Vui lòng nhập kết quản phản ứng';
+      setErrorVaccination(newErrorVaccination);
+      
+      // Tẩy giun
+      const newErrorDeworming: FormErrorsDeworming = {};
+      if(!formDataDeworming.medicationName) newErrorDeworming.medicationName = 'Vui lòng nhập tên thuốc';
+      if(!formDataDeworming.dosage) newErrorDeworming.dosage = 'Vui lòng nhập liều lượng';
+      if(!formDataDeworming.dewormingDate) newErrorDeworming.dewormingDate = 'Vui lòng chọn ngày tẩy giun';
+      if(!formDataDeworming.nextDewormingDate) newErrorDeworming.nextDewormingDate = 'Vui lòng chọn ngày tẩy lại';
+      setErrorDeworming(newErrorDeworming);
+
+      return Object.keys(newErrorInfoPet).length === 0 && Object.keys(newErrorInfoHealthPet).length === 0 && Object.keys(newErrorVaccination).length === 0 && Object.keys(newErrorDeworming).length === 0;
     }
 
     const handleSave = async() => {
@@ -161,11 +218,28 @@ const CreateProfilePet = (props: CreateProfilePetProps) => {
       setIsSubmitting(true);
       try {
         let uploadResponse: any;
+        let uploadResponses: any;
+        let payloadImages: {
+          nameImage: string,
+          urlImage: string
+        }[] = [];
         uploadResponse = await uploadImage(formDataInfoPet.avartar!, 'pets');
         if (!uploadResponse.success || !uploadResponse.data?.file) {
           throw new Error('Upload ảnh thất bại hoặc không nhận được URL ảnh');
         }
-        const payload: PayloadPet = {
+
+        if(imageFiles.length > 0){
+          uploadResponses = await uploadImages(imageFiles, 'pets/images/');
+          if (!uploadResponses.success || !uploadResponses.data?.files) {
+            throw new Error('Upload ảnh thất bại hoặc không nhận được URL ảnh');
+          }
+          payloadImages = uploadResponses.data.files.map((img: any) => ({
+            nameImage: img.originalname,
+            urlImage: img.url,
+          }))          
+        }
+
+        const payload: any = {
           pet: {
             name: formDataInfoPet.name,
             sex: formDataInfoPet.sex,
@@ -176,7 +250,25 @@ const CreateProfilePet = (props: CreateProfilePetProps) => {
             urlAvatar: uploadResponse.data.file.imageUrl,
             nameAvatar: uploadResponse.data.file.originalname,
           },
+          health: { ...formDataInfoHealthPet },
+          vaccination: {
+            medicationNameVac: formDataVaccination.medicationName,
+            firstDoseDate: formDataVaccination.firstDoseDate,
+            boosterDate: formDataVaccination.boosterDate,
+            adverseReaction: formDataVaccination.adverseReaction,
+           },
+          deworming: { ...formDataDeworming },
+          images: payloadImages
         };
+
+        // ✅ chỉ thêm nếu có dữ liệu
+        if (!isEmptyObject(formDataRegularVetCheckup)) {
+          payload.checkup = { ...formDataRegularVetCheckup };
+        }
+
+        if (!isEmptyObject(formDataSpecialNutritionalPlan)) {
+          payload.nutrition = { ...formDataSpecialNutritionalPlan };
+        }
 
         const res = await createPet(payload);
         notify({
@@ -193,6 +285,7 @@ const CreateProfilePet = (props: CreateProfilePetProps) => {
         setIsSubmitting(false)
       }
     }
+
     return (
       <Box>
         <NavigateBack sx={{ p: 1, bgcolor: '#fff' }} title='Tạo hồ sơ' onBack={handleClose} />
@@ -338,22 +431,84 @@ const CreateProfilePet = (props: CreateProfilePetProps) => {
               <Typography variant='subtitle2' fontWeight={500}>
                 Hình ảnh cập nhật thú cưng
               </Typography>
-              <Box
-                flexDirection='column'
-                mt={5}
-                display='flex'
-                justifyContent='center'
-                alignItems='center'
-              >
-                <CommonImage src={image_pet} sx={{ width: '50%', height: '50%', mb: 4 }} />
-                <Typography
-                  align='center'
-                  variant='h6'
-                  sx={{ wordBreak: 'break-word', whiteSpace: 'normal' }}
+              {images.length > 0 ? (
+                  images.map((image, index) => (
+                    <>
+                      <Box
+                        mt={5}
+                        sx={{
+                          position: 'relative',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        <CommonImage
+                          src={image}
+                          alt={`upload-${index}`}
+                          style={{ width: '100%', height: 200, objectFit: 'fill', borderRadius: 10 }}
+                        />
+                        <IconButton
+                          onClick={() => handleRemove(index)}
+                          sx={{
+                            position: 'absolute',
+                            top: 4,
+                            right: 4,
+                            color: '#000',
+                            '&:hover': { bgcolor: 'transparent' },
+                          }}
+                          size='small'
+                        >
+                          <Close fontSize='small' />
+                        </IconButton>
+                      </Box>
+                      <Box>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          capture='environment'
+                          hidden
+                          ref={filesInputRef}
+                          onChange={handleChangeImages}
+                          multiple
+                        />
+                        <Button
+                          onClick={handleBoxClick}
+                        >
+                          Thêm ảnh
+                        </Button>
+                      </Box>
+                    </>
+                  ))
+              ) : (
+                <Box
+                  mt={5}
                 >
-                  Bạn chưa có hình ảnh cập nhật của thú cưng
-                </Typography>
-              </Box>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    capture='environment'
+                    hidden
+                    ref={filesInputRef}
+                    onChange={handleChangeImages}
+                    multiple
+                  />
+                  <Box
+                    onClick={handleBoxClick}
+                    flexDirection='column'
+                    display='flex'
+                    justifyContent='center'
+                    alignItems='center'
+                  >
+                    <CommonImage src={image_pet} sx={{ width: '50%', height: '50%', mb: 4 }} />
+                    <Typography
+                      align='center'
+                      variant='h6'
+                      sx={{ wordBreak: 'break-word', whiteSpace: 'normal' }}
+                    >
+                      Bạn chưa có hình ảnh cập nhật của thú cưng
+                    </Typography>
+                  </Box>
+                </Box>                
+              )}
             </Paper>
           </Grid>
         </Grid>

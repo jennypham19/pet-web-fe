@@ -58,7 +58,41 @@ export interface PayloadPet{
         breedingStatus: string,
         nameAvatar: string,
         urlAvatar: string 
-    }
+    },
+    health: {
+        clinicName: string,
+        address: string,
+        phone: string,
+        attendingVet: string
+    },
+    vaccination: {
+        medicationNameVac: string,
+        firstDoseDate: Dayjs | null,
+        boosterDate: Dayjs | null,
+        adverseReaction: string
+    },
+    deworming: {
+        medicationName: string,
+        dosage: string,
+        dewormingDate: Dayjs | null,
+        nextDewormingDate: Dayjs | null
+    },
+    checkup: {
+        examinationDate: Dayjs | null,
+        recheckDate: Dayjs | null,
+        healthCondition: string,
+        conclusion: string
+    } | {},
+    nutrition: {
+        food: string,
+        amount: string,
+        frequency: string,
+        nutritionalSupplements: string
+    } | {},
+    images: {
+        nameImage: string,
+        urlImage: string
+    }[]
 }
 
 // output
