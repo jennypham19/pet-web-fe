@@ -11,6 +11,7 @@ import DialogCreateAccount from "../DialogCreateAccount";
 import { useFetchData } from "@/hooks/useFetchData";
 import { IUser } from "@/types/user";
 import { getAccounts } from "@/services/user-service";
+import DialogDetailAccount from "../DialogDetailAccount";
 
 const DATA = [
     {
@@ -39,16 +40,27 @@ interface AccountContentProps{
 
 const AccountContent = (props: AccountContentProps) => {
     const { } = props;
-    const [openDialogCreateAccount, setOpenDialogCreateAccount] = useState(false);
+    const [openDialogAccount, setOpenDialogAccount] = useState<{open: boolean, type: string}>({ open: false, type: ''});
+    const [id, setId] = useState<string | null>(null)
+
     const { page, rowsPerPage, listData, fetchData, searchTerm, handlePageChange, handleSearch } = useFetchData<IUser>(getAccounts)
     
     const handleOpenDialogCreateAccount = () => {
-        setOpenDialogCreateAccount(true)
+        setOpenDialogAccount({open: true, type: 'add'})
     }
 
     const handleCloseDialogCreateAccount = () => {
-        setOpenDialogCreateAccount(false)
+        setOpenDialogAccount({open: false, type: 'add'})
         fetchData(page, rowsPerPage)
+    }
+
+    const handleOpenDialogViewAccount = (id: string) => {
+        setOpenDialogAccount({open: true, type: 'view'})
+        setId(id)
+    }
+
+    const handleCloseDialogViewAccount = () => {
+        setOpenDialogAccount({open: false, type: 'view'})
     }
     return(
         <Box>
@@ -71,7 +83,7 @@ const AccountContent = (props: AccountContentProps) => {
             <Grid container spacing={2}>
                 {listData.length > 0 && listData.map((data, idx) => (
                     <Grid key={idx} size={{ xs: 12, md: 4 }}>
-                        <CardData>
+                        <CardData onDetail={() => handleOpenDialogViewAccount(data.id)}>
                             <Box display='flex' justifyContent='center' alignItems='center' flexDirection='column'>
                                 <Avatar
                                     src={data.avatarUrl || avatar}
@@ -92,10 +104,17 @@ const AccountContent = (props: AccountContentProps) => {
                     </Grid>
                 ))}
             </Grid>
-            {openDialogCreateAccount && (
+            {openDialogAccount.open && openDialogAccount.type === 'add' && (
                 <DialogCreateAccount
-                    open={openDialogCreateAccount}
+                    open={openDialogAccount.open}
                     onClose={handleCloseDialogCreateAccount}
+                />
+            )}
+            {id && openDialogAccount.open && openDialogAccount.type === 'view' && (
+                <DialogDetailAccount
+                    open={openDialogAccount.open}
+                    id={id}
+                    onClose={handleCloseDialogViewAccount}
                 />
             )}
         </Box>

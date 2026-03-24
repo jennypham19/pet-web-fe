@@ -35,3 +35,8 @@ export const getAccounts = async(getParams: GetParams): Promise<HttpResponse<Pag
         throw new Error(response.message || 'Failed to fetch list accounts')
     }
 }
+
+
+export const getDetailAccount = async(id:string) => {
+    return HttpClient.get<HttpResponse<IUser>>(`${prefix}/user-account-detail/${id}`)
+}
