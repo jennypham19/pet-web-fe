@@ -1,37 +1,38 @@
 import { ChangeEvent, useRef, useState } from "react";
-
-
-
 import { CameraAlt, Close } from "@mui/icons-material";
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import DialogComponent from "@/components/DialogComponent";
-
-
-
 import { COLORS } from "@/constants/colors";
 import { getPhotoTime, resizeImage } from "@/utils/common";
-import { Dayjs } from "dayjs";
 import DateTime from "@/utils/DateTime";
+import useNotification from "@/hooks/useNotification";
+import { uploadImages } from "@/services/upload-service";
+import { PayloadTaskImages } from "@/types/task";
+import useAuth from "@/hooks/useAuth";
+import { updateImagesForTask } from "@/services/task-service";
+import Backdrop from "@/components/Backdrop";
 
 
 interface UploadImagesProps{
     open: boolean,
     onClose: () => void;
+    id: string
 }
 
 const UploadImages = (props: UploadImagesProps) => {
-    const { open, onClose } = props;
+    const { open, onClose, id } = props;
+    const notify = useNotification();
+    const { profile } = useAuth()
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [errorFiles, setErrorFiles] = useState('');
     const [imageFiles, setImageFiles] = useState<File[]>([]);
     const [images, setImages] = useState<{url: string, time: Date | null}[]>([]);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
 
     const handleChangeImages = async (event: ChangeEvent<HTMLInputElement>) => {
       const files = event.target.files;
-      console.log("files: ", files);
-      
       if (!files) return;
       const resized = await Promise.all(
         Array.from(files).map(async (file) => {
@@ -45,9 +46,6 @@ const UploadImages = (props: UploadImagesProps) => {
         };        
         }),
       );
-
-      console.log('resized: ', resized);
-
       const resizedFiles = resized.map((r) => r.file);
       setImageFiles((prev) => [...prev, ...resizedFiles]);
       const urls = resized.map((file) => ({
@@ -72,6 +70,44 @@ const UploadImages = (props: UploadImagesProps) => {
     const handleClose = () => {
         onClose();
     }
+
+    const handleSave = async() => {
+      setIsSubmitting(true);
+      try {
+        let uploadResponses: any;
+        uploadResponses = await uploadImages(imageFiles!, 'pet/task/images');
+        if(!uploadResponses.success || !uploadResponses.data.files){
+          throw new Error('Upload ảnh thất bại hoặc không nhận được URL ảnh'); 
+        }
+
+        const payloadImages = uploadResponses.data.files.map((img: any, index: number) => ({
+          nameImage: img.originalname,
+          urlImage: img.url,
+          uploadedDate: images[index]?.time || null
+        }))
+
+        const payload: PayloadTaskImages = {
+          uploadedBy: profile?.id ? profile.id : undefined,
+          images: payloadImages
+        }
+        console.log("payload: ", payload);
+        
+        const res = await updateImagesForTask(id, payload);
+        notify({
+          message: res.message,
+          severity: 'success'
+        })
+        handleClose()
+      } catch (error: any) {
+        notify({
+          message: error.message,
+          severity: 'error'
+        })
+      } finally {
+        setIsSubmitting(false)
+      }
+    }
+
     return (
       <DialogComponent
         dialogKey={open}
@@ -111,53 +147,63 @@ const UploadImages = (props: UploadImagesProps) => {
                 <Typography mt={1.5} variant="caption">{DateTime.Format(img.time)}</Typography>
               </Grid>
             ))}
-        <Grid size={{ xs: 6 }}>
-            <Box>
-            <input
-                type='file'
-                accept='image/*'
-                capture='environment'
-                hidden
-                ref={fileInputRef}
-                onChange={handleChangeImages}
-                multiple
-            />
-            <Box
-                sx={{
-                border: errorFiles ? '2px dashed red' : '2px dashed #000',
-                borderRadius: 2,
-                p: 3,
-                textAlign: 'center',
-                '&:hover': { borderColor: 'primary.main' },
-                height: 180,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                }}
+          <Grid size={{ xs: 6 }}>
+              <Box>
+              <input
+                  type='file'
+                  accept='image/*'
+                  capture='environment'
+                  hidden
+                  ref={fileInputRef}
+                  onChange={handleChangeImages}
+                  multiple
+              />
+              <Box
+                  sx={{
+                  border: errorFiles ? '2px dashed red' : '2px dashed #000',
+                  borderRadius: 2,
+                  p: 3,
+                  textAlign: 'center',
+                  '&:hover': { borderColor: 'primary.main' },
+                  height: 180,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  }}
+              >
+                  <Box sx={{ margin: 'auto 0' }}>
+                  <CameraAlt sx={{ fontSize: 48, color: 'text.secondary' }} />
+                  <Typography fontSize='13px'>Thêm HÌNH ẢNH cập nhật công việc tại đây.</Typography>
+                  <Typography fontSize='13px'>{`Hình ảnh dưới dạng PNG, JPG....`}</Typography>
+                  </Box>
+              </Box>
+              <Box mt={2} display='flex' justifyContent='center'>
+                  <Button
+                      onClick={handleBoxClick}
+                      variant='outlined'
+                      sx={{
+                          border: `1px solid ${COLORS.PRIMARY}`,
+                          color: COLORS.PRIMARY,
+                          px: 2,
+                          borderRadius: 2,
+                      }}
+                  >
+                  Thêm hình ảnh
+                  </Button>
+              </Box>
+              </Box>            
+          </Grid>
+          <Grid size={{ xs: 12 }} sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Button
+              onClick={handleSave}
+              sx={{ bgcolor: COLORS.PRIMARY, px: 2 }}
+              disabled={imageFiles.length === 0}
             >
-                <Box sx={{ margin: 'auto 0' }}>
-                <CameraAlt sx={{ fontSize: 48, color: 'text.secondary' }} />
-                <Typography fontSize='13px'>Thêm HÌNH ẢNH cập nhật công việc tại đây.</Typography>
-                <Typography fontSize='13px'>{`Hình ảnh dưới dạng PNG, JPG....`}</Typography>
-                </Box>
-            </Box>
-            <Box mt={2} display='flex' justifyContent='center'>
-                <Button
-                    onClick={handleBoxClick}
-                    variant='outlined'
-                    sx={{
-                        border: `1px solid ${COLORS.PRIMARY}`,
-                        color: COLORS.PRIMARY,
-                        px: 2,
-                        borderRadius: 2,
-                    }}
-                >
-                Thêm hình ảnh
-                </Button>
-            </Box>
-            </Box>            
+              Cập nhật
+            </Button>
+          </Grid>
         </Grid>
-        </Grid>
+        {isSubmitting && <Backdrop open={isSubmitting}/>}
       </DialogComponent>
     );
 }

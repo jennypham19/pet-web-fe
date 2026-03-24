@@ -6,6 +6,7 @@ import { getTranslation } from '@/utils/getTranslation';
 export const DateFormat = 'DD/MM/YYYY';
 export const HourFormat = 'HH:mm A';
 export const DateTimeFormat = 'DD/MM/YYYY, HH:mm';
+export const DateHourFormat = 'DD/MM/YYYY, HH:mm A';
 export const ISOFormat = 'YYYY-MM-DDTHH:mm:ss[Z]';
 
 const t = getTranslation('date');
