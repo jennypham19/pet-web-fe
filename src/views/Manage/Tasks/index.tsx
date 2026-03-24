@@ -1,21 +1,32 @@
-import IconButton from "@/components/IconButton/IconButton"
-import Page from "@/components/Page"
-import { COLORS } from "@/constants/colors"
-import { useFetchData } from "@/hooks/useFetchData"
-import { getTasks, updateStatus } from "@/services/task-service"
-import { ITask } from "@/types/task"
-import SearchBox from "@/views/components/SearchBox"
-import { FilterAlt, Notifications } from "@mui/icons-material"
-import { Box, Paper, Typography, useMediaQuery, useTheme } from "@mui/material"
+import { useState } from "react";
+
+
+
+import { FilterAlt, Notifications } from "@mui/icons-material";
+import { Box, Paper, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import TaskCard from "./components/TaskCard"
-import useNotification from "@/hooks/useNotification"
-import { useState } from "react"
+
+import TaskCard from "./components/TaskCard";
+import UploadImages from "./components/UploadImages";
+import Backdrop from "@/components/Backdrop";
+import IconButton from "@/components/IconButton/IconButton";
+import Page from "@/components/Page";
+
+
+
+import { COLORS } from "@/constants/colors";
+import { useFetchData } from "@/hooks/useFetchData";
+import useNotification from "@/hooks/useNotification";
+import { getTasks, updateStatus } from "@/services/task-service";
+import { ITask } from "@/types/task";
+import SearchBox from "@/views/components/SearchBox";
+
 
 const ManagementTasks = () => {
     const notify = useNotification();
 
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [openUpload, setOpenUpload] = useState(false);
     const theme = useTheme();
     const md = useMediaQuery(theme.breakpoints.down('md'));
     const { listData, searchTerm, handleSearch, fetchData, page, rowsPerPage } = useFetchData<ITask>(getTasks)
@@ -40,38 +51,59 @@ const ManagementTasks = () => {
     };
 
     const grouped = groupTasks(queryData);
-    const handleButton = async(id: string, type: string) => {{
-        console.log("id: ", id);
-        console.log("type: ", type);
+
+    const handleUploadAndUpdate = async(id: string, type: string) => {
         let res: any;
+        let payload: { status: string };
         setIsSubmitting(true);
         try {
-            switch (type) {
-                case 'completed':
-                    
-                    break;
-                case 'start':
-                default:
-                    const payload: { status: string} = {
-                        status: 'in_progress'
-                    }
-                    res = await updateStatus(id, payload);
-            }
-            notify({
-                message: res.message,
-                severity: 'success'
-            })
-            fetchData(page, rowsPerPage)
-        } catch (error: any) {
-            notify({
-                message: error.messgae,
-                severity: 'error'
-            })
-        } finally {
-            setIsSubmitting(false)
+        switch (type) {
+            case 'completed':
+                payload = {
+                    status: 'completed',
+                };
+                res = await updateStatus(id, payload);
+                break;
+            case 'start':
+                payload = {
+                    status: 'in_progress',
+                };
+                res = await updateStatus(id, payload);
+                break;
+            default:
+                break;
         }
+        notify({
+            message: res.message,
+            severity: 'success',
+        });
+        fetchData(page, rowsPerPage);
+        } catch (error: any) {
+        notify({
+            message: error.messgae,
+            severity: 'error',
+        });
+        } finally {
+        setIsSubmitting(false);
+        }
+    }
 
-    }}
+    const handleButton = (id: string, type: string) => {
+        switch (type) {
+            case 'completed':
+                handleUploadAndUpdate(id, type);
+                break
+            case 'updated':
+                setOpenUpload(true);
+                break;
+            case 'start':
+                handleUploadAndUpdate(id, type);
+                break;
+            default:
+                break
+        }
+    }
+
     return(
         <Page title="Quản lý công việc">
             <Box p={1} bgcolor='#fff'>
@@ -123,7 +155,14 @@ const ManagementTasks = () => {
                         />
                     </Paper>
                 </Grid>
-            </Grid>       
+            </Grid>
+            {isSubmitting && <Backdrop open={isSubmitting}/>} 
+            {openUpload && (
+                <UploadImages
+                    open={openUpload}
+                    onClose={() => { setOpenUpload(false) }}
+                />
+            )}      
         </Page>
     )
 }
