@@ -59,7 +59,7 @@ const RegularVetCheckup = (props: RegularVetCheckupProps) => {
             type='text'
             name='healthCondition'
             onChange={onInputChange}
-            placeholder='Tình trạng sức khỏe *'
+            placeholder='Tình trạng sức khỏe'
             multiline
             rows={3}
             error={!!errorRegularVetCheckup.healthCondition}
@@ -73,7 +73,7 @@ const RegularVetCheckup = (props: RegularVetCheckupProps) => {
             type='text'
             name='conclusion'
             onChange={onInputChange}
-            placeholder='Kết luận *'
+            placeholder='Kết luận'
             multiline
             rows={3}
             error={!!errorRegularVetCheckup.conclusion}

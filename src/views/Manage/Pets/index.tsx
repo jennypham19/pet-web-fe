@@ -12,6 +12,7 @@ import Page from "@/components/Page";
 import { COLORS } from "@/constants/colors";
 import SearchBox from "@/views/components/SearchBox";
 import CreateProfilePet from "./components/CreateProfilePet";
+import ListPetsInDashboard from "../Home/components/ListPetsInDashboard";
 
 
 const ManagementPets = () => {
@@ -28,6 +29,7 @@ const ManagementPets = () => {
     return (
         <Page title='Danh sách thú cưng'>
             {!openCreateProfilePet.open && (
+                <>
                     <Box p={1} bgcolor='#fff'>
                         <SearchBox
                             initialValue=''
@@ -59,12 +61,18 @@ const ManagementPets = () => {
                             </Button>
                         </SearchBox>
                     </Box>
+                    <ListPetsInDashboard
+                        onClick={() => {}}
+                        onDetailPet={() => {}}
+                    />                    
+                </>    
             )}
             {openCreateProfilePet.open && openCreateProfilePet.type === 'create' && (
                 <CreateProfilePet
                     onClose={handleCloseCreateProfilePet}
                 />
             )}
+
         </Page>
     );
 }

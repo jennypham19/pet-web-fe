@@ -89,7 +89,7 @@ const DialogViewDetail = (props: DialogViewDetailProps) => {
             {task && task.status === 'pending' && (
                 <Stack mt={2} justifyContent='flex-end'>
                     <Button
-                        onClick={() => onUploadAndUpdate(task.id, 'start')}
+                        onClick={() => { onUploadAndUpdate(task.id, 'start'); onClose() }}
                         sx={{ bgcolor: COLORS.PRIMARY, px: 3 }}
                     >
                         Bắt đầu
@@ -106,7 +106,7 @@ const DialogViewDetail = (props: DialogViewDetailProps) => {
             {task && task.status === 'in_progress' && (
                 <Stack mt={2} justifyContent='flex-end'>
                     <Button
-                        onClick={() => onUploadAndUpdate(task.id, 'completed')}
+                        onClick={() => { onUploadAndUpdate(task.id, 'completed'); onClose()}}
                         sx={{ bgcolor: COLORS.PRIMARY, px: 3 }}
                         disabled={!task.isUpdatedImage}
                     >
