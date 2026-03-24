@@ -61,12 +61,18 @@ export const findDuplicateKey = (data: any, iteratee: string) => {
 
 // lấy thời gian chụp ảnh
 
-export const getPhotoTime = async (file: File): Promise<string | null> => {
+export const getPhotoTime = async (file: File): Promise<Date | null> => {
   try {
-    const data = await exifr.parse(file);
-    return data?.DateTimeOriginal || null;
-  } catch {
-    return null;
+    const exif = await exifr.parse(file);
+
+    const takenAt =
+      exif?.DateTimeOriginal ||
+      exif?.CreateDate ||
+      new Date(file.lastModified);
+
+    return takenAt || null;
+  } catch (err) {
+    return new Date(file.lastModified);
   }
 };
 
