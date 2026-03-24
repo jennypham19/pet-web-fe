@@ -13,68 +13,15 @@ import dog_1 from "@/assets/images/users/alaska.png";
 import dog from "@/assets/images/users/dog.png";
 import dog_2 from "@/assets/images/users/soc.png";
 import { COLORS } from "@/constants/colors";
+import { useFetchData } from "@/hooks/useFetchData";
+import { getTasks } from "@/services/task-service";
+import { ITask } from "@/types/task";
 import DateTime from "@/utils/DateTime";
 import { getStatusTaskColor, getStatusTaskLabel } from "@/utils/labelEntoVni";
 import CardData from "@/views/components/CardData";
 import ViewData from "@/views/components/ViewData";
-import { useFetchData } from "@/hooks/useFetchData";
-import { ITask } from "@/types/task";
-import { getTasks } from "@/services/task-service";
+import { useEffect } from "react";
 
-
-const DATA_PET = [
-    {
-        id: 1,
-        name: 'Milo',
-        image: dog,
-    },
-    {
-        id: 2,
-        name: 'Sữa',
-        image: dog_1,
-    },
-    {
-        id: 3,
-        name: 'Bơ',
-        image: dog_2,
-    },
-    {
-        id: 4,
-        name: 'Bơ',
-        image: dog_2,
-    },
-];
-
-const DATA_TASKS_PROCESS = [
-    {
-        id: 1,
-        name: 'Cho chó ăn sáng',
-        pets: DATA_PET,
-        status: 'pending',
-        date: dayjs()
-    },
-    {
-        id: 2,
-        name: 'Cho chó ăn sáng',
-        pets: DATA_PET,
-        status: 'in_progress',
-        date: dayjs()
-    },
-    {
-        id: 3,
-        name: 'Cho chó ăn sáng',
-        pets: DATA_PET,
-        status: 'in_progress',
-        date: dayjs()
-    },
-    {
-        id: 4,
-        name: 'Cho chó ăn sáng',
-        pets: DATA_PET,
-        status: 'completed',
-        date: dayjs()
-    },
-]
 
 const CardListPets = ({ tasks } : { tasks: ITask[] }) => {
     return(
@@ -155,10 +102,16 @@ const TableListPets = ({ tasks } : { tasks: ITask[] }) => {
     );
 }
 
-const TasksProcessInDashboard = () => {
+const TasksProcessInDashboard = ({ isReload }: { isReload: boolean}) => {
     const theme = useTheme();
     const md = useMediaQuery(theme.breakpoints.down('md'));
-    const { listData } = useFetchData<ITask>(getTasks)
+    const { listData, fetchData, page, rowsPerPage } = useFetchData<ITask>(getTasks)
+    useEffect(() => {
+      if(isReload){
+        fetchData(page, rowsPerPage)
+      }
+    }, [isReload])
+    
     return(
         <Box p={2}>
             <ViewData

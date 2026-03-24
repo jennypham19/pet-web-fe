@@ -3,6 +3,7 @@ import _ from 'lodash';
 import Papa from 'papaparse';
 import { PDFDocument } from "pdf-lib";
 import JSZip from "jszip";
+import exifr from 'exifr';
 // import { createFFmpeg } from "@ffmpeg/ffmpeg";
 
 
@@ -56,6 +57,17 @@ export const findDuplicateKey = (data: any, iteratee: string) => {
     .keys()
     .value();
   return result;
+};
+
+// lấy thời gian chụp ảnh
+
+export const getPhotoTime = async (file: File): Promise<string | null> => {
+  try {
+    const data = await exifr.parse(file);
+    return data?.DateTimeOriginal || null;
+  } catch {
+    return null;
+  }
 };
 
 // Resize ảnh

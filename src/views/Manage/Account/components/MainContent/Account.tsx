@@ -8,6 +8,9 @@ import avatar from "@/assets/images/users/avatar-1.png"
 import { getRoleLabel } from "@/utils/labelEntoVni";
 import { useState } from "react";
 import DialogCreateAccount from "../DialogCreateAccount";
+import { useFetchData } from "@/hooks/useFetchData";
+import { IUser } from "@/types/user";
+import { getAccounts } from "@/services/user-service";
 
 const DATA = [
     {
@@ -37,6 +40,7 @@ interface AccountContentProps{
 const AccountContent = (props: AccountContentProps) => {
     const { } = props;
     const [openDialogCreateAccount, setOpenDialogCreateAccount] = useState(false);
+    const { page, rowsPerPage, listData, fetchData, searchTerm, handlePageChange, handleSearch } = useFetchData<IUser>(getAccounts)
     
     const handleOpenDialogCreateAccount = () => {
         setOpenDialogCreateAccount(true)
@@ -44,12 +48,13 @@ const AccountContent = (props: AccountContentProps) => {
 
     const handleCloseDialogCreateAccount = () => {
         setOpenDialogCreateAccount(false)
+        fetchData(page, rowsPerPage)
     }
     return(
         <Box>
             <SearchBox
-                initialValue=''
-                onSearch={() => {}}
+                initialValue={searchTerm}
+                onSearch={handleSearch}
             >
                 <Button
                     onClick={handleOpenDialogCreateAccount}
@@ -64,12 +69,12 @@ const AccountContent = (props: AccountContentProps) => {
                 Danh sách tài khoản
             </Typography>
             <Grid container spacing={2}>
-                {DATA.map((data, idx) => (
+                {listData.length > 0 && listData.map((data, idx) => (
                     <Grid key={idx} size={{ xs: 12, md: 4 }}>
                         <CardData>
                             <Box display='flex' justifyContent='center' alignItems='center' flexDirection='column'>
                                 <Avatar
-                                    src={data.avartarUrl}
+                                    src={data.avatarUrl || avatar}
                                     sx={{ borderRadius: '50%', width: 100, height: 100 }}
                                 />
                                 <Box mt={2}>
