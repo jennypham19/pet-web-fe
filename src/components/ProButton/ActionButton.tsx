@@ -42,10 +42,11 @@ interface Props extends LoadingButtonProps {
   actionType?: keyof typeof Icons;
   iconPosition?: 'start' | 'end';
   onSubmit?: () => Promise<void>;
+  isIcon?: boolean
 }
 
 const ActionButton = (props: Props) => {
-  const { actionType, iconPosition = 'start', onSubmit, loading, ...rest } = props;
+  const { actionType, iconPosition = 'start', onSubmit, loading, isIcon = true, ...rest } = props;
 
   const [submitting, setSubmitting] = useState<boolean>(false);
 
@@ -71,8 +72,8 @@ const ActionButton = (props: Props) => {
       loading={submitting || loading}
       {...(actionType && {
         loadingPosition: iconPosition,
-        startIcon: Icon && iconPosition === 'start' ? <Icon /> : void 0,
-        endIcon: Icon && iconPosition === 'end' ? <Icon /> : void 0,
+        startIcon: isIcon && Icon && iconPosition === 'start' ? <Icon /> : void 0,
+        endIcon: isIcon && Icon && iconPosition === 'end' ? <Icon /> : void 0,
         variant: actionType === 'cancel' ? 'outlined' : void 0,
       })}
       {...rest}

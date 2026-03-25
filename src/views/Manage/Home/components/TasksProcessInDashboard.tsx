@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 
 
 import { BorderColorOutlined, VisibilityOutlined } from "@mui/icons-material";
-import { Avatar, Box, Button, Chip, IconButton as IconButtonMui, Tooltip, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Avatar, Box, Button, Chip, IconButton as IconButtonMui, Stack, Tooltip, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import IconButton from "@/components/IconButton/IconButton";
 
@@ -21,17 +21,58 @@ import { getStatusTaskColor, getStatusTaskLabel } from "@/utils/labelEntoVni";
 import CardData from "@/views/components/CardData";
 import ViewData from "@/views/components/ViewData";
 import { useEffect } from "react";
+import PetsAvatar from "@/views/components/PetsAvatar";
 
 
-const CardListPets = ({ tasks } : { tasks: ITask[] }) => {
+const CardListPets = ({ tasks, onHandle } : { tasks: ITask[], onHandle: (id: string, type: string) => void }) => {
     return(
-        <CardData>
-            <Box></Box>
-        </CardData>
+      <Box display='flex' gap={1} flexDirection='column'>
+        {tasks.slice(0,2).map((task, index) => (
+          <CardData key={index} onDetail={() => {}}>
+              <Box display='flex' justifyContent='space-between'>
+                <Chip
+                  label={getStatusTaskLabel(task.status)}
+                  color={getStatusTaskColor(task.status).color}
+                />
+                <Typography variant='subtitle2'>{DateTime.FormatDateHour(task.hour)}</Typography>
+              </Box>
+              <Box display='flex' justifyContent='space-between'>
+                <Typography my={2} variant='h6' fontWeight={600}>{task.name}</Typography>
+                <Stack mt={1}>
+                  {task.status === 'pending' && (
+                    <IconButton
+                      tooltip='Chỉnh sửa'
+                      handleFunt={(e: any) => {
+                        e.stopPropagation();
+                        onHandle(task.id, 'update')
+                      }}
+                      backgroundColor= '#E1E3E4'
+                      icon={<BorderColorOutlined sx={{ color: COLORS.PRIMARY }} />}
+                      sx={{ borderRadius: '50%' }}
+                    />
+                  )}
+                  <IconButton
+                    tooltip='Xem chi tiết'
+                      handleFunt={(e: any) => {
+                        e.stopPropagation();
+                        onHandle(task.id, 'view')
+                      }}
+                    backgroundColor= '#E1E3E4'
+                    icon={<VisibilityOutlined sx={{ color: COLORS.PRIMARY }} />}
+                    sx={{ borderRadius: '50%' }}
+                  />
+                </Stack>
+              </Box>
+              <PetsAvatar
+                pets={task.pets}
+              />
+          </CardData>        
+        ))}
+      </Box>  
     )
 }
 
-const TableListPets = ({ tasks } : { tasks: ITask[] }) => {
+const TableListPets = ({ tasks, onHandle } : { tasks: ITask[], onHandle: (id: string, type: string) => void }) => {
     return (
       <>
         <Grid sx={{ mt: 1, bgcolor: '#fff', p: 1, borderRadius: 3 }} container spacing={2}>
@@ -81,17 +122,21 @@ const TableListPets = ({ tasks } : { tasks: ITask[] }) => {
                 color={getStatusTaskColor(task.status).color}
               />
             </Grid>
-            <Grid sx={{ flex: 1, textAlign: 'center' }}>{DateTime.FormatHour(task.hour)}</Grid>
             <Grid sx={{ flex: 1, textAlign: 'center' }}>
-              <IconButton
-                tooltip='Chỉnh sửa'
-                handleFunt={() => {}}
-                icon={<BorderColorOutlined sx={{ color: COLORS.PRIMARY }} />}
-                sx={{ boxShadow: '2px 2px 4px 1px rgba(0,0,0,0.3)', mr: 1 }}
-              />
+              <Typography variant='subtitle2'>{DateTime.FormatDateHour(task.hour)}</Typography>
+            </Grid>
+            <Grid sx={{ flex: 1, textAlign: 'center' }}>
+              {task.status === 'pending' && (
+                <IconButton
+                  tooltip='Chỉnh sửa'
+                  handleFunt={() => onHandle(task.id, 'update')}
+                  icon={<BorderColorOutlined sx={{ color: COLORS.PRIMARY }} />}
+                  sx={{ boxShadow: '2px 2px 4px 1px rgba(0,0,0,0.3)', mr: 1 }}
+                />
+              )}
               <IconButton
                 tooltip='Xem chi tiết'
-                handleFunt={() => {}}
+                handleFunt={() => onHandle(task.id, 'view')}
                 icon={<VisibilityOutlined sx={{ color: COLORS.PRIMARY }} />}
                 sx={{ boxShadow: '2px 2px 4px 1px rgba(0,0,0,0.3)' }}
               />
@@ -102,7 +147,7 @@ const TableListPets = ({ tasks } : { tasks: ITask[] }) => {
     );
 }
 
-const TasksProcessInDashboard = ({ isReload }: { isReload: boolean}) => {
+const TasksProcessInDashboard = ({ isReload, onHandle }: { isReload: boolean, onHandle: (id: string, type: string ) => void }) => {
     const theme = useTheme();
     const md = useMediaQuery(theme.breakpoints.down('md'));
     const { listData, fetchData, page, rowsPerPage } = useFetchData<ITask>(getTasks)
@@ -119,9 +164,9 @@ const TasksProcessInDashboard = ({ isReload }: { isReload: boolean}) => {
                 onClick={() => {}}
             />
             {md ? (
-                <CardListPets tasks={listData}/>
+                <CardListPets tasks={listData} onHandle={onHandle}/>
             ) : (
-                <TableListPets tasks={listData}/>
+                <TableListPets tasks={listData} onHandle={onHandle}/>
             )}
         </Box>
     )
