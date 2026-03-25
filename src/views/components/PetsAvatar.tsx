@@ -1,7 +1,6 @@
 import { Avatar, Box, Tooltip, Typography, IconButton as IconButtonMui } from "@mui/material";
 
-const PetsAvatar = ({ pets, width = 40, height = 40 }: { pets: {name: string, sex: string, urlAvatar: string}[], width?: number, height?: number }) => {
-  const maxShow = 3;
+const PetsAvatar = ({ pets, width = 40, height = 40, maxShow = 3 }: { pets: {name: string, sex: string, urlAvatar: string}[], width?: number, height?: number, maxShow?: number }) => {
   const visible = pets.slice(0, maxShow);
   const remain = pets.length - maxShow;
 

@@ -24,9 +24,10 @@ export interface AutocompleteComponentProps<T>{
     debounceTime?: number;
     error?: boolean;
     helperText?: React.ReactNode;
+    values?: T[] 
 }
 export default function AutocompleteComponent<T>(props: AutocompleteComponentProps<T>){
-    const { label, placeholder, fetchOptions, getOptionLabel, getRenderOption, onChange, getOptionKey, debounceTime = 400, error, helperText } = props;
+    const { values, label, placeholder, fetchOptions, getOptionLabel, getRenderOption, onChange, getOptionKey, debounceTime = 400, error, helperText } = props;
     const [options, setOptions] = useState<T[]>([]);
     const [value, setValue] = useState<T[]>([]);
     const [inputValue, setInputValue] = useState("");
@@ -36,6 +37,12 @@ export default function AutocompleteComponent<T>(props: AutocompleteComponentPro
     const [total, setTotal] = useState(0);
     const [hasMore, setHasMore] = useState(true);
 
+    useEffect(() => {
+        if(values !== undefined && values.length > 0) {
+            setValue(values)
+        }
+    }, [values])
+    
     // =========== CACHE ============
     const cacheRef = useRef(new Map<string, { data: T[]; total: number }>());
 

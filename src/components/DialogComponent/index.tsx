@@ -20,6 +20,8 @@ interface Props extends Omit<DialogProps, 'open' | 'fullScreen'> {
   isActiveHeader?:boolean,
   maxWidth?: any,
   toolTip?: string,
+  labelBtn?: string,
+  isIcon?: boolean
 }
 
 const DialogComponent = ({
@@ -36,6 +38,8 @@ const DialogComponent = ({
   isActiveHeader=true,
   maxWidth,
   toolTip = dialogTitle,
+  labelBtn = 'Hủy',
+  isIcon,
   ...rest
 }: Props) => {
   return (
@@ -47,8 +51,8 @@ const DialogComponent = ({
       {isActiveFooter && (
         <DialogFooter>
           {customButtons}
-          <ActionButton actionType='cancel' onClick={handleClose}>
-            Hủy
+          <ActionButton isIcon={isIcon} actionType='cancel' onClick={handleClose}>
+            {labelBtn}
           </ActionButton>
         </DialogFooter>        
       )}
