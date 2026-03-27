@@ -12,6 +12,10 @@ import DialogConfirm from "@/views/components/DialogConfirm";
 import img from "@/assets/images/users/img_2.jpg"
 import ViewTask from "../../Tasks/components/ViewTask";
 import UpdateTask from "../../Tasks/components/UpdateTask";
+import { ROUTE_PATH } from "@/constants/routes";
+import { useFetchData } from "@/hooks/useFetchData";
+import { IPet } from "@/types/pet";
+import { getPets } from "@/services/pet-service";
 
 
 const DashboardInMod = () => {
@@ -19,7 +23,10 @@ const DashboardInMod = () => {
     const [openTask, setOpenTask] = useState<{ open: boolean, type: string }>({ open: false, type: '' });
     const [openDialogConfirm, setOpenDialogConfirm] = useState(false);
     const [isReload, setIsReload] = useState(false);
-    const [id, setId] = useState<string | null>(null)
+    const [id, setId] = useState<string | null>(null);
+
+    const { listData } = useFetchData<IPet>(getPets)
+    
     const handleCloseOpenTask = () => {
         // setIsReload(true);
         setOpenDialogConfirm(true)
@@ -93,8 +100,8 @@ const DashboardInMod = () => {
             </Button>
           </SearchBox>
         </Box>
-        <ListPetsInDashboard onClick={() => { navigate('/pet/manage/pet')}} onDetailPet={() => {}}/>
-        <TasksProcessInDashboard isReload={isReload} onHandle={handleButton}/>
+        <ListPetsInDashboard listData={listData} onClick={() => { navigate('/pet/manage/pet')}} onDetailPet={() => {}}/>
+        <TasksProcessInDashboard onClick={() => { navigate(`/pet/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_TASK}`)}} isReload={isReload} onHandle={handleButton}/>
         {openTask.open && openTask.type === 'add' && (
           <CreateTask open={openTask.open} onClose={handleCloseOpenTask} />
         )}

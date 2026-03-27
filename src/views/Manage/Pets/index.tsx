@@ -13,22 +13,43 @@ import { COLORS } from "@/constants/colors";
 import SearchBox from "@/views/components/SearchBox";
 import CreateProfilePet from "./components/CreateProfilePet";
 import ListPetsInDashboard from "../Home/components/ListPetsInDashboard";
+import ListPets from "./ListPets";
+import DetailPet from "./components/DetailPet";
+import { useFetchData } from "@/hooks/useFetchData";
+import { IPet } from "@/types/pet";
+import { getPets } from "@/services/pet-service";
 
 
 const ManagementPets = () => {
-    const [openCreateProfilePet, setOpenCreateProfilePet] = useState<{ open: boolean, type: string}>({ open: false, type: '' }) 
+    const [openProfilePet, setOpenProfilePet] = useState<{ open: boolean, type: string}>({ open: false, type: '' });
+    const [openListPets, setOpenListPets] = useState(false);
+    const [id, setId] = useState<string | null>(null); 
+    const { listData, page, rowsPerPage, handlePageChange, total, fetchData } = useFetchData<IPet>(getPets, 8);
     
+    // Tạo hồ sơ
     const handleOpenCreateProfilePet = () => {
-      setOpenCreateProfilePet({ open: true, type: 'create' });
+        setOpenProfilePet({ open: true, type: 'create' });
     };
 
     const handleCloseCreateProfilePet = () => {
-      setOpenCreateProfilePet({ open: false, type: 'create' });
+        setOpenProfilePet({ open: false, type: 'create' });
+        fetchData(page, rowsPerPage)
+    };
+
+    // Xem chi tiết
+    const handleOpenViewProfilePet = (id: string) => {
+        setId(id)
+        setOpenProfilePet({ open: true, type: 'view' });
+    };
+
+    const handleCloseViewProfilePet = () => {
+        setId(null)
+        setOpenProfilePet({ open: false, type: 'view' });
     };
 
     return (
         <Page title='Danh sách thú cưng'>
-            {!openCreateProfilePet.open && (
+            {(!openProfilePet.open && !openListPets) && (
                 <>
                     <Box p={1} bgcolor='#fff'>
                         <SearchBox
@@ -62,17 +83,34 @@ const ManagementPets = () => {
                         </SearchBox>
                     </Box>
                     <ListPetsInDashboard
-                        onClick={() => {}}
-                        onDetailPet={() => {}}
+                        onClick={() => { setOpenListPets(true) }}
+                        onDetailPet={handleOpenViewProfilePet}
+                        listData={listData}
                     />                    
                 </>    
             )}
-            {openCreateProfilePet.open && openCreateProfilePet.type === 'create' && (
+            {openProfilePet.open && openProfilePet.type === 'create' && (
                 <CreateProfilePet
                     onClose={handleCloseCreateProfilePet}
                 />
             )}
+            {openListPets && (
+                <ListPets
+                    listData={listData}
+                    page={page}
+                    rowsPerPage={rowsPerPage}
+                    total={total}
+                    onPageChange={handlePageChange}
+                    onBack={() => { setOpenListPets(false) }}
+                />
+            )}
 
+            {openProfilePet.open && openProfilePet.type === 'view' && id && (
+                <DetailPet
+                    onBack={handleCloseViewProfilePet}
+                    id={id}
+                />
+            )}
         </Page>
     );
 }

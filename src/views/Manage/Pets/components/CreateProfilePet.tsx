@@ -432,10 +432,11 @@ const CreateProfilePet = (props: CreateProfilePetProps) => {
                 Hình ảnh cập nhật thú cưng
               </Typography>
               {images.length > 0 ? (
-                  images.map((image, index) => (
+                <>
+                  {images.map((image, index) => (
                     <>
                       <Box
-                        mt={5}
+                        mt={2}
                         sx={{
                           position: 'relative',
                           overflow: 'hidden',
@@ -460,7 +461,12 @@ const CreateProfilePet = (props: CreateProfilePetProps) => {
                           <Close fontSize='small' />
                         </IconButton>
                       </Box>
-                      <Box>
+
+                    </>
+                  ))}
+                      <Box
+                        mt={1}
+                      >
                         <input
                           type="file"
                           accept="image/*"
@@ -475,9 +481,8 @@ const CreateProfilePet = (props: CreateProfilePetProps) => {
                         >
                           Thêm ảnh
                         </Button>
-                      </Box>
-                    </>
-                  ))
+                      </Box>                  
+                </>
               ) : (
                 <Box
                   mt={5}

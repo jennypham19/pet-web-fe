@@ -6,12 +6,6 @@ import { BorderColorOutlined, VisibilityOutlined } from "@mui/icons-material";
 import { Avatar, Box, Button, Chip, IconButton as IconButtonMui, Stack, Tooltip, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import IconButton from "@/components/IconButton/IconButton";
-
-
-
-import dog_1 from "@/assets/images/users/alaska.png";
-import dog from "@/assets/images/users/dog.png";
-import dog_2 from "@/assets/images/users/soc.png";
 import { COLORS } from "@/constants/colors";
 import { useFetchData } from "@/hooks/useFetchData";
 import { getTasks } from "@/services/task-service";
@@ -28,7 +22,7 @@ const CardListPets = ({ tasks, onHandle } : { tasks: ITask[], onHandle: (id: str
     return(
       <Box display='flex' gap={1} flexDirection='column'>
         {tasks.slice(0,2).map((task, index) => (
-          <CardData key={index} onDetail={() => {}}>
+          <CardData key={index}>
               <Box display='flex' justifyContent='space-between'>
                 <Chip
                   label={getStatusTaskLabel(task.status)}
@@ -40,27 +34,31 @@ const CardListPets = ({ tasks, onHandle } : { tasks: ITask[], onHandle: (id: str
                 <Typography my={2} variant='h6' fontWeight={600}>{task.name}</Typography>
                 <Stack mt={1}>
                   {task.status === 'pending' && (
-                    <IconButton
-                      tooltip='Chỉnh sửa'
-                      handleFunt={(e: any) => {
-                        e.stopPropagation();
-                        onHandle(task.id, 'update')
-                      }}
-                      backgroundColor= '#E1E3E4'
-                      icon={<BorderColorOutlined sx={{ color: COLORS.PRIMARY }} />}
-                      sx={{ borderRadius: '50%' }}
-                    />
+                    <Tooltip title="Chỉnh sửa">
+                      <IconButtonMui
+                        onClick={(e: any) => {
+                          e.stopPropagation();
+                          onHandle(task.id, 'update')
+                        }}
+                        
+                        sx={{ borderRadius: '50%', backgroundColor: '#E1E3E4', width: 36, height: 36 }}
+                      >
+                          <BorderColorOutlined sx={{ color: COLORS.PRIMARY }} />
+                      </IconButtonMui>
+                    </Tooltip>
                   )}
-                  <IconButton
-                    tooltip='Xem chi tiết'
-                      handleFunt={(e: any) => {
+                  <Tooltip title="Xem chi tiết">
+                    <IconButtonMui
+                      onClick={(e: any) => {
                         e.stopPropagation();
                         onHandle(task.id, 'view')
                       }}
-                    backgroundColor= '#E1E3E4'
-                    icon={<VisibilityOutlined sx={{ color: COLORS.PRIMARY }} />}
-                    sx={{ borderRadius: '50%' }}
-                  />
+                        
+                      sx={{ borderRadius: '50%', backgroundColor: '#E1E3E4', width: 36, height: 36 }}
+                    >
+                      <VisibilityOutlined sx={{ color: COLORS.PRIMARY }} />
+                    </IconButtonMui>
+                  </Tooltip>
                 </Stack>
               </Box>
               <PetsAvatar
@@ -147,7 +145,7 @@ const TableListPets = ({ tasks, onHandle } : { tasks: ITask[], onHandle: (id: st
     );
 }
 
-const TasksProcessInDashboard = ({ isReload, onHandle }: { isReload: boolean, onHandle: (id: string, type: string ) => void }) => {
+const TasksProcessInDashboard = ({ isReload, onHandle, onClick }: { isReload: boolean, onHandle: (id: string, type: string ) => void, onClick: () => void }) => {
     const theme = useTheme();
     const md = useMediaQuery(theme.breakpoints.down('md'));
     const { listData, fetchData, page, rowsPerPage } = useFetchData<ITask>(getTasks)
@@ -161,7 +159,7 @@ const TasksProcessInDashboard = ({ isReload, onHandle }: { isReload: boolean, on
         <Box p={2}>
             <ViewData
                 label="Tiến độ công việc"
-                onClick={() => {}}
+                onClick={onClick}
             />
             {md ? (
                 <CardListPets tasks={listData} onHandle={onHandle}/>

@@ -1,25 +1,22 @@
 import ViewData from "@/views/components/ViewData";
 import { Avatar, Box, Button, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import dog from "@/assets/images/users/dog.png"
 import CardData from "@/views/components/CardData";
 import { getGenderPetLabel, getSpeciesPetLabel, getTypePetLabel } from "@/utils/labelEntoVni";
-import { useFetchData } from "@/hooks/useFetchData";
 import { IPet } from "@/types/pet";
-import { getPets } from "@/services/pet-service";
 import { COLORS } from "@/constants/colors";
 
 interface ListPetsInDashboardProps{
     onClick: () => void;
     label?: string,
     onDetailPet: (id: string) => void;
+    listData: IPet[]
 }
 
 const ListPetsInDashboard = (props: ListPetsInDashboardProps) => {
-    const { label = "Danh sách thú cưng", onClick, onDetailPet } = props;
+    const { label = "Danh sách thú cưng", onClick, onDetailPet, listData } = props;
     const theme = useTheme();
     const md = useMediaQuery(theme.breakpoints.down('md'));
-    const { listData } = useFetchData<IPet>(getPets)
     const petsList = md ? listData.slice(0,1) : listData.slice(0,4)
     return(
         <Box p={2}>

@@ -108,5 +108,57 @@ export interface IPet{
     createdAt: string,
     updatedAt: string,
     nameAvatar: string,
-    urlAvatar: string
+    urlAvatar: string,
+    petHealth: {
+        id: string,
+        clinicName: string,
+        address: string,
+        phone: string,
+        attendingVet: string,
+        createdAt: string,
+        updatedAt: string
+    },
+    petVaccination: {
+        id: string,
+        medicationName: string,
+        firstDoseDate: string,
+        boosterDate: string,
+        adverseReaction: string,
+        createdAt: string,
+        updatedAt: string
+    },
+    petDeworming: {
+        id: string,
+        medicationName: string,
+        dosage: string,
+        dewormingDate: string,
+        nextDewormingDate: string,
+        createdAt: string,
+        updatedAt: string
+    },
+    petRegularVetCheckup: {
+        id: string,
+        examinationDate: string,
+        recheckDate: string,
+        healthCondition: string,
+        conclusion: string,
+        createdAt: string,
+        updatedAt: string
+    },
+    petSpecialNutritionalPlan: {
+        id: string,
+        food: string,
+        amount: string,
+        frequency: string,
+        nutritionalSupplements: string,
+        createdAt: string,
+        updatedAt: string
+    },
+    petImages:{
+        id: string,
+        nameImage: string,
+        urlImage: string,
+        createdAt: string,
+        updatedAt: string
+    }[]
 }

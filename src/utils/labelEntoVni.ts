@@ -1,4 +1,4 @@
-import { GENDER_LABELS, GENDER_PET_LABELS, GenderPet, GenderUser, ROLE_LABELS, RoleUser, SPECIES_PET_LABELS, SpeciesPet, TYPE_PET_LABELS, TypePet, StatusTask, STATUS_TASK_LABELS } from "@/constants/status";
+import { GENDER_LABELS, GENDER_PET_LABELS, GenderPet, GenderUser, ROLE_LABELS, RoleUser, SPECIES_PET_LABELS, SpeciesPet, TYPE_PET_LABELS, TypePet, StatusTask, STATUS_TASK_LABELS, TimeTaks, TIME_TASK_LABELS, FrequencyTask, FREQUENCY_TASK_LABELS } from "@/constants/status";
 
 export const getRoleLabel = (role: RoleUser | null | undefined) : string => {
     if(!role) return "Chưa xác định";
@@ -43,3 +43,13 @@ export const getStatusTaskColor = (status: string | null) => {
       return { color: 'error' as const };
   }
 };
+
+export const getTimeTaskLabel = (time: TimeTaks | null | undefined) : string => {
+    if(!time) return "Chưa xác định";
+    return TIME_TASK_LABELS[time] || time;
+}
+
+export const getFrequencyTaskLabel = (frequency: FrequencyTask | null | undefined) : string => {
+    if(!frequency) return "Chưa xác định";
+    return FREQUENCY_TASK_LABELS[frequency] || frequency;
+}
