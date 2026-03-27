@@ -80,3 +80,47 @@ export const STATUS_TASK_LABELS: { [key in StatusTask]: string } = {
     [StatusTask.IN_PROGRESS]: 'Đang hoạt động',
     [StatusTask.COMPLETED]: 'Hoàn thành'
 }
+
+export const TimeTaks = {
+    MORING: 'morining',
+    MOONTIME: 'moontime',
+    AFTERNOON: 'afternoon',
+    EVENING: 'evening'
+}
+
+export type TimeTaks = typeof TimeTaks[keyof typeof TimeTaks];
+
+export const TIME_TASK_LABELS: { [key in TimeTaks]: string } = {
+    [TimeTaks.MORING]: 'Buổi sáng',
+    [TimeTaks.MOONTIME]: 'Buổi trưa',
+    [TimeTaks.AFTERNOON]: 'Buổi chiều',
+    [TimeTaks.EVENING]: 'Buổi tối'
+}
+
+export const FrequencyTask = {
+    EVERYDAY: 'everyday',
+    ONE_TIME_DAY: 'one_time_day',
+    TWO_TIMES_DAY: 'two_times_day',
+    THREE_TIMES_DAY: 'three_times_day',
+    EVERYWEEK: 'everyweek',
+    ONE_TIME_WEEK: 'one_time_week',
+    TWO_TIMES_WEEK: 'two_times_week',
+    THREE_TIMES_WEEK: 'three_times_week',
+    EVERYMONTH: 'everymonth',
+    OTHERS: 'others',
+}
+
+export type FrequencyTask = typeof FrequencyTask[keyof typeof FrequencyTask];
+
+export const FREQUENCY_TASK_LABELS: { [key in FrequencyTask]: string } = {
+    [FrequencyTask.EVERYDAY]: 'Hằng ngày',
+    [FrequencyTask.ONE_TIME_DAY]: '1 lần/ngày',
+    [FrequencyTask.TWO_TIMES_DAY]: '2 lần/ngày',
+    [FrequencyTask.THREE_TIMES_DAY]: '3 lần/ngày',
+    [FrequencyTask.EVERYWEEK]: 'Hằng tuần',
+    [FrequencyTask.ONE_TIME_WEEK]: '1 lần/tuần',
+    [FrequencyTask.TWO_TIMES_WEEK]: '2 lần/tuần',
+    [FrequencyTask.THREE_TIMES_WEEK]: '3 lần/tuần',
+    [FrequencyTask.EVERYMONTH]: 'Hằng tháng',
+    [FrequencyTask.OTHERS]: 'Khác',
+}

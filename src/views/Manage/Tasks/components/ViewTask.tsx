@@ -3,7 +3,7 @@ import CommonImage from "@/components/Image/index";
 import { getDetailTask } from "@/services/task-service";
 import { ITask } from "@/types/task";
 import DateTime from "@/utils/DateTime";
-import { getStatusTaskColor, getStatusTaskLabel } from "@/utils/labelEntoVni";
+import { getFrequencyTaskLabel, getStatusTaskColor, getStatusTaskLabel, getTimeTaskLabel } from "@/utils/labelEntoVni";
 import PetsAvatar from "@/views/components/PetsAvatar";
 import { Chip, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
@@ -56,11 +56,11 @@ const ViewTask = (props: ViewTaskProps) => {
                     </Grid>
                     <Grid size={{ xs: 12, md: 4 }}>
                         <Typography variant="subtitle2" color="text.secondary">Tần suất</Typography>
-                        <Typography variant="subtitle2" fontWeight={500}>{task.frequency}</Typography>
+                        <Typography variant="subtitle2" fontWeight={500}>{getFrequencyTaskLabel(task.frequency)}</Typography>
                     </Grid>
                     <Grid size={{ xs: 12, md: 4 }}>
                         <Typography variant="subtitle2" color="text.secondary">Thời điểm</Typography>
-                        <Typography variant="subtitle2" fontWeight={500}>{task.time}</Typography>
+                        <Typography variant="subtitle2" fontWeight={500}>{getTimeTaskLabel(task.time)}</Typography>
                     </Grid>
                     <Grid size={{ xs: 12, md: 4 }}>
                         <Typography variant="subtitle2" color="text.secondary">Nhân viên</Typography>

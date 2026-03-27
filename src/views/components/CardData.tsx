@@ -2,7 +2,7 @@ import { Card, CardContent } from "@mui/material";
 
 interface CardDataProps{
     children: React.ReactNode,
-    onDetail: () => void;
+    onDetail?: () => void;
 }
 
 const CardData = (props: CardDataProps) => {

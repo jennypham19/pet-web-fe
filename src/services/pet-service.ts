@@ -37,3 +37,7 @@ export const getPets = async(getParams: GetParams): Promise<HttpResponse<Paginat
         throw new Error(response.message || 'Failed to fetch list pets')
     }
 }
+
+export const getPet = async(id: string) => {
+    return HttpClient.get<HttpResponse<IPet>>(`${prefix}/detail-pet/${id}`)
+}

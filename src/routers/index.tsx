@@ -43,17 +43,17 @@ const routes: RouteObject[] = [
 
   // --- NHÁNH 2: CÁC TRANG XÁC THỰC (CHỈ DÀNH CHO NGƯỜI CHƯA ĐĂNG NHẬP) ---
   {
-    path: '/pet',
+    path: '/',
     element: <PublicRoute/>,
     children: [
       {
         element: <AuthLayout/>,
         children: [
-          { index: true, element: <Navigate to={'login'} replace /> },
-          { path: 'login', element: <Login /> },
-          { path: 'registration', element: <Registration /> },
-          { path: 'forgot-password', element: <ForgotPassword /> },
-          { path: 'change-password', element: <ChangePassword /> },
+          { index: true, element: <Navigate to={'pet/login'} replace /> },
+          { path: 'pet/login', element: <Login /> },
+          { path: 'pet/registration', element: <Registration /> },
+          { path: 'pet/forgot-password', element: <ForgotPassword /> },
+          { path: 'pet/change-password', element: <ChangePassword /> },
         ]
       }
     ],
