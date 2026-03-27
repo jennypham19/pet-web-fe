@@ -87,7 +87,7 @@ export default function Login() {
             severity: 'success',
           });
 
-          navigate('/pet/' + ROUTE_PATH.MANAGE, { replace: true });   
+          navigate('/' + ROUTE_PATH.MANAGE, { replace: true });   
         }
       } else {
         setError(respAuth.message || 'Login failed, no access token returned.');
