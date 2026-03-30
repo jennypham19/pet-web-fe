@@ -162,3 +162,11 @@ export interface IPet{
         updatedAt: string
     }[]
 }
+
+export interface IImagesPet{
+    id: string,
+    nameImage: string,
+    urlImage: string,
+    createdAt: string,
+    updatedAt: string
+}

@@ -1,5 +1,5 @@
 import type { HttpResponse } from '@/types/common';
-import { IPet, PayloadPet } from '@/types/pet';
+import { IImagesPet, IPet, PayloadPet } from '@/types/pet';
 import HttpClient from '@/utils/HttpClient';
 import { PaginatedResponse } from './base-service';
 
@@ -38,6 +38,26 @@ export const getPets = async(getParams: GetParams): Promise<HttpResponse<Paginat
     }
 }
 
+// Lấy chi tiết hồ sơ thú cưng
 export const getPet = async(id: string) => {
     return HttpClient.get<HttpResponse<IPet>>(`${prefix}/detail-pet/${id}`)
+}
+
+// Lấy hình ảnh thú cưng
+export const getPetImages = async(getParams: GetParams): Promise<HttpResponse<PaginatedResponse<IImagesPet>>> => {
+    const url = `${prefix}/list-pet-images`;
+    const params: Record<string, any> = {
+        page: getParams.page,
+        limit: getParams.limit
+    }
+    const response = await HttpClient.get<{
+        message: string,
+        success: boolean,
+        data: PaginatedResponse<IImagesPet>
+    }>(url, { params });
+    if(response.data && response.success && response.data){
+        return response
+    }else{
+        throw new Error(response.message || 'Failed to fetch list images pet')
+    }
 }
