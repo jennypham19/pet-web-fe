@@ -51,17 +51,17 @@ const AdminSidebars = (): Section[] => [
     items: [
       {
         title: 'Trang chủ',
-        path: `/pet/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_HOME}`,
+        path: `/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_HOME}`,
         icon: HomeOutlined        
       },
       {
         title: 'Quản lý tài khoản',
-        path: `/pet/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_ACCOUNT}`,
+        path: `/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_ACCOUNT}`,
         icon: AccountBox
       },
       {
         title: 'Hồ sơ người dùng',
-        path: `/pet/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_INFORMATION}`,
+        path: `/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_INFORMATION}`,
         icon: Person
       }
     ]
@@ -75,17 +75,17 @@ const ModSidebars = (): Section[] => [
     items: [
       {
         title: 'Trang chủ',
-        path: `/pet/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_HOME}`,
+        path: `/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_HOME}`,
         icon: HomeOutlined
       },
       {
         title: 'Danh sách thú cưng',
-        path: `/pet/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_PET}`,
+        path: `/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_PET}`,
         icon: Pets
       },
       {
         title: 'Hồ sơ người dùng',
-        path: `/pet/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_INFORMATION}`,
+        path: `/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_INFORMATION}`,
         icon: Person
       }
     ]
@@ -99,17 +99,17 @@ const SpecialistSidebars = (): Section[] => [
     items: [
       {
         title: 'Quản lý công việc',
-        path: `/pet/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_TASK}`,
+        path: `/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_TASK}`,
         icon: Assignment
       },
       {
         title: 'Danh sách thú cưng',
-        path: `/pet/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_PET}`,
+        path: `/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_PET}`,
         icon: Pets
       },
       {
         title: 'Hồ sơ người dùng',
-        path: `/pet/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_INFORMATION}`,
+        path: `/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_INFORMATION}`,
         icon: Person
       }
     ]
@@ -123,12 +123,12 @@ const EmployeeSidebars = (): Section[] => [
     items: [
       {
         title: 'Cập nhật hình ảnh',
-        path: `/pet/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_IMAGE}`,
+        path: `/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_IMAGE}`,
         icon: Image
       },
       {
         title: 'Hồ sơ người dùng',
-        path: `/pet/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_INFORMATION}`,
+        path: `/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_INFORMATION}`,
         icon: Person
       }
     ]
