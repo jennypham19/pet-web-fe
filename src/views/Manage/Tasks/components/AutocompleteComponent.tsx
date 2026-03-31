@@ -24,7 +24,7 @@ export interface AutocompleteComponentProps<T>{
     debounceTime?: number;
     error?: boolean;
     helperText?: React.ReactNode;
-    values?: T[] 
+    values?: T[]; 
 }
 export default function AutocompleteComponent<T>(props: AutocompleteComponentProps<T>){
     const { values, label, placeholder, fetchOptions, getOptionLabel, getRenderOption, onChange, getOptionKey, debounceTime = 400, error, helperText } = props;
