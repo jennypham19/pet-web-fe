@@ -1,5 +1,5 @@
 import type { HttpResponse } from '@/types/common';
-import { FormDataAccount, IUser } from '@/types/user';
+import { FormDataAccount, IUser, PayloadUser } from '@/types/user';
 import HttpClient from '@/utils/HttpClient';
 import { GetParams, PaginatedResponse } from './base-service';
 
@@ -39,4 +39,9 @@ export const getAccounts = async(getParams: GetParams): Promise<HttpResponse<Pag
 
 export const getDetailAccount = async(id:string) => {
     return HttpClient.get<HttpResponse<IUser>>(`${prefix}/user-account-detail/${id}`)
+}
+
+// chỉnh sửa hồ sơ
+export const updateProfile = async(id: string, payload: PayloadUser) => {
+    return HttpClient.put(`${prefix}/profile-user-updated/${id}`, payload)
 }

@@ -1,5 +1,6 @@
 import { FormDataDeworming, FormDataInfoHealthPet, FormDataInfoPet, FormDataRegularVetCheckup, FormDataSpecialNutritionalPlan, FormDataVaccination } from "./pet";
 import { FormDataTask } from "./task";
+import { FormDataUser } from "./user";
 
 // pets
 export type FormErrorsInfoPet = {
@@ -29,4 +30,9 @@ export type FormErrorsSpecialNutritionalPlan = {
 // tasks
 export type FormErrorsTask = {
     [K in keyof FormDataTask]?: string
+}
+
+// users
+export type FormErrorsUser = {
+    [K in keyof FormDataUser]?: string
 }
