@@ -16,9 +16,17 @@ import CardData from "@/views/components/CardData";
 import ViewData from "@/views/components/ViewData";
 import { useEffect } from "react";
 import PetsAvatar from "@/views/components/PetsAvatar";
+import CustomPagination from "@/components/Pagination/CustomPagination";
 
 
-const CardListPets = ({ tasks, onHandle } : { tasks: ITask[], onHandle: (id: string, type: string) => void }) => {
+const CardListPets = ({ tasks, onHandle, onChangePage, page, rowsPerPage, total } : { 
+  tasks: ITask[], 
+  onHandle: (id: string, type: string) => void, 
+  onChangePage: (newPage: number) => void,
+  page: number,
+  rowsPerPage: number,
+  total:  number  
+}) => {
     return(
       <Box display='flex' gap={1} flexDirection='column'>
         {tasks.slice(0,2).map((task, index) => (
@@ -66,11 +74,26 @@ const CardListPets = ({ tasks, onHandle } : { tasks: ITask[], onHandle: (id: str
               />
           </CardData>        
         ))}
+        <Box mt={2} display='flex' justifyContent='center'>
+          <CustomPagination
+            page={page}
+            rowsPerPage={rowsPerPage}
+            onPageChange={onChangePage}
+            count={total}
+          />
+        </Box>
       </Box>  
     )
 }
 
-const TableListPets = ({ tasks, onHandle } : { tasks: ITask[], onHandle: (id: string, type: string) => void }) => {
+const TableListPets = ({ tasks, onHandle, onChangePage, page, rowsPerPage, total } : { 
+  tasks: ITask[], 
+  onHandle: (id: string, type: string) => void, 
+  onChangePage: (newPage: number) => void,
+  page: number,
+  rowsPerPage: number,
+  total:  number 
+}) => {
     return (
       <>
         <Grid sx={{ mt: 1, bgcolor: '#fff', p: 1, borderRadius: 3 }} container spacing={2}>
@@ -82,7 +105,7 @@ const TableListPets = ({ tasks, onHandle } : { tasks: ITask[], onHandle: (id: st
             </Grid>
           ))}
         </Grid>
-        {tasks.slice(0,4).map((task, index) => (
+        {tasks.map((task, index) => (
           <Grid
             key={index}
             sx={{ mt: 1, bgcolor: '#fff', p: 2, borderRadius: 3 }}
@@ -99,19 +122,21 @@ const TableListPets = ({ tasks, onHandle } : { tasks: ITask[], onHandle: (id: st
                     <Avatar src={pet.urlAvatar} sx={{ borderRadius: '50%' }} />
                   </Tooltip>
                 ))}
-                <Tooltip title='Xem thêm'>
-                  <IconButtonMui
-                    sx={{
-                      border: '1px solid #000',
-                      borderRadius: '50%',
-                      bgcolor: 'rgba(0,0,0,0.1)',
-                      width: 40,
-                      height: 40
-                    }}
-                  >
-                    <Typography variant='subtitle2' fontWeight={500}>+{task.pets.length - 3}</Typography>
-                  </IconButtonMui>
-                </Tooltip>
+                {task.pets.length - 3 > 0 && (
+                  <Tooltip title='Xem thêm'>
+                    <IconButtonMui
+                      sx={{
+                        border: '1px solid #000',
+                        borderRadius: '50%',
+                        bgcolor: 'rgba(0,0,0,0.1)',
+                        width: 40,
+                        height: 40
+                      }}
+                    >
+                      <Typography variant='subtitle2' fontWeight={500}>+{task.pets.length - 3}</Typography>
+                    </IconButtonMui>
+                  </Tooltip>
+                )}
               </Box>
             </Grid>
             <Grid sx={{ flex: 1, textAlign: 'center' }}>
@@ -141,6 +166,14 @@ const TableListPets = ({ tasks, onHandle } : { tasks: ITask[], onHandle: (id: st
             </Grid>
           </Grid>
         ))}
+        <Box mt={2} display='flex' justifyContent='center'>
+          <CustomPagination
+            page={page}
+            rowsPerPage={rowsPerPage}
+            onPageChange={onChangePage}
+            count={total}
+          />
+        </Box>
       </>
     );
 }
@@ -148,12 +181,20 @@ const TableListPets = ({ tasks, onHandle } : { tasks: ITask[], onHandle: (id: st
 const TasksProcessInDashboard = ({ isReload, onHandle, onClick }: { isReload: boolean, onHandle: (id: string, type: string ) => void, onClick: () => void }) => {
     const theme = useTheme();
     const md = useMediaQuery(theme.breakpoints.down('md'));
-    const { listData, fetchData, page, rowsPerPage } = useFetchData<ITask>(getTasks)
+    const { listData, fetchData, page, rowsPerPage, handlePageChange, total, setPage  } = useFetchData<ITask>(getTasks, md ? 2 : 4)
     useEffect(() => {
       if(isReload){
-        fetchData(page, rowsPerPage)
+        fetchData(1, rowsPerPage)
       }
     }, [isReload])
+
+    useEffect(() => {
+      setPage(1)
+    }, [md])
+
+    const handleChangePage = (newPage: number) => {
+      handlePageChange(newPage)
+    }
     
     return(
         <Box p={2}>
@@ -162,9 +203,9 @@ const TasksProcessInDashboard = ({ isReload, onHandle, onClick }: { isReload: bo
                 onClick={onClick}
             />
             {md ? (
-                <CardListPets tasks={listData} onHandle={onHandle}/>
+                <CardListPets page={page} rowsPerPage={rowsPerPage} total={total} onChangePage={handleChangePage} tasks={listData} onHandle={onHandle}/>
             ) : (
-                <TableListPets tasks={listData} onHandle={onHandle}/>
+                <TableListPets page={page} rowsPerPage={rowsPerPage} total={total} onChangePage={handleChangePage} tasks={listData} onHandle={onHandle}/>
             )}
         </Box>
     )

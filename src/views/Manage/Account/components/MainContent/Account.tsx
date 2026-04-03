@@ -12,38 +12,19 @@ import { useFetchData } from "@/hooks/useFetchData";
 import { IUser } from "@/types/user";
 import { getAccounts } from "@/services/user-service";
 import DialogDetailAccount from "../DialogDetailAccount";
-
-const DATA = [
-    {
-        id: 1,
-        avartarUrl: avatar,
-        name: 'Nguyễn Văn A',
-        role: 'mod',
-    },
-    {
-        id: 2,
-        avartarUrl: avatar,
-        name: 'Nguyễn Văn A',
-        role: 'specialist',
-    },
-    {
-        id: 1,
-        avartarUrl: avatar,
-        name: 'Nguyễn Văn A',
-        role: 'employee',
-    },
-]
+import CustomPagination from "@/components/Pagination/CustomPagination";
+import { ROLE } from "@/constants/roles";
 
 interface AccountContentProps{
-
+    onOpenUpdate: (data: IUser) => void;
 }
 
 const AccountContent = (props: AccountContentProps) => {
-    const { } = props;
+    const { onOpenUpdate } = props;
     const [openDialogAccount, setOpenDialogAccount] = useState<{open: boolean, type: string}>({ open: false, type: ''});
-    const [id, setId] = useState<string | null>(null)
+    const [id, setId] = useState<string | null>(null);
 
-    const { page, rowsPerPage, listData, fetchData, searchTerm, handlePageChange, handleSearch } = useFetchData<IUser>(getAccounts)
+    const { page, rowsPerPage, listData, fetchData, searchTerm, handlePageChange, handleSearch,total } = useFetchData<IUser>(getAccounts, 9)
     
     const handleOpenDialogCreateAccount = () => {
         setOpenDialogAccount({open: true, type: 'add'})
@@ -62,6 +43,9 @@ const AccountContent = (props: AccountContentProps) => {
     const handleCloseDialogViewAccount = () => {
         setOpenDialogAccount({open: false, type: 'view'})
     }
+
+    
+
     return(
         <Box>
             <SearchBox
@@ -99,11 +83,30 @@ const AccountContent = (props: AccountContentProps) => {
                                         <Typography variant="subtitle2" fontWeight={500}>{getRoleLabel(data.role)} </Typography>
                                     </Stack>
                                 </Box>
+                                {data.role !== ROLE.ADMIN && (
+                                    <Button 
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            onOpenUpdate(data)
+                                        }}
+                                        sx={{ mt: 1, borderRadius: 4, bgcolor: COLORS.PRIMARY }} fullWidth
+                                    >
+                                        Chỉnh sửa
+                                    </Button>
+                                )}
                             </Box>
                         </CardData>
                     </Grid>
                 ))}
             </Grid>
+            <Box mt={2} display='flex' justifyContent='center'>
+                <CustomPagination
+                    page={page}
+                    rowsPerPage={rowsPerPage}
+                    count={total}
+                    onPageChange={handlePageChange}
+                />
+            </Box>
             {openDialogAccount.open && openDialogAccount.type === 'add' && (
                 <DialogCreateAccount
                     open={openDialogAccount.open}

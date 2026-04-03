@@ -25,7 +25,7 @@ const IconButton: React.FC<IconButtonProps> = ({
     height = "36px",
     border,
     borderRadius,
-    backgroundColor,
+    backgroundColor = 'transparent',
     color = '',
     disabled,
     handleFunt,

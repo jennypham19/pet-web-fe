@@ -335,7 +335,7 @@ const CreateProfilePet = (props: CreateProfilePetProps) => {
                         ref={fileInputRef}
                         type='file'
                         hidden
-                        accept='iamge/*'
+                        accept='image/*'
                         onChange={handleChangeAvatar}
                       />
                     </Button>

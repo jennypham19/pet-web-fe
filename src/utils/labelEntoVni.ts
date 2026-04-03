@@ -6,7 +6,7 @@ export const getRoleLabel = (role: RoleUser | null | undefined) : string => {
 }
 
 export const getRenderLabel = (gender: GenderUser | null | undefined) : string => {
-    if(!gender) return "Chưa xác định";
+    if(!gender) return "";
     return GENDER_LABELS[gender] || gender;
 }
 

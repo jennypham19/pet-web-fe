@@ -30,6 +30,7 @@ import { setProfile } from '@/slices/user';
 import { useAppDispatch } from '@/store';
 import { setAccessToken } from '@/utils/AuthHelper';
 import Logger from '@/utils/Logger';
+import { COLORS } from '@/constants/colors';
 
 export const ID_USER = 'user_id'
 
@@ -94,6 +95,7 @@ export default function Login() {
       }
     } catch (error: any) {
       Logger.log(error);
+      setError(error.message)
     } finally {
       setLoading.off();
     }
@@ -112,7 +114,7 @@ export default function Login() {
         </Typography>
       </Box>
       {_error && (
-        <Alert variant='filled' severity='warning'>
+        <Alert variant='filled' severity='error'>
           {_error}
         </Alert>
       )}
@@ -187,8 +189,8 @@ export default function Login() {
             }
           /> */}
         </div>
-        <LoadingButton loading={_loading} type='submit' variant='contained' fullWidth>
-          Login
+        <LoadingButton loading={_loading} type='submit' variant='contained' fullWidth sx={{ bgcolor: COLORS.PRIMARY }}>
+          Đăng nhập
         </LoadingButton>
         {/* <Box display='flex' justifyContent='center' alignItems='center' flexWrap='wrap' gap={2}>
           <Typography>Don't have an account</Typography>
