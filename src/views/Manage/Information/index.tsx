@@ -16,7 +16,7 @@ const ManagementInformation = () => {
                     md ? (
                         <InformationMobile profile={profile}/>
                     ) : (
-                        <InformationDesktop profile={profile}/>
+                        <InformationDesktop profile={profile} md={md} />
                     )
                 )}
             </Box>

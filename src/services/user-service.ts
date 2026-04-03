@@ -43,5 +43,5 @@ export const getDetailAccount = async(id:string) => {
 
 // chỉnh sửa hồ sơ
 export const updateProfile = async(id: string, payload: PayloadUser) => {
-    return HttpClient.put(`${prefix}/profile-user-updated/${id}`, payload)
+    return HttpClient.put<HttpResponse<IUser>>(`${prefix}/profile-user-updated/${id}`, payload as any)
 }

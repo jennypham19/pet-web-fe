@@ -80,5 +80,6 @@ export const useFetchData = <T>(
         page,
         rowsPerPage,
         fetchData,
+        setPage
     }
 }

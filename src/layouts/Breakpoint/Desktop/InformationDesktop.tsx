@@ -10,13 +10,17 @@ import location from "@/assets/images/users/location.png"
 import { useState } from "react";
 import EditProfile from "@/views/Manage/Information/components/EditProfile";
 import DateTime from "@/utils/DateTime";
+import ChangePassword from "@/views/Manage/Information/components/ChangePassword";
+import ChangePasswordMobile from "../Mobile/ChangePasswordMobile";
+import ChangePasswordDesktop from "./ChangePasswordDesktop";
 
 interface InformationDesktopProps{
-    profile: IUser
+    profile: IUser,
+    md: boolean
 }
 
 const InformationDesktop = (props: InformationDesktopProps) => {
-    const { profile} = props;
+    const { profile, md } = props;
 
     const [openProfile, setOpenProfile] = useState<{open: boolean, type: string}>({open: false, type: ''});
 
@@ -271,7 +275,8 @@ const InformationDesktop = (props: InformationDesktopProps) => {
                                             p: 3
                                         }}
                                     >
-                                        <Typography fontWeight={500}>Tiểu sử nghề nghiệp</Typography>
+                                        <Typography mb={2} fontWeight={500}>Tiểu sử nghề nghiệp</Typography>
+                                        <Typography variant="caption">{profile.professionalBiography}</Typography>
                                     </Paper>
                                 </Grid>
                             </Grid>
@@ -284,6 +289,16 @@ const InformationDesktop = (props: InformationDesktopProps) => {
                     onClose={() => setOpenProfile({ open: false, type: 'edit' })} 
                     profile={profile}
                 />
+            )}
+            {openProfile.open && openProfile.type === 'password' && (
+                md ? (
+                    <ChangePasswordMobile/>
+                ) : (
+                    <ChangePasswordDesktop
+                        onClose={() => setOpenProfile({ open: false, type: 'password' })}
+                        user={profile}
+                    />
+                )
             )}
         </Box>
     )
