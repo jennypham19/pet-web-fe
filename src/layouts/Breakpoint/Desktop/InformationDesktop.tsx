@@ -10,7 +10,6 @@ import location from "@/assets/images/users/location.png"
 import { useState } from "react";
 import EditProfile from "@/views/Manage/Information/components/EditProfile";
 import DateTime from "@/utils/DateTime";
-import ChangePassword from "@/views/Manage/Information/components/ChangePassword";
 import ChangePasswordMobile from "../Mobile/ChangePasswordMobile";
 import ChangePasswordDesktop from "./ChangePasswordDesktop";
 
