@@ -30,7 +30,8 @@ const ManagementTasks = () => {
     const theme = useTheme();
     const md = useMediaQuery(theme.breakpoints.down('md'));
     const { listData, searchTerm, handleSearch, fetchData, page, rowsPerPage } = useFetchData<ITask>(getTasks)
-    const queryData = md ? listData.slice(0,1) : listData.slice(0,4);
+    // const queryData = md ? listData.slice(0,2) : listData.slice(0,5);
+    const queryData = listData;
     const [taskId, setTaskId] = useState<string | null>(null)
 
     const groupTasks = (tasks: ITask[]) => {

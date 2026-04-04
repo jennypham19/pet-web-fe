@@ -25,10 +25,10 @@ const ManagementImage = () => {
     }
     return(
         <Page title="Cập nhật hình ảnh">
-            <Box mx={2} p={1}>
+            Cập nhật hình ảnh
+            {/* <Box mx={2} p={1}>
                 <Typography pb={1} fontWeight={600} variant='h6'>Hình ảnh thú cưng</Typography>
                 <Grid container spacing={2}>
-                    {/* Thêm hình ảnh */}
                     <Grid size={{ xs: 12, md: 3 }}>
                         <Box 
                             sx={{ 
@@ -54,7 +54,7 @@ const ManagementImage = () => {
                         </Box>
                     </Grid>
                     
-                    {/* Lấy danh sách */}
+
                     {listData.length === 0 ? (
                         <Typography>Không tồn tại bản ghi nào cả.</Typography>
                     ): (
@@ -77,7 +77,7 @@ const ManagementImage = () => {
                         onPageChange={handlePageChange}
                     />
                 </Box>
-            </Box>
+            </Box> */}
             {openDialog.open && openDialog.type === 'add' && (
                 <DialogUploadImages
                     open={openDialog.open}
