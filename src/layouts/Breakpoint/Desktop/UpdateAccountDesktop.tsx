@@ -9,6 +9,8 @@ import Grid from "@mui/material/Grid2";
 import { useEffect, useState } from "react";
 import ChangePasswordMobile from "../Mobile/ChangePasswordMobile";
 import ChangePasswordDesktop from "./ChangePasswordDesktop";
+import useNotification from "@/hooks/useNotification";
+import { activateAccount, disableAccount } from "@/services/user-service";
 
 interface UpdateAccountDesktopProps{
     onClose: () => void;
@@ -18,6 +20,7 @@ interface UpdateAccountDesktopProps{
 const UpdateAccountDesktop = (props: UpdateAccountDesktopProps) => {
     const { onClose, user } = props;
     const theme = useTheme();
+    const notify = useNotification();
     const md = useMediaQuery(theme.breakpoints.down('md'));
     const [formData, setFormData] = useState<{name: string, account: string, role: string}>({ name: '', account: '', role: '' });
     const [openChangePassword, setOpenChangePassword] = useState(false);
@@ -33,6 +36,28 @@ const UpdateAccountDesktop = (props: UpdateAccountDesktopProps) => {
     const handleClose = () => {
         onClose()
         setFormData({ name: '', account: '', role: '' })
+    }
+
+    // kích hoạt tài khoản
+    const handleActived = async(id: string) => {
+        try {
+            const res = await activateAccount(id);
+            notify({ message: res.message, severity: 'success' });
+            handleClose()
+        } catch (error: any) {
+            notify({ message: error.message, severity: 'error'})
+        }
+    }
+
+    // vô hiệu hóa tài khoản
+    const handleUnActived = async(id: string) => {
+        try {
+            const res = await disableAccount(id);
+            notify({ message: res.message, severity: 'success' })
+            handleClose()
+        } catch (error: any) {
+            notify({ message: error.message, severity: 'error'})
+        }
     }
 
     const handleChangeInput = (name: string, value: any) => {
@@ -72,14 +97,7 @@ const UpdateAccountDesktop = (props: UpdateAccountDesktopProps) => {
                                 variant="outlined"
                                 sx={{ border: `1px solid ${COLORS.PRIMARY}`, color: COLORS.PRIMARY, borderRadius: 3, px: 2 }}
                             >
-                                Reset
-                            </Button>
-                            <Button
-                                sx={{
-                                    bgcolor: COLORS.PRIMARY, borderRadius: 3, px: 4
-                                }}
-                            >
-                                Lưu thay đổi
+                                Reset mật khẩu
                             </Button>
                         </Box>
                     </Box>
@@ -102,6 +120,7 @@ const UpdateAccountDesktop = (props: UpdateAccountDesktopProps) => {
                                             type="text"
                                             onChange={handleChangeInput}
                                             margin="dense"
+                                            disabled={true}
                                         />
                                     </Grid>
                                     <Grid size={{ md: 4 }}>
@@ -113,6 +132,7 @@ const UpdateAccountDesktop = (props: UpdateAccountDesktopProps) => {
                                             type="text"
                                             onChange={handleChangeInput}
                                             margin="dense"
+                                            disabled={true}
                                         />
                                     </Grid>
                                     <Grid size={{ md: 4 }}>
@@ -148,13 +168,13 @@ const UpdateAccountDesktop = (props: UpdateAccountDesktopProps) => {
                                             {user.isActived === 1 ? (
                                                 <IconButton
                                                     title="Vô hiệu xóa"
-                                                    handleFunt={() => {}}
+                                                    handleFunt={() => user && handleUnActived(user.id)}
                                                     icon={<ToggleOff color="error" sx={{ width: 30, height: 30 }}/>}
                                                 />
                                             ) : (
                                                 <IconButton
                                                     title="Kích hoạt"
-                                                    handleFunt={() => {}}
+                                                    handleFunt={() => user && handleActived(user.id)}
                                                     icon={<ToggleOn color="success" sx={{ width: 30, height: 30 }}/>}
                                                 />
                                             )}

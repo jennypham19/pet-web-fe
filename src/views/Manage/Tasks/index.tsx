@@ -44,7 +44,7 @@ const ManagementTasks = () => {
 
     const Column = ({ tasks, handleButton }: { tasks: ITask[], handleButton: (id: string, type: string) => void }) => {
         return (
-            <Box flex={1}>
+            <Box flex={1} gap={{ xs: 2, md: 0}} display='flex' flexDirection='column'>
                 {tasks.map((task) => (
                     <TaskCard key={task.id} task={task} handleButton={handleButton} />
                 ))}

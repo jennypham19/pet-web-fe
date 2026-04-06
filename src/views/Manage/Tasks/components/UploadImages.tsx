@@ -90,7 +90,6 @@ const UploadImages = (props: UploadImagesProps) => {
           uploadedBy: profile?.id ? profile.id : undefined,
           images: payloadImages
         }
-        console.log("payload: ", payload);
         
         const res = await updateImagesForTask(id, payload);
         notify({
@@ -149,34 +148,34 @@ const UploadImages = (props: UploadImagesProps) => {
             ))}
           <Grid size={{ xs: 6 }}>
               <Box>
-              <input
-                  type='file'
-                  accept='image/*'
-                  capture='environment'
-                  hidden
-                  ref={fileInputRef}
-                  onChange={handleChangeImages}
-                  multiple
-              />
-              <Box
-                  sx={{
-                  border: errorFiles ? '2px dashed red' : '2px dashed #000',
-                  borderRadius: 2,
-                  p: 3,
-                  textAlign: 'center',
-                  '&:hover': { borderColor: 'primary.main' },
-                  height: 180,
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  }}
-              >
-                  <Box sx={{ margin: 'auto 0' }}>
-                  <CameraAlt sx={{ fontSize: 48, color: 'text.secondary' }} />
-                  <Typography fontSize='13px'>Thêm HÌNH ẢNH cập nhật công việc tại đây.</Typography>
-                  <Typography fontSize='13px'>{`Hình ảnh dưới dạng PNG, JPG....`}</Typography>
-                  </Box>
-              </Box>
+                <input
+                    type='file'
+                    accept='image/*'
+                    capture='environment'
+                    hidden
+                    ref={fileInputRef}
+                    onChange={handleChangeImages}
+                    multiple
+                />
+                <Box
+                    sx={{
+                    border: errorFiles ? '2px dashed red' : '2px dashed #000',
+                    borderRadius: 2,
+                    p: 3,
+                    textAlign: 'center',
+                    '&:hover': { borderColor: 'primary.main' },
+                    height: 180,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    }}
+                >
+                    <Box sx={{ margin: 'auto 0' }}>
+                    <CameraAlt sx={{ fontSize: 48, color: 'text.secondary' }} />
+                    <Typography fontSize='13px'>Thêm HÌNH ẢNH cập nhật công việc tại đây.</Typography>
+                    <Typography fontSize='13px'>{`Hình ảnh dưới dạng PNG, JPG....`}</Typography>
+                    </Box>
+                </Box>
               <Box mt={2} display='flex' justifyContent='center'>
                   <Button
                       onClick={handleBoxClick}
