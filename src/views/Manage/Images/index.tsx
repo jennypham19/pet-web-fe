@@ -6,14 +6,20 @@ import { useFetchData } from "@/hooks/useFetchData"
 import { getPetImages } from "@/services/pet-service"
 import { IImagesPet } from "@/types/pet"
 import { CameraAlt } from "@mui/icons-material"
-import { Box, Button, Typography } from "@mui/material"
+import { Box, Button, Typography, useMediaQuery, useTheme } from "@mui/material"
 import Grid from "@mui/material/Grid2"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import DialogUploadImages from "./components/DialogUploadImages"
 
 const ManagementImage = () => {
-    const { listData, page, rowsPerPage, handlePageChange, total, fetchData } = useFetchData<IImagesPet>(getPetImages);
+    const theme = useTheme();
+    const md = useMediaQuery(theme.breakpoints.down('md'));
+    const { listData, page, rowsPerPage, handlePageChange, total, fetchData, setPage } = useFetchData<IImagesPet>(getPetImages, md ? 1 : 6);
     const [openDialog, setOpenDialog] = useState<{ open: boolean, type: string}>({ open: false, type: '' });
+
+    useEffect(() => {
+      setPage(1)
+    }, [md])
 
     const handleOpenAddImage = () => {
         setOpenDialog({ open: true, type: 'add' });
@@ -21,12 +27,11 @@ const ManagementImage = () => {
 
     const handleCloseAddImage = () => {
         setOpenDialog({ open: false, type: 'add' });
-        fetchData(page, rowsPerPage)
+        fetchData(1, md ? 1 : 6)
     }
     return(
         <Page title="Cập nhật hình ảnh">
-            Cập nhật hình ảnh
-            {/* <Box mx={2} p={1}>
+            <Box mx={2} p={1}>
                 <Typography pb={1} fontWeight={600} variant='h6'>Hình ảnh thú cưng</Typography>
                 <Grid container spacing={2}>
                     <Grid size={{ xs: 12, md: 3 }}>
@@ -47,6 +52,7 @@ const ManagementImage = () => {
                                 <Button
                                     onClick={handleOpenAddImage}
                                     sx={{ mt: 1, bgcolor: COLORS.PRIMARY }}
+                                    disabled={!md}
                                 >
                                     Thêm hình ảnh
                                 </Button>
@@ -58,8 +64,8 @@ const ManagementImage = () => {
                     {listData.length === 0 ? (
                         <Typography>Không tồn tại bản ghi nào cả.</Typography>
                     ): (
-                        listData.map((img, index) => (
-                            <Grid key={index} size={{ xs: 12, md: 3 }}>
+                        listData.map((img) => (
+                            <Grid key={img.id} size={{ xs: 12, md: 3 }}>
                                 <CommonImage
                                     src={img.urlImage}
                                     alt={img.nameImage}
@@ -77,7 +83,7 @@ const ManagementImage = () => {
                         onPageChange={handlePageChange}
                     />
                 </Box>
-            </Box> */}
+            </Box>
             {openDialog.open && openDialog.type === 'add' && (
                 <DialogUploadImages
                     open={openDialog.open}

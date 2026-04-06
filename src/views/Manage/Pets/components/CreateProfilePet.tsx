@@ -229,7 +229,7 @@ const CreateProfilePet = (props: CreateProfilePetProps) => {
         }
 
         if(imageFiles.length > 0){
-          uploadResponses = await uploadImages(imageFiles, 'pets/images/');
+          uploadResponses = await uploadImages(imageFiles, 'pets/images');
           if (!uploadResponses.success || !uploadResponses.data?.files) {
             throw new Error('Upload ảnh thất bại hoặc không nhận được URL ảnh');
           }

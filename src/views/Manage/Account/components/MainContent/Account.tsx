@@ -8,23 +8,28 @@ import avatar from "@/assets/images/users/avatar-1.png"
 import { getRoleLabel } from "@/utils/labelEntoVni";
 import { useState } from "react";
 import DialogCreateAccount from "../DialogCreateAccount";
-import { useFetchData } from "@/hooks/useFetchData";
 import { IUser } from "@/types/user";
-import { getAccounts } from "@/services/user-service";
 import DialogDetailAccount from "../DialogDetailAccount";
 import CustomPagination from "@/components/Pagination/CustomPagination";
 import { ROLE } from "@/constants/roles";
 
 interface AccountContentProps{
     onOpenUpdate: (data: IUser) => void;
+    page: number,
+    rowsPerPage: number,
+    listData: IUser[],
+    fetchData: (page: number, limit: number, searchTerm?: string) => void,
+    searchTerm: string,
+    handlePageChange: (page: number) => void,
+    handleSearch: (value: string) => void,
+    total: number
 }
 
 const AccountContent = (props: AccountContentProps) => {
-    const { onOpenUpdate } = props;
+    const { onOpenUpdate, page, rowsPerPage, listData, fetchData, searchTerm, handlePageChange, handleSearch, total } = props;
     const [openDialogAccount, setOpenDialogAccount] = useState<{open: boolean, type: string}>({ open: false, type: ''});
     const [id, setId] = useState<string | null>(null);
 
-    const { page, rowsPerPage, listData, fetchData, searchTerm, handlePageChange, handleSearch,total } = useFetchData<IUser>(getAccounts, 9)
     
     const handleOpenDialogCreateAccount = () => {
         setOpenDialogAccount({open: true, type: 'add'})
@@ -66,7 +71,7 @@ const AccountContent = (props: AccountContentProps) => {
             </Typography>
             <Grid container spacing={2}>
                 {listData.length > 0 && listData.map((data, idx) => (
-                    <Grid key={idx} size={{ xs: 12, md: 4 }}>
+                    <Grid key={data.id} size={{ xs: 12, md: 4 }}>
                         <CardData onDetail={() => handleOpenDialogViewAccount(data.id)}>
                             <Box display='flex' justifyContent='center' alignItems='center' flexDirection='column'>
                                 <Avatar

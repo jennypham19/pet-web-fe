@@ -24,7 +24,7 @@ export const useFetchData = <T>(
 
     const fetchData = useCallback(async(page: number, limit: number, searchTerm?: string) => {
         setLoading(true);
-        const fetchId = Date.now();
+        const fetchId = ++latestFetchRef.current;
         latestFetchRef.current = fetchId;
         try {
             const res = await fn({ page: page, limit: limit, searchTerm: searchTerm });
@@ -55,11 +55,16 @@ export const useFetchData = <T>(
 
     // Lần đầu hoặc khi page/status/curator thay đổi -> fetch ngay
     useEffect(() => {
-        debounceGet.cancel(); // ngắt debounce cũ
-        fetchData(page, rowsPerPage, '');
-        if(searchTerm) debounceGet(page, rowsPerPage, searchTerm);
+        debounceGet.cancel();
+
+        if (searchTerm) {
+            debounceGet(page, rowsPerPage, searchTerm);
+        } else {
+            fetchData(page, rowsPerPage);
+        }
+
         return () => debounceGet.cancel();
-  } , [page, rowsPerPage, searchTerm]);
+    }, [page, rowsPerPage, searchTerm]);
 
     const handlePageChange = (newPage: number) => {
         setPage(newPage)

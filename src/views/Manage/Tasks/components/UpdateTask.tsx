@@ -130,54 +130,54 @@ const UpdateTask = (props: UpdateTaskProps) => {
                 </Grid>
                 <Grid size={{ xs: 12, md: 6 }}>
                     <InputSelect
-                    label=''
-                    onChange={handleInputChange}
-                    name='time'
-                    value={formDataTask.time}
-                    options={[
-                        { id: 1, label: 'Buổi sáng', value: 'morning' },
-                        { id: 2, label: 'Buổi trưa', value: 'noontime' },
-                        { id: 3, label: 'Buổi chiều', value: 'afternoon' },
-                        { id: 4, label: 'Buổi tối', value: 'evening' },
-                    ]}
-                    placeholder='Thời điểm'
-                    error={!!errorsTask.time}
-                    helperText={errorsTask.time}
+                        label=''
+                        onChange={handleInputChange}
+                        name='time'
+                        value={formDataTask.time}
+                        options={[
+                            { id: 1, label: 'Buổi sáng', value: 'morning' },
+                            { id: 2, label: 'Buổi trưa', value: 'noontime' },
+                            { id: 3, label: 'Buổi chiều', value: 'afternoon' },
+                            { id: 4, label: 'Buổi tối', value: 'evening' },
+                        ]}
+                        placeholder='Thời điểm'
+                        error={!!errorsTask.time}
+                        helperText={errorsTask.time}
                     />
                 </Grid>
                 <Grid size={{ xs: 12, md: 6 }}>
                     <InputText
-                    label=""
-                    placeholder="Thời gian"
-                    value={formDataTask.hour}
-                    type="time"
-                    onChange={handleInputChange}
-                    name="hour"
-                    error={!!errorsTask.hour}
-                    helperText={errorsTask.hour}
+                        label=""
+                        placeholder="Thời gian"
+                        value={formDataTask.hour}
+                        type="time"
+                        onChange={handleInputChange}
+                        name="hour"
+                        error={!!errorsTask.hour}
+                        helperText={errorsTask.hour}
                     />
                 </Grid>
                 <Grid size={{ xs: 12, md: 6 }}>
                     <InputSelect
-                    label=''
-                    name='frequency'
-                    value={formDataTask.frequency}
-                    onChange={handleInputChange}
-                    options={[
-                        { id: 1, label: 'Hằng ngày', value: 'everyday' },
-                        { id: 2, label: '1 lần/ngày', value: 'one_time_day' },
-                        { id: 3, label: '2 lần/ngày', value: 'two_times_day' },
-                        { id: 4, label: '3 lần/ngày', value: 'three_times_day' },
-                        { id: 5, label: 'Hằng tuần', value: 'everyweek' },
-                        { id: 6, label: '1 lần/tuần', value: 'one_time_week' },
-                        { id: 7, label: '2 lần/tuần', value: 'two_times_week' },
-                        { id: 8, label: '3 lần/tuần', value: 'three_times_week' },
-                        { id: 9, label: 'Hằng tháng', value: 'everymonth' },
-                        { id: 10, label: 'Khác', value: 'others' },
-                    ]}
-                    placeholder='Tần suất'
-                    error={!!errorsTask.frequency}
-                    helperText={errorsTask.frequency}
+                        label=''
+                        name='frequency'
+                        value={formDataTask.frequency}
+                        onChange={handleInputChange}
+                        options={[
+                            { id: 1, label: 'Hằng ngày', value: 'everyday' },
+                            { id: 2, label: '1 lần/ngày', value: 'one_time_day' },
+                            { id: 3, label: '2 lần/ngày', value: 'two_times_day' },
+                            { id: 4, label: '3 lần/ngày', value: 'three_times_day' },
+                            { id: 5, label: 'Hằng tuần', value: 'everyweek' },
+                            { id: 6, label: '1 lần/tuần', value: 'one_time_week' },
+                            { id: 7, label: '2 lần/tuần', value: 'two_times_week' },
+                            { id: 8, label: '3 lần/tuần', value: 'three_times_week' },
+                            { id: 9, label: 'Hằng tháng', value: 'everymonth' },
+                            { id: 10, label: 'Khác', value: 'others' },
+                        ]}
+                        placeholder='Tần suất'
+                        error={!!errorsTask.frequency}
+                        helperText={errorsTask.frequency}
                     />
                 </Grid>
                 {frequency === 'others' && (

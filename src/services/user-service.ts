@@ -45,3 +45,13 @@ export const getDetailAccount = async(id:string) => {
 export const updateProfile = async(id: string, payload: PayloadUser) => {
     return HttpClient.put<HttpResponse<IUser>>(`${prefix}/profile-user-updated/${id}`, payload as any)
 }
+
+// vô hiệu hóa tài khoản
+export const disableAccount = async(id: string) => {
+    return HttpClient.patch<HttpResponse>(`${prefix}/user-account-disabled/${id}`)
+}
+
+// kich hoạt tài khoản
+export const activateAccount = async(id: string) => {
+    return HttpClient.patch<HttpResponse>(`${prefix}/user-account-activated/${id}`)
+}

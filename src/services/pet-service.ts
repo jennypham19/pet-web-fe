@@ -61,3 +61,9 @@ export const getPetImages = async(getParams: GetParams): Promise<HttpResponse<Pa
         throw new Error(response.message || 'Failed to fetch list images pet')
     }
 }
+
+// Thêm hình ảnh cho thú cưng
+export const addPetImages = async(payloads: { imagePets: { petId: string,  nameImage: string, urlImage: string }[] }) => {
+    return HttpClient.post(`${prefix}/pet-images-add`, payloads)
+}
+    

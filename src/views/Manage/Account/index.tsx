@@ -9,6 +9,8 @@ import AccountContent from "./components/MainContent/Account";
 import { IUser } from "@/types/user";
 import UpdateAccountMobile from "@/layouts/Breakpoint/Mobile/UpdateAccountMobile";
 import UpdateAccountDesktop from "@/layouts/Breakpoint/Desktop/UpdateAccountDesktop";
+import { getAccounts } from "@/services/user-service";
+import { useFetchData } from "@/hooks/useFetchData";
 
 const DATA_SIDEBAR_EMP = [
     {
@@ -31,7 +33,13 @@ const ManagementAccount = () => {
     const md = useMediaQuery(theme.breakpoints.down('md'));
     const [openSidebarEmp, setOpenSidebarEmp] = useState<{open: boolean, type: string}>({ open: false, type: '' });
     const [openUpdateAccount, setOpenUpdateAccount] = useState(false);
-    const [user, setUser] = useState<IUser |null>(null)
+    const [user, setUser] = useState<IUser |null>(null);
+
+    const { page, rowsPerPage, listData, fetchData, searchTerm, handlePageChange, handleSearch, total, setPage } = useFetchData<IUser>(getAccounts, md ? 2 : 9);
+
+    useEffect(() => {
+        setPage(1)
+    },[md])
 
     useEffect(() => {
         if(location.includes('account')) {
@@ -81,6 +89,14 @@ const ManagementAccount = () => {
                         <Paper elevation={2} sx={{ boxShadow: '2px 2px 4px 1px rgba(0,0,0,0.1)', p:2 }}>
                             {openSidebarEmp.open && openSidebarEmp.type === 'account' && (
                                 <AccountContent 
+                                    page={page}
+                                    rowsPerPage={md ? 2 : 9 }
+                                    listData={listData}
+                                    fetchData={fetchData}
+                                    searchTerm={searchTerm}
+                                    handlePageChange={handlePageChange}
+                                    handleSearch={handleSearch}
+                                    total={total}
                                     onOpenUpdate={(data: IUser) => {
                                         setOpenUpdateAccount(true);
                                         setUser(data)
@@ -97,7 +113,7 @@ const ManagementAccount = () => {
                 ) : (
                     <UpdateAccountDesktop
                         user={user}
-                        onClose={() => { setOpenUpdateAccount(false); setUser(null) }}
+                        onClose={() => { setOpenUpdateAccount(false); setUser(null); fetchData(1, md ? 2 : 9) }}
                     />
                 )
             )}

@@ -348,7 +348,7 @@ const InputText: React.FC<CustomInputProps> = ({
                 color: 'black'
             },
             startAdornment: startAdornment,
-            endAdornment: hasValue ? (
+            endAdornment: (hasValue && !disabled) ? (
               <InputAdornment position='end'>
                 <IconButton
                   handleFunt={handleClear}
