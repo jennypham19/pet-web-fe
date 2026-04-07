@@ -42,6 +42,7 @@ export interface ITask {
     frequency: string,
     otherFrequency: string | null,
     requiredNote: string,
+    dueDate: string,
     manager: {
         name: string,
         role: string,

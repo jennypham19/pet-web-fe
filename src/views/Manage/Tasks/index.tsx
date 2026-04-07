@@ -14,7 +14,7 @@ import Page from "@/components/Page";
 import { COLORS } from "@/constants/colors";
 import { useFetchData } from "@/hooks/useFetchData";
 import useNotification from "@/hooks/useNotification";
-import { getTasks, updateStatus } from "@/services/task-service";
+import { getTasks, getTasksForSpecialist, updateStatus } from "@/services/task-service";
 import { ITask } from "@/types/task";
 import SearchBox from "@/views/components/SearchBox";
 import DialogViewDetail from "./components/DialogViewDetail";
@@ -29,7 +29,7 @@ const ManagementTasks = () => {
     const [openViewDetail, setOpenViewDetail] = useState(false);
     const theme = useTheme();
     const md = useMediaQuery(theme.breakpoints.down('md'));
-    const { listData, searchTerm, handleSearch, fetchData, page, rowsPerPage } = useFetchData<ITask>(getTasks)
+    const { listData, searchTerm, handleSearch, fetchData, page, rowsPerPage } = useFetchData<ITask>(getTasksForSpecialist)
     // const queryData = md ? listData.slice(0,2) : listData.slice(0,5);
     const queryData = listData;
     const [taskId, setTaskId] = useState<string | null>(null)

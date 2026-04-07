@@ -14,7 +14,8 @@ import DialogUploadImages from "./components/DialogUploadImages"
 const ManagementImage = () => {
     const theme = useTheme();
     const md = useMediaQuery(theme.breakpoints.down('md'));
-    const { listData, page, rowsPerPage, handlePageChange, total, fetchData, setPage } = useFetchData<IImagesPet>(getPetImages, md ? 1 : 6);
+    const pageSize = md ? 2 : 6;
+    const { listData, page, rowsPerPage, handlePageChange, total, fetchData, setPage } = useFetchData<IImagesPet>(getPetImages, pageSize);
     const [openDialog, setOpenDialog] = useState<{ open: boolean, type: string}>({ open: false, type: '' });
 
     useEffect(() => {
@@ -27,17 +28,17 @@ const ManagementImage = () => {
 
     const handleCloseAddImage = () => {
         setOpenDialog({ open: false, type: 'add' });
-        fetchData(1, md ? 1 : 6)
+        fetchData(1, pageSize)
     }
     return(
         <Page title="Cập nhật hình ảnh">
             <Box mx={2} p={1}>
                 <Typography pb={1} fontWeight={600} variant='h6'>Hình ảnh thú cưng</Typography>
                 <Grid container spacing={2}>
-                    <Grid size={{ xs: 12, md: 3 }}>
+                    <Grid size={{ xs: 12, sm: 4, md: 3 }}>
                         <Box 
                             sx={{ 
-                                px: 2, width: { xs: 250, lg: 350 }, height: 250, 
+                                px: 2, width: { xs: '100%', lg: 350 }, height: 250, 
                                 border: '1px dashed #a3a0a0', 
                                 borderRadius: 2, 
                                 display: 'flex', 
@@ -65,11 +66,11 @@ const ManagementImage = () => {
                         <Typography>Không tồn tại bản ghi nào cả.</Typography>
                     ): (
                         listData.map((img) => (
-                            <Grid key={img.id} size={{ xs: 12, md: 3 }}>
+                            <Grid key={img.id} size={{ xs: 12, sm: 4, md: 3 }}>
                                 <CommonImage
                                     src={img.urlImage}
                                     alt={img.nameImage}
-                                    sx={{ width:{ xs: 250, lg: 350 }, height: 250, borderRadius: 2 }}
+                                    sx={{ width:{ xs: '100%', lg: 350 }, height: 250, borderRadius: 2 }}
                                 />
                             </Grid>
                         ))
