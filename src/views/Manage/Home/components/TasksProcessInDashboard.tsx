@@ -29,6 +29,11 @@ const CardListPets = ({ tasks, onHandle, onChangePage, page, rowsPerPage, total 
 }) => {
     return(
       <Box display='flex' gap={1} flexDirection='column'>
+        {tasks.length === 0 && (
+          <Box mt={2} display='flex' justifyContent='center'>
+            <Typography variant='subtitle2'>Không tồn tại công việc nào</Typography>
+          </Box>
+        )}
         {tasks.slice(0,2).map((task, index) => (
           <CardData key={index}>
               <Box display='flex' justifyContent='space-between'>
@@ -38,8 +43,12 @@ const CardListPets = ({ tasks, onHandle, onChangePage, page, rowsPerPage, total 
                 />
                 <Typography variant='subtitle2'>{DateTime.FormatDateHour(task.hour)}</Typography>
               </Box>
+              <Box my={1} display='flex' justifyContent='space-between'>
+                <Typography variant="subtitle2" fontWeight={500}>Hạn chót</Typography>
+                <Typography variant='subtitle2'>{DateTime.FormatDateHour(task.dueDate)}</Typography>
+              </Box>
               <Box display='flex' justifyContent='space-between'>
-                <Typography my={2} variant='h6' fontWeight={600}>{task.name}</Typography>
+                <Typography my={2} variant='h6' fontWeight={600}>{index + 1}.{task.name}</Typography>
                 <Stack mt={1}>
                   {task.status === 'pending' && (
                     <Tooltip title="Chỉnh sửa">
@@ -97,7 +106,7 @@ const TableListPets = ({ tasks, onHandle, onChangePage, page, rowsPerPage, total
     return (
       <>
         <Grid sx={{ mt: 1, bgcolor: '#fff', p: 1, borderRadius: 3 }} container spacing={2}>
-          {['Công việc', 'Thú cưng', 'Trạng thái', 'Thời gian', 'Thao tác'].map((header) => (
+          {['Công việc', 'Thú cưng', 'Trạng thái', 'Thời gian', 'Hạn chót', 'Thao tác'].map((header) => (
             <Grid key={header} sx={{ flex: 1, textAlign: 'center' }}>
               <Typography variant='subtitle2' fontWeight={500}>
                 {header}
@@ -105,6 +114,11 @@ const TableListPets = ({ tasks, onHandle, onChangePage, page, rowsPerPage, total
             </Grid>
           ))}
         </Grid>
+        {tasks.length === 0 && (
+          <Box mt={2} display='flex' justifyContent='center'>
+            <Typography variant='subtitle2'>Không tồn tại công việc nào</Typography>
+          </Box>
+        )}
         {tasks.map((task, index) => (
           <Grid
             key={index}
@@ -113,7 +127,7 @@ const TableListPets = ({ tasks, onHandle, onChangePage, page, rowsPerPage, total
             spacing={2}
           >
             <Grid sx={{ flex: 1, textAlign: 'center' }}>
-              <Typography variant='subtitle2'>{task.name}</Typography>
+              <Typography variant='subtitle2'>{index + 1}.{task.name}</Typography>
             </Grid>
             <Grid sx={{ flex: 1, textAlign: 'center' }}>
               <Box display='flex' flexDirection='row' justifyContent='center'>
@@ -147,6 +161,9 @@ const TableListPets = ({ tasks, onHandle, onChangePage, page, rowsPerPage, total
             </Grid>
             <Grid sx={{ flex: 1, textAlign: 'center' }}>
               <Typography variant='subtitle2'>{DateTime.FormatDateHour(task.hour)}</Typography>
+            </Grid>
+            <Grid sx={{ flex: 1, textAlign: 'center' }}>
+              <Typography variant='subtitle2'>{DateTime.FormatDateHour(task.dueDate)}</Typography>
             </Grid>
             <Grid sx={{ flex: 1, textAlign: 'center' }}>
               {task.status === 'pending' && (
@@ -201,6 +218,7 @@ const TasksProcessInDashboard = ({ isReload, onHandle, onClick }: { isReload: bo
             <ViewData
                 label="Tiến độ công việc"
                 onClick={onClick}
+                isShowViewMore={false}
             />
             {md ? (
                 <CardListPets page={page} rowsPerPage={rowsPerPage} total={total} onChangePage={handleChangePage} tasks={listData} onHandle={onHandle}/>

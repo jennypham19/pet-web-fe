@@ -33,6 +33,28 @@ export const getTasks = async(getParams: GetParams): Promise<HttpResponse<Pagina
     }
 }
 
+// Lấy danh sách cho chuyên viên
+export const getTasksForSpecialist = async(getParams: GetParams): Promise<HttpResponse<PaginatedResponse<ITask>>> => {
+    const url = `${prefix}/list-tasks-for-specialist`;
+    const params: Record<string, any> = {
+        page: getParams.page,
+        limit: getParams.limit
+    }
+    if(getParams.searchTerm && getParams.searchTerm.trim()){
+        params.searchTerm = getParams.searchTerm
+    }
+    const response = await HttpClient.get<{
+        success: boolean,
+        message: string,
+        data: PaginatedResponse<ITask>
+    }>(url, { params });
+    if(response.data && response.success && response.data){
+        return response
+    }else{
+        throw new Error(response.message || 'Failed to fetch list tasks')
+    }
+}
+
 // cập nhập trạng thái
 export const updateStatus = (id: string, payload: { status: string, finishedDate?: Dayjs | null, type: string }) => {
     return HttpClient.patch(`${prefix}/status-updated/${id}`, payload)

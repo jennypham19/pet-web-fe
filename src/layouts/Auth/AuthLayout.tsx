@@ -1,8 +1,9 @@
-import { createTheme, ThemeProvider } from '@mui/material';
+import { Box, createTheme, ThemeProvider } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
+import bg from "@/assets/images/users/bg.jpg"
 
 const AuthContainer = styled(Stack)(({ theme }) => ({
   minHeight: '100%',
@@ -24,6 +25,9 @@ const AuthContainer = styled(Stack)(({ theme }) => ({
       backgroundImage: 'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
     }),
   },
+  backgroundImage: `url(${bg})`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
 }));
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -34,8 +38,9 @@ const Card = styled(MuiCard)(({ theme }) => ({
   gap: theme.spacing(2),
   margin: 'auto',
   [theme.breakpoints.up('sm')]: {
-    maxWidth: '450px',
+    maxWidth: '500px',
   },
+  borderRadius: 8,
   boxShadow:
     'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
   ...theme.applyStyles('dark', {

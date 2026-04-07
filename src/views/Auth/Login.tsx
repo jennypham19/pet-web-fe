@@ -172,7 +172,7 @@ export default function Login() {
           prefixIcon={Lock}
         />
         <div>
-          <Box>
+          {/* <Box>
             <Typography
               color='primary'
               component={RouterLink}
@@ -181,7 +181,7 @@ export default function Login() {
             >
               Quên mật khẩu?
             </Typography>
-          </Box>
+          </Box> */}
           {/* <FormControlLabel
             label={'Remember me'}
             control={
