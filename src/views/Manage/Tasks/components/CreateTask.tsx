@@ -15,9 +15,7 @@ import { IPet } from "@/types/pet";
 import { Button, Typography } from "@mui/material";
 import { COLORS } from "@/constants/colors";
 import AutocompleteComponent from "./AutocompleteComponent";
-import AutocompleteComponentPet from "./AutocomplePet";
 import { FormDataTask, PayloadTask } from "@/types/task";
-import dayjs from "dayjs";
 import { FormErrorsTask } from "@/types/errors";
 import useNotification from "@/hooks/useNotification";
 import { createTask } from "@/services/task-service";
@@ -28,10 +26,11 @@ import useAuth from "@/hooks/useAuth";
 interface CreateTaskProps{
     open: boolean,
     onClose: () => void;
+    onOpenDialogConfirm: () => void;
 }
 
 const CreateTask = (props: CreateTaskProps) => {
-    const { open, onClose } = props;
+    const { open, onClose, onOpenDialogConfirm } = props;
     const { profile } = useAuth();
     const notify = useNotification();
     const [otherFrequency, setOtherFrequency] = useState('');
@@ -103,6 +102,7 @@ const CreateTask = (props: CreateTaskProps) => {
           severity: 'success'
         })
         handleClose()
+        onOpenDialogConfirm()
       } catch (error: any) {
         notify({
           message: error.message,

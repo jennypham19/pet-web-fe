@@ -69,3 +69,9 @@ export const updateImagesForTask = (id: string, payload: PayloadTaskImages) => {
 export const getDetailTask = (id: string) => {
     return HttpClient.get<HttpResponse<ITask>>(`${prefix}/detail-task/${id}`)
 }
+
+
+// xóa công việc
+export const deleteTask = (id: string) => {
+    return HttpClient.delete(`${prefix}/task-deleted/${id}`)
+}

@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Add, FilterAlt, Notifications, Update } from "@mui/icons-material";
-import { Box, Button } from "@mui/material";
+import { Box, Button, useMediaQuery, useTheme } from "@mui/material";
 import SearchBox from "../../../components/SearchBox";
 import ListPetsInDashboard from "../../Home/components/ListPetsInDashboard";
 import TasksProcessInDashboard from "../../Home/components/TasksProcessInDashboard";
@@ -16,20 +16,24 @@ import { ROUTE_PATH } from "@/constants/routes";
 import { useFetchData } from "@/hooks/useFetchData";
 import { IPet } from "@/types/pet";
 import { getPets } from "@/services/pet-service";
+import DeleteConfirmTask from "../../Tasks/components/DeleteConfirmTask";
+import { ITask } from "@/types/task";
+import { getTasks } from "@/services/task-service";
 
 
 const DashboardInMod = () => {
     const navigate = useNavigate();
+    const theme = useTheme();
+    const md = useMediaQuery(theme.breakpoints.down('md'));
     const [openTask, setOpenTask] = useState<{ open: boolean, type: string }>({ open: false, type: '' });
     const [openDialogConfirm, setOpenDialogConfirm] = useState(false);
     const [isReload, setIsReload] = useState(false);
     const [id, setId] = useState<string | null>(null);
 
-    const { listData } = useFetchData<IPet>(getPets)
+    const { listData: listPets } = useFetchData<IPet>(getPets)
     
     const handleCloseOpenTask = () => {
         // setIsReload(true);
-        setOpenDialogConfirm(true)
         setOpenTask({ open: false, type: 'add' });
     }
 
@@ -47,18 +51,25 @@ const DashboardInMod = () => {
         case 'view':
           setOpenTask({ open: true, type: 'view'})
           break;
+        case 'delete':
+          setOpenTask({ open: true, type: 'delete'})
+          break;
         default:
           break;
       }
     }
 
     const handleCloseButton = (type: string) => {
+      setIsReload(true)
       switch (type) {
         case 'update':
           setOpenTask({ open: false, type: 'update'})
           break;
         case 'view':
           setOpenTask({ open: false, type: 'view'})
+          break;
+        case 'delete':
+          setOpenTask({ open: false, type: 'delete'})
           break;
         default:
           break;
@@ -100,10 +111,10 @@ const DashboardInMod = () => {
             </Button>
           </SearchBox>
         </Box>
-        <ListPetsInDashboard listData={listData} onClick={() => { navigate('/pet/manage/pet')}} onDetailPet={() => {}}/>
+        <ListPetsInDashboard listData={listPets} onClick={() => { navigate('/pet/manage/pet')}} onDetailPet={() => {}}/>
         <TasksProcessInDashboard onClick={() => { navigate(`/pet/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_TASK}`)}} isReload={isReload} onHandle={handleButton}/>
         {openTask.open && openTask.type === 'add' && (
-          <CreateTask open={openTask.open} onClose={handleCloseOpenTask} />
+          <CreateTask open={openTask.open} onClose={handleCloseOpenTask} onOpenDialogConfirm={() => { setOpenDialogConfirm(true)}} />
         )}
         {openDialogConfirm && (
           <DialogConfirm
@@ -125,6 +136,13 @@ const DashboardInMod = () => {
           <UpdateTask
             open={openTask.open}
             onClose={() => handleCloseButton('update')}
+            id={id}
+          />
+        )}
+        {openTask.open && openTask.type === 'delete' && id && (
+          <DeleteConfirmTask
+            open={openTask.open}
+            onClose={() => handleCloseButton('delete')}
             id={id}
           />
         )}
