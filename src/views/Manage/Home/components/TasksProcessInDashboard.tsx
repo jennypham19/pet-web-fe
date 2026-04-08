@@ -48,7 +48,7 @@ const CardListPets = ({ tasks, onHandle, onChangePage, page, rowsPerPage, total 
                 <Typography variant='subtitle2'>{DateTime.FormatDateHour(task.dueDate)}</Typography>
               </Box>
               <Box display='flex' justifyContent='space-between'>
-                <Typography my={2} variant='h6' fontWeight={600}>{index + 1}.{task.name}</Typography>
+                <Typography my={2} variant='h6' fontWeight={600}>{task.displayName}</Typography>
                 <Stack mt={1}>
                   {task.status === 'pending' && (
                     <>
@@ -145,7 +145,7 @@ const TableListPets = ({ tasks, onHandle, onChangePage, page, rowsPerPage, total
               spacing={2}
             >
               <Grid sx={{ flex: 1, textAlign: 'center' }}>
-                <Typography variant='subtitle2'>{index + 1}.{task.name}</Typography>
+                <Typography variant='subtitle2'>{task.displayName}</Typography>
               </Grid>
               <Grid sx={{ flex: 1, textAlign: 'center' }}>
                 <Box display='flex' flexDirection='row' justifyContent='center'>
@@ -225,7 +225,7 @@ const TableListPets = ({ tasks, onHandle, onChangePage, page, rowsPerPage, total
 const TasksProcessInDashboard = ({ isReload, onHandle, onClick }: { isReload: boolean, onHandle: (id: string, type: string ) => void, onClick: () => void }) => {
     const theme = useTheme();
     const md = useMediaQuery(theme.breakpoints.down('md'));
-    const { listData, fetchData, page, rowsPerPage, handlePageChange, total, setPage  } = useFetchData<ITask>(getTasks, md ? 2 : 4)
+    const { listData, fetchData, page, rowsPerPage, handlePageChange, total, setPage  } = useFetchData<ITask>(getTasks, md ? 2 : 5)
     useEffect(() => {
       if(isReload){
         fetchData(1, rowsPerPage)

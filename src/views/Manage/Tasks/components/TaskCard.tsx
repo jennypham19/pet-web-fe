@@ -69,7 +69,7 @@ const TaskCard = ({ task, handleButton}: { task: ITask, handleButton: (id: strin
             </Tooltip>
         </Box>
         <Typography fontWeight={600} mb={1}>
-            {task.name}
+            {task.displayName}
         </Typography>
 
         <Box display='flex' justifyContent='space-between'>
@@ -79,7 +79,13 @@ const TaskCard = ({ task, handleButton}: { task: ITask, handleButton: (id: strin
                 </Typography>  
                 <Typography variant="subtitle2" fontWeight={500}>
                     {DateTime.FormatDateHour(task.hour)}
-                </Typography>                              
+                </Typography>   
+                <Typography fontSize={13} color="gray">
+                    Hạn chót
+                </Typography>  
+                <Typography variant="subtitle2" fontWeight={500}>
+                    {DateTime.FormatDateHour(task.dueDate)}
+                </Typography>                             
             </Stack>
             <PetsAvatar pets={task.pets} height={30} width={30}/>            
         </Box>
