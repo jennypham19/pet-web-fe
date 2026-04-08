@@ -37,6 +37,8 @@ export interface PayloadTaskImages{
 export interface ITask {
     id: string,
     name: string,
+    taskNumber: number,
+    displayName: string,
     time: string,
     hour: string,
     frequency: string,
