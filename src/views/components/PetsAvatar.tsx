@@ -11,20 +11,22 @@ const PetsAvatar = ({ pets, width = 40, height = 40, maxShow = 3 }: { pets: {nam
                 <Avatar src={pet.urlAvatar} sx={{ borderRadius: '50%', width: width, height: height, ml: idx === 0 ? 0 : -1, }} />
             </Tooltip>
         ))}
-        <Tooltip title='Xem thêm'>
-            <IconButtonMui
-                sx={{
-                    border: '1px solid #000',
-                    borderRadius: '50%',
-                    bgcolor: '#b4b0b0',
-                    width: width,
-                    height: height,
-                    ml: -1
-                }}
-            >
-                <Typography variant='subtitle2' fontWeight={500}>+{remain}</Typography>
-            </IconButtonMui>
-        </Tooltip>
+        {remain > 0 && (
+            <Tooltip title='Xem thêm'>
+                <IconButtonMui
+                    sx={{
+                        border: '1px solid #000',
+                        borderRadius: '50%',
+                        bgcolor: '#b4b0b0',
+                        width: width,
+                        height: height,
+                        ml: -1
+                    }}
+                >
+                    <Typography variant='subtitle2' fontWeight={500}>+{remain}</Typography>
+                </IconButtonMui>
+            </Tooltip>
+        )}
     </Box>
   );
 };
