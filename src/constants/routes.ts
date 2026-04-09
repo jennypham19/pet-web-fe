@@ -11,6 +11,7 @@ export const ROUTE_PATH = {
   MANAGE_TASK: 'task', // quản lý công việc
   MANAGE_IMAGE: 'image', // cập nhật hình ảnh
   MANAGE_ACCOUNT: 'account', // quản lý tài khoản
+  MANAGE_HISTORY_TASK: 'history-task', // quản lý lịch sử công việc
 
   PRODUCT_CATEGORY: '/products/categories',
   PRODUCT_CATEGORY_CREATE: '/products/categories/create',
