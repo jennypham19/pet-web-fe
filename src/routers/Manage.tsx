@@ -11,6 +11,7 @@ const Information = Loadable(lazy(() => import('@/views/Manage/Information/index
 const Images = Loadable(lazy(() => import('@/views/Manage/Images/index')));
 const Pets = Loadable(lazy(() => import('@/views/Manage/Pets/index')));
 const Tasks = Loadable(lazy(() => import('@/views/Manage/Tasks/index')));
+const ManageHistoryTask = Loadable(lazy(() => import('@/views/Manage/HistoyTask/index')));
 
 const ManageRedirect = () => {
   const { profile } = useAppSelector((state) => state.auth);
@@ -36,6 +37,7 @@ const manageRoutes: RouteObject[] = [
     { path: ROUTE_PATH.MANAGE_IMAGE, element: <Images/> },
     { path: ROUTE_PATH.MANAGE_PET, element: <Pets/> },
     { path: ROUTE_PATH.MANAGE_TASK, element: <Tasks/> },
+    { path: ROUTE_PATH.MANAGE_HISTORY_TASK, element: <ManageHistoryTask/> },
 ];
 
 export default manageRoutes;

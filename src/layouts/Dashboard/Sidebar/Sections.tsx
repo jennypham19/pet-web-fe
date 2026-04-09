@@ -84,6 +84,11 @@ const ModSidebars = (): Section[] => [
         icon: Pets
       },
       {
+        title: 'Quản lý lịch sử công việc',
+        path: `/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_HISTORY_TASK}`,
+        icon: Assignment
+      },
+      {
         title: 'Hồ sơ người dùng',
         path: `/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_INFORMATION}`,
         icon: Person

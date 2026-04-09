@@ -11,6 +11,12 @@ export const createTask = async(payload: PayloadTask) => {
   return HttpClient.post(`${prefix}/task-created`, payload)
 }
 
+export interface TotalData{
+    totalTask: number,
+    todayTask: number,
+    totalStaff: number
+}
+
 // Lấy danh sách
 export const getTasks = async(getParams: GetParams): Promise<HttpResponse<PaginatedResponse<ITask>>> => {
     const url = `${prefix}/list-tasks`;
@@ -74,4 +80,9 @@ export const getDetailTask = (id: string) => {
 // xóa công việc
 export const deleteTask = (id: string) => {
     return HttpClient.delete(`${prefix}/task-deleted/${id}`)
+}
+
+// // lấy tổng công việc, công việc ngày hôm nay, tổng nhân sự (chuyên viên + nhân viên đang hoạt động)
+export const getTotalTaskAndStaff = () => {
+    return HttpClient.get<HttpResponse<TotalData>>(`${prefix}/total-task-and-staff`)
 }
