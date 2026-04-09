@@ -38,7 +38,9 @@ const routes: RouteObject[] = [
 
   {
     path: '/',
-    element: <Navigate to="login" replace />,
+    children: [
+      { index: true, element: <Login/>}
+    ]
   },
 
   // --- NHÁNH 2: CÁC TRANG XÁC THỰC (CHỈ DÀNH CHO NGƯỜI CHƯA ĐĂNG NHẬP) ---
@@ -49,8 +51,6 @@ const routes: RouteObject[] = [
       {
         element: <AuthLayout/>,
         children: [
-          { index: true, element: <Navigate to={'login'} replace /> },
-          { path: 'login', element: <Login /> },
           { path: 'registration', element: <Registration /> },
           { path: 'forgot-password', element: <ForgotPassword /> },
           { path: 'change-password', element: <ChangePassword /> },
