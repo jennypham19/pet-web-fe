@@ -1,4 +1,4 @@
-import { GENDER_LABELS, GENDER_PET_LABELS, GenderPet, GenderUser, ROLE_LABELS, RoleUser, SPECIES_PET_LABELS, SpeciesPet, TYPE_PET_LABELS, TypePet, StatusTask, STATUS_TASK_LABELS, TimeTaks, TIME_TASK_LABELS, FrequencyTask, FREQUENCY_TASK_LABELS } from "@/constants/status";
+import { GENDER_LABELS, GENDER_PET_LABELS, GenderPet, GenderUser, ROLE_LABELS, RoleUser, SPECIES_PET_LABELS, SpeciesPet, TYPE_PET_LABELS, TypePet, StatusTask, STATUS_TASK_LABELS, TimeTaks, TIME_TASK_LABELS, FrequencyTask, FREQUENCY_TASK_LABELS, ActiveUser, ACTIVE_LABELS } from "@/constants/status";
 
 export const getRoleLabel = (role: RoleUser | null | undefined) : string => {
     if(!role) return "Chưa xác định";
@@ -9,6 +9,21 @@ export const getRenderLabel = (gender: GenderUser | null | undefined) : string =
     if(!gender) return "";
     return GENDER_LABELS[gender] || gender;
 }
+
+export const getActiveLabel = (active: ActiveUser | null | undefined | number) : string => {
+    if(!active) return '';
+    return ACTIVE_LABELS[active] ;
+}
+
+export const getActiveAccountColor = (active: number) => {
+  switch (active) {
+    case -1:
+      return { color: 'error' as const };
+    case 1:
+    default:
+      return { color: 'success' as const };
+  }
+};
 
 // Pets
 export const getGenderPetLabel = (gender: GenderPet | null | undefined) : string => {

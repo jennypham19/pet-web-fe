@@ -85,7 +85,7 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({
   }
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 2, ...sx }}>
+    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', ...sx }}>
       <Stack direction="row" spacing={0.5} alignItems="center">
         <IconButton
           onClick={handlePrevious}

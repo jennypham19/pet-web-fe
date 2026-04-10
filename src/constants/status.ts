@@ -28,6 +28,19 @@ export const GENDER_LABELS: { [key in GenderUser]: string } = {
 
 }
 
+export const ActiveUser = {
+    ACTIVE: 1,
+    UNACTIVE: -1
+};
+
+export type ActiveUser = typeof ActiveUser[keyof typeof ActiveUser];
+
+export const ACTIVE_LABELS: { [key in ActiveUser]: string } = {
+    [ActiveUser.ACTIVE]: "Active",
+    [ActiveUser.UNACTIVE]: "Inactive",
+
+}
+
 // Pets
 export const GenderPet = {
     FEMALE: 'female',
