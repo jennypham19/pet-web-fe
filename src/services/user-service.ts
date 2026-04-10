@@ -36,6 +36,28 @@ export const getAccounts = async(getParams: GetParams): Promise<HttpResponse<Pag
     }
 }
 
+// Lấy danh sách tài khoản
+export const getListAccounts = async(getParams: GetParams): Promise<HttpResponse<PaginatedResponse<IUser>>> => {
+    const url = `${prefix}/user-accounts`;
+    const params: Record<string, any> = {
+        page: getParams.page,
+        limit: getParams.limit
+    }
+    if(getParams.searchTerm && getParams.searchTerm.trim()){
+        params.searchTerm = getParams.searchTerm
+    }
+    const response = await HttpClient.get<{
+        success: boolean,
+        message: string,
+        data: PaginatedResponse<IUser>
+    }>(url, { params });
+    if(response.data && response.success && response.data){
+        return response
+    }else{
+        throw new Error(response.message || 'Failed to fetch list accounts')
+    }
+}
+
 
 export const getDetailAccount = async(id:string) => {
     return HttpClient.get<HttpResponse<IUser>>(`${prefix}/user-account-detail/${id}`)

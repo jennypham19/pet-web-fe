@@ -11,6 +11,7 @@ import UpdateAccountMobile from "@/layouts/Breakpoint/Mobile/UpdateAccountMobile
 import UpdateAccountDesktop from "@/layouts/Breakpoint/Desktop/UpdateAccountDesktop";
 import { getAccounts } from "@/services/user-service";
 import { useFetchData } from "@/hooks/useFetchData";
+import ListAccountsContent from "./components/MainContent/List";
 
 const DATA_SIDEBAR_EMP = [
     {
@@ -102,6 +103,9 @@ const ManagementAccount = () => {
                                         setUser(data)
                                     }}
                                 />
+                            )}
+                            {openSidebarEmp.open && openSidebarEmp.type === 'list' && (
+                                <ListAccountsContent/>
                             )}
                         </Paper>
                     </Grid>
