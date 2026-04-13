@@ -126,7 +126,7 @@ export interface IPet{
         adverseReaction: string,
         createdAt: string,
         updatedAt: string
-    },
+    }[],
     petDeworming: {
         id: string,
         medicationName: string,
@@ -135,7 +135,7 @@ export interface IPet{
         nextDewormingDate: string,
         createdAt: string,
         updatedAt: string
-    },
+    }[],
     petRegularVetCheckup: {
         id: string,
         examinationDate: string,
@@ -144,7 +144,7 @@ export interface IPet{
         conclusion: string,
         createdAt: string,
         updatedAt: string
-    },
+    }[],
     petSpecialNutritionalPlan: {
         id: string,
         food: string,

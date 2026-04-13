@@ -3,6 +3,7 @@ export interface PaginatedResponse<T>{
     totalPages: number;
     currentPage: number;
     total: number;
+    limit?: number
 }
 
 export interface GetParams {
