@@ -19,7 +19,8 @@ interface TableListAccountsProps{
 
 const TableListAccounts = (props: TableListAccountsProps) => {
     const { users, onHandle, onChangePage, page, rowsPerPage, total } = props;
-
+    const start = total === 0 ? 0 : (page - 1) * rowsPerPage + 1;
+    const end = start + users.length - 1;
     return(
         <>
             <Grid sx={{ mt: 1, bgcolor: '#d4d4d4', p: 1, borderRadius: 3 }} container spacing={2}>
@@ -76,7 +77,7 @@ const TableListAccounts = (props: TableListAccountsProps) => {
             })}
             <Grid sx={{ mt: 1, bgcolor: '#d4d4d4', borderRadius: 3 }} container spacing={2}>
                 <Grid sx={{ flex: 1, display: 'flex', textAlign: 'center', p: 1, px: 1.5, justifyContent: 'space-between' }}>
-                    <Typography sx={{ margin: 'auto 0'}} variant="subtitle2">Hiện thị 5 của {total} nhân sự</Typography>
+                    <Typography sx={{ margin: 'auto 0'}} variant="subtitle2">Hiện thị {start} - {end} của {total} nhân sự</Typography>
                     <CustomPagination
                         page={page}
                         count={total}

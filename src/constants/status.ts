@@ -79,6 +79,24 @@ export const SPECIES_PET_LABELS: { [key in SpeciesPet]: string } = {
 
 }
 
+export const FrequencyPet = {
+    ONE_MEALS: 'one_meals',
+    TWO_MEALS: 'two_meals',
+    THREE_MEALS: 'three_meals',
+    FOUR_MEALS: 'four_meals',
+    FIVE_MEALS: 'five_meals'
+};
+
+export type FrequencyPet = typeof FrequencyPet[keyof typeof FrequencyPet];
+
+export const FREQUENCY_PET_LABELS: { [key in FrequencyPet]: string } = {
+    [FrequencyPet.ONE_MEALS]: '1 bữa/ngày',
+    [FrequencyPet.TWO_MEALS]: '2 bữa/ngày',
+    [FrequencyPet.THREE_MEALS]: '3 bữa/ngày',
+    [FrequencyPet.FOUR_MEALS]: '4 bữa/ngày',
+    [FrequencyPet.FIVE_MEALS]: '5 bữa/ngày',
+}
+
 // Task
 export const StatusTask = {
     PENDING: 'pending',
