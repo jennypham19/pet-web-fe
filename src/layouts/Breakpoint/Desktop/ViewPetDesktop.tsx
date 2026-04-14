@@ -4,7 +4,7 @@ import { IPet } from "@/types/pet";
 import DateTime from "@/utils/DateTime";
 import { getFrequencyPetLabel } from "@/utils/labelEntoVni";
 import { ArrowForward, Edit, HealthAndSafety, MedicalServices, PestControl, RestaurantMenu, Vaccines } from "@mui/icons-material";
-import { Box, Chip, Paper, Stack, Step, StepConnector, StepContent, StepLabel, Stepper, Typography } from "@mui/material";
+import { Box, Chip, Paper, Stack, Step, StepContent, StepLabel, Stepper, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 
 interface ViewPetDesktopProps{
