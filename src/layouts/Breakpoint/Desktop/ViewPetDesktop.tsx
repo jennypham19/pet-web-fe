@@ -219,7 +219,7 @@ const ViewPetDesktop = (props: ViewPetDesktopProps) => {
                                                     <Typography variant="caption">{checkUpStep.healthCondition}</Typography>
                                                 </Stack>
                                                 <Stack direction='row'>
-                                                    <Typography fontWeight={500} variant="caption">Lết luận: </Typography>
+                                                    <Typography fontWeight={500} variant="caption">Kết luận: </Typography>
                                                     <Typography variant="caption">{checkUpStep.conclusion}</Typography>
                                                 </Stack>
                                             </Box>
