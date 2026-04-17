@@ -1,20 +1,22 @@
 import CommonImage from "@/components/Image/index";
 import { COLORS } from "@/constants/colors";
-import { IPet } from "@/types/pet";
+import { IPet, IPetDeworming, IPetRegularVetCheckup, IPetVaccination } from "@/types/pet";
 import DateTime from "@/utils/DateTime";
-import { CalendarMonth, CalendarToday, Female, LocalFlorist, LocationCityRounded, Male, MedicalServices, NavigateBefore, NavigateNext, Person, PestControl, Phone, Place, Vaccines } from "@mui/icons-material";
+import { CalendarMonth, CalendarToday, Female, FoodBank, LocalFlorist, LocationCityRounded, Male, MedicalServices, MenuBook, NavigateBefore, NavigateNext, Numbers, Person, PestControl, Phone, Place, Restaurant, Vaccines } from "@mui/icons-material";
 import { Box, Button, Chip, IconButton, Paper, Stack, Tooltip, Typography } from "@mui/material";
 import dayjs from "dayjs";
 import Grid from "@mui/material/Grid2";
-import { getGenderPetLabel } from "@/utils/labelEntoVni";
-import NavigateBack from "@/views/components/NavigateBack";
+import { getFrequencyPetLabel, getGenderPetLabel } from "@/utils/labelEntoVni";
 
 interface ViewPetMobileProps{
-    pet: IPet
+    pet: IPet;
+    onOpenVaccination: (type: string, data: IPetVaccination[]) => void;
+    onOpenDeworming: (type: string, data: IPetDeworming[]) => void;
+    onOpenRegularVetCheckup: (type: string, data: IPetRegularVetCheckup[]) => void;
 }
 
 const ViewPetMobile = (props: ViewPetMobileProps) => {
-    const { pet } = props;
+    const { pet, onOpenDeworming, onOpenRegularVetCheckup, onOpenVaccination } = props;
 
     const age = dayjs().get('year') - dayjs(pet.dob).get('year')
     return(
@@ -107,9 +109,11 @@ const ViewPetMobile = (props: ViewPetMobileProps) => {
             {/* ------------ TIÊM PHÒNG ------------- */}
             <Stack mt={3} mb={1} direction='row' display='flex' justifyContent='space-between'>
                 <Typography fontWeight={600}>Thông tin tiêm phòng</Typography>
-                <IconButton>
-                    <NavigateNext/>
-                </IconButton>
+                <Tooltip title='Xem thêm'>
+                    <IconButton onClick={() => onOpenVaccination('vaccination', pet.petVaccination)}>
+                        <NavigateNext/>
+                    </IconButton>
+                </Tooltip>
             </Stack>
             {pet.petVaccination.slice(0,1).map((vac) => (
                 <Paper sx={{ p: 2, bgcolor: '#fff', borderRadius: 2 }}>
@@ -136,9 +140,11 @@ const ViewPetMobile = (props: ViewPetMobileProps) => {
             {/* ------------ TẨY GIUN ------------- */}
             <Stack mt={3} mb={1} direction='row' display='flex' justifyContent='space-between'>
                 <Typography fontWeight={600}>Thông tin tẩy giun</Typography>
-                <IconButton>
-                    <NavigateNext/>
-                </IconButton>
+                <Tooltip title="Xem thêm">
+                    <IconButton onClick={() => onOpenDeworming('deworming', pet.petDeworming)}>
+                        <NavigateNext/>
+                    </IconButton>
+                </Tooltip>
             </Stack>
             {pet.petDeworming.slice(0,1).map((dew) => (
                 <Paper sx={{ p: 2, bgcolor: '#fff', borderRadius: 2 }}>
@@ -171,9 +177,11 @@ const ViewPetMobile = (props: ViewPetMobileProps) => {
             {/* ------------ KHÁM ĐỊNH KỲ ------------- */}
             <Stack mt={3} mb={1} direction='row' display='flex' justifyContent='space-between'>
                 <Typography fontWeight={600}>Thông tin khám định kỳ</Typography>
-                <IconButton>
-                    <NavigateNext/>
-                </IconButton>
+                <Tooltip title="Xem thêm">
+                    <IconButton onClick={() => onOpenRegularVetCheckup('regularVetCheckup', pet.petRegularVetCheckup)}>
+                        <NavigateNext/>
+                    </IconButton>
+                </Tooltip>
             </Stack>
             {pet.petRegularVetCheckup.slice(0,1).map((checkUp, index) => (
                 <Paper sx={{ p: 2, bgcolor: '#fff', borderRadius: 2, borderLeft: `5px solid ${COLORS.PRIMARY}` }}>
@@ -191,6 +199,63 @@ const ViewPetMobile = (props: ViewPetMobileProps) => {
                     </Stack>
                 </Paper>
             ))}
+
+            {/* ------------ CHẾ ĐỘ DINH DƯỠNG ĐẶC BIỆT ------------- */}
+            <Paper sx={{ p: 2, bgcolor: '#c5e3f1', mt: 3, borderRadius: 2 }}>
+                <Typography fontWeight={600}>Thông tin chế độ dinh dưỡng đặc biệt</Typography>
+                {pet.petSpecialNutritionalPlan !== null && (
+                    <>
+                        <Paper sx={{ p: 2, bgcolor: '#fff', mt: 2, borderRadius: 2 }}>
+                            <Stack>
+                                <Restaurant sx={{ margin: 'auto 0' }}/>
+                                <Stack direction='column'>
+                                    <Typography fontWeight={500} variant="caption">TẦN SUẤT</Typography>
+                                    <Typography variant="caption">{getFrequencyPetLabel(pet.petSpecialNutritionalPlan.frequency)}</Typography>
+                                </Stack>
+                            </Stack>
+                        </Paper>
+                        <Paper sx={{ p: 2, bgcolor: '#fff', mt: 2, borderRadius: 2 }}>
+                            <Stack>
+                                <FoodBank sx={{ margin: 'auto 0' }}/>
+                                <Stack direction='column'>
+                                    <Typography fontWeight={500} variant="caption">THỨC ĂN</Typography>
+                                    <Typography variant="caption">{pet.petSpecialNutritionalPlan.food}</Typography>
+                                </Stack>
+                            </Stack>
+                        </Paper>
+                        <Paper sx={{ p: 2, bgcolor: '#fff', mt: 2, borderRadius: 2 }}>
+                            <Stack>
+                                <Numbers sx={{ margin: 'auto 0' }}/>
+                                <Stack direction='column'>
+                                    <Typography fontWeight={500} variant="caption">SỐ LƯỢNG</Typography>
+                                    <Typography variant="caption">{pet.petSpecialNutritionalPlan.amount}</Typography>
+                                </Stack>
+                            </Stack>
+                        </Paper>
+                        <Paper sx={{ p: 2, bgcolor: '#fff', mt: 2, borderRadius: 2 }}>
+                            <Stack>
+                                <MenuBook sx={{ margin: 'auto 0' }}/>
+                                <Stack direction='column'>
+                                    <Typography fontWeight={500} variant="caption">BỔ SUNG THÊM DINH DƯỠNG</Typography>
+                                    <Typography variant="caption">{pet.petSpecialNutritionalPlan.nutritionalSupplements}</Typography>
+                                </Stack>
+                            </Stack> 
+                        </Paper>                    
+                    </>
+                )} 
+            </Paper>
+            <Typography mt={3} variant="h6" fontWeight={600}>Hình ảnh của {pet.name}</Typography>
+            <Grid container spacing={2} mt={1}>
+                {pet.petImages.length > 0  && pet.petImages.map((img, idx) => (
+                    <Grid key={idx} size={{ xs: 6 }}>
+                        <CommonImage
+                            src={img.urlImage}
+                            alt={img.nameImage}
+                            sx={{ height: 200, width: '100%' }}
+                        />
+                    </Grid>
+                ))}
+            </Grid> 
         </Box>
     )
 }

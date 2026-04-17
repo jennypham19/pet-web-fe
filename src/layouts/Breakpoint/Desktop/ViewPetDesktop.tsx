@@ -1,6 +1,6 @@
 import CommonImage from "@/components/Image/index";
 import { COLORS } from "@/constants/colors";
-import { IPet } from "@/types/pet";
+import { IPet, IPetDeworming, IPetRegularVetCheckup } from "@/types/pet";
 import DateTime from "@/utils/DateTime";
 import { getFrequencyPetLabel } from "@/utils/labelEntoVni";
 import { ArrowForward, Edit, HealthAndSafety, MedicalServices, PestControl, RestaurantMenu, Vaccines } from "@mui/icons-material";
@@ -8,11 +8,15 @@ import { Box, Chip, Paper, Stack, Step, StepContent, StepLabel, Stepper, Typogra
 import Grid from "@mui/material/Grid2";
 
 interface ViewPetDesktopProps{
-    pet: IPet
+    pet: IPet,
+    onOpenVaccination: (type: string) => void;
+    onOpenDeworming: (type: string) => void;
+    onOpenRegularVetCheckup: (type: string) => void;
 }
 
 const ViewPetDesktop = (props: ViewPetDesktopProps) => {
-    const { pet } = props;
+    const { pet, onOpenVaccination, onOpenDeworming, onOpenRegularVetCheckup } = props;
+
     return(
         <Box p={2}>
             <Grid container spacing={2}>
@@ -113,16 +117,25 @@ const ViewPetDesktop = (props: ViewPetDesktopProps) => {
                                 <Vaccines/>
                                 <Typography fontWeight={600}>Thông tin tiêm vắc xin</Typography>
                             </Stack>
-                            <Stack onClick={() => {}} sx={{ cursor: 'pointer', fontStyle: 'italic' }} direction='row'>
+                            <Stack onClick={() => onOpenVaccination('vaccination')} sx={{ cursor: 'pointer', fontStyle: 'italic' }} direction='row'>
                                 <Typography fontWeight={600} variant="caption">Xem thêm</Typography>
                                 <ArrowForward sx={{ width: 15, height: 15 }}/>
                             </Stack>
                         </Box>
                         <Stepper sx={{ mt: 1.5 }} orientation="vertical">
                             {pet.petVaccination.slice(0,3).map((vacStep, index) => (
-                                <Step key={vacStep.id}>
+                                <Step expanded key={vacStep.id}> {/* Stepper vertical dùng activeStep để control step nào mở; Nếu không set → mặc định chỉ mở step đầu; Thêm expanded giúp bỏ logic activeStep -> mở hết tất cả */}
                                     <StepLabel
                                         icon={<Vaccines/>}
+                                        sx={{
+                                            '& .MuiStepLabel-label': {
+                                                color: '#000 !important',
+                                                fontWeight: 600
+                                            },
+                                            '& .MuiStepIcon-root': {
+                                                color: '#000 !important',
+                                            }
+                                        }}
                                     >
                                         {index + 1}. {vacStep.medicationName}
                                     </StepLabel>
@@ -154,15 +167,26 @@ const ViewPetDesktop = (props: ViewPetDesktopProps) => {
                                 <PestControl/>
                                 <Typography fontWeight={600}>Thông tin tẩy giun</Typography>
                             </Stack>
-                            <Stack onClick={() => {}} sx={{ cursor: 'pointer', fontStyle: 'italic' }} direction='row'>
+                            <Stack onClick={() => onOpenDeworming('deworming')} sx={{ cursor: 'pointer', fontStyle: 'italic' }} direction='row'>
                                 <Typography fontWeight={600} variant="caption">Xem thêm</Typography>
                                 <ArrowForward sx={{ width: 15, height: 15 }}/>
                             </Stack>
                         </Box>
                         <Stepper sx={{ mt: 1.5 }} orientation="vertical">
                             {pet.petDeworming.slice(0,3).map((vacDew, index) => (
-                                <Step key={vacDew.id}>
-                                    <StepLabel icon={<PestControl/>}>
+                                <Step expanded key={vacDew.id}>
+                                    <StepLabel 
+                                        icon={<PestControl/>}
+                                        sx={{
+                                            '& .MuiStepLabel-label': {
+                                                color: '#000 !important',
+                                                fontWeight: 600
+                                            },
+                                            '& .MuiStepIcon-root': {
+                                                color: '#000 !important',
+                                            }
+                                        }}
+                                    >
                                         {index + 1}. {vacDew.medicationName}
                                     </StepLabel>
                                     <StepContent>
@@ -193,15 +217,26 @@ const ViewPetDesktop = (props: ViewPetDesktopProps) => {
                                 <HealthAndSafety/>
                                 <Typography fontWeight={600}>Thông tin khám định kỳ</Typography>
                             </Stack>
-                            <Stack onClick={() => {}} sx={{ cursor: 'pointer', fontStyle: 'italic' }} direction='row'>
+                            <Stack onClick={() => onOpenRegularVetCheckup('regularVetCheckup')} sx={{ cursor: 'pointer', fontStyle: 'italic' }} direction='row'>
                                 <Typography fontWeight={600} variant="caption">Xem thêm</Typography>
                                 <ArrowForward sx={{ width: 15, height: 15 }}/>
                             </Stack>
                         </Box>
                         <Stepper sx={{ mt: 1.5 }} orientation="vertical">
                             {pet.petRegularVetCheckup.slice(0,3).map((checkUpStep, index) => (
-                                <Step key={checkUpStep.id}>
-                                    <StepLabel icon={<HealthAndSafety/>}>
+                                <Step expanded key={checkUpStep.id}>
+                                    <StepLabel 
+                                        icon={<HealthAndSafety/>}
+                                        sx={{
+                                            '& .MuiStepLabel-label': {
+                                                color: '#000 !important',
+                                                fontWeight: 600
+                                            },
+                                            '& .MuiStepIcon-root': {
+                                                color: '#000 !important',
+                                            }
+                                        }}
+                                    >
                                         {index + 1}. Khám định kỳ lần {index + 1}
                                     </StepLabel>
                                     <StepContent>

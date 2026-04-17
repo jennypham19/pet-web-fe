@@ -95,6 +95,30 @@ export interface PayloadPet{
     }[]
 }
 
+export interface PayloadDataVaccination{
+    idPet: string
+    medicationName: string,
+    firstDoseDate: Dayjs | null,
+    boosterDate: Dayjs | null,
+    adverseReaction: string
+}
+
+export interface PayloadDataDeworming{
+    idPet: string
+    medicationName: string,
+    dosage: string,        
+    dewormingDate: Dayjs | null,
+    nextDewormingDate: Dayjs | null,
+}
+
+export interface PayloadDataRegularVetCheckup{
+    idPet: string
+    examinationDate: Dayjs | null,
+    recheckDate: Dayjs | null,        
+    healthCondition: string,
+    conclusion: string,
+}
+
 // output
 
 export interface IPet{
@@ -161,6 +185,36 @@ export interface IPet{
         createdAt: string,
         updatedAt: string
     }[]
+}
+
+export interface IPetVaccination {
+    id: string,
+    medicationName: string,
+    firstDoseDate: string,
+    boosterDate: string,
+    adverseReaction: string,
+    createdAt: string,
+    updatedAt: string
+}
+
+export interface IPetDeworming{
+    id: string,
+    medicationName: string,
+    dosage: string,
+    dewormingDate: string,
+    nextDewormingDate: string,
+    createdAt: string,
+    updatedAt: string
+}
+
+export interface IPetRegularVetCheckup{
+    id: string,
+    examinationDate: string,
+    recheckDate: string,
+    healthCondition: string,
+    conclusion: string,
+    createdAt: string,
+    updatedAt: string
 }
 
 export interface IImagesPet{
