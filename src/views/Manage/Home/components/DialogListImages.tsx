@@ -39,7 +39,7 @@ const DialogListImages = (props: DialogListImagesProps) => {
                     <Typography>Không tồn tại hình ảnh nào.</Typography>
                 ) : (
                     images?.images.map((image, index) => (
-                        <Grid key={index} size={{ xs: 12, md: 6 }}>
+                        <Grid key={index} size={{ xs: 12, md: 6, lg: 4 }}>
                             <CommonImage
                                 src={image.urlImage}
                                 alt={image.nameImage}
