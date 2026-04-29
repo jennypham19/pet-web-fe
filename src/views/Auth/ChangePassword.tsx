@@ -118,10 +118,18 @@ export default function ChangePassword() {
           type='submit'
           variant='contained'
           fullWidth
+          sx={{ mt: 2,  }}
+        >
+          Thay đổi mật khẩu
+        </LoadingButton>
+        {/* <Button
+          onClick={() => navigate(`/`)}
+          variant='outlined'
+          fullWidth
           sx={{ mt: 2 }}
         >
-          Change Password
-        </LoadingButton>
+          Quay lại trang đăng nhập
+        </Button> */}
       </Box>
     </Page>
   );

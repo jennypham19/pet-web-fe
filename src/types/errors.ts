@@ -1,6 +1,6 @@
 import { FormDataDeworming, FormDataInfoHealthPet, FormDataInfoPet, FormDataRegularVetCheckup, FormDataSpecialNutritionalPlan, FormDataVaccination } from "./pet";
 import { FormDataTask } from "./task";
-import { FormDataUser } from "./user";
+import { FormDataUser, FormDataPassword } from "./user";
 
 // pets
 export type FormErrorsInfoPet = {
@@ -35,4 +35,16 @@ export type FormErrorsTask = {
 // users
 export type FormErrorsUser = {
     [K in keyof FormDataUser]?: string
+}
+
+export type FormErrorsPassword = {
+    [K in keyof FormDataPassword]?: string
+}
+
+// error
+export interface ApiError {
+  success: boolean;
+  message: string;
+  statusCode: number;
+  type?: string;
 }

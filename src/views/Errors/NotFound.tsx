@@ -26,7 +26,7 @@ const NotFound = () => {
         >
           <Image sx={{ width: '400px' }} src='/static/imgs/404.svg' alt='Not found' />
           <LinkButton
-            to={`/pet/${ROUTE_PATH.MANAGE}`}
+            to={`/`}
             variant='contained'
             startIcon={<ArrowBackIcon />}
             color='error'

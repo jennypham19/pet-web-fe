@@ -2,15 +2,15 @@ import IconButton from "@/components/IconButton/IconButton";
 import InputSelect from "@/components/InputSelect";
 import InputText from "@/components/InputText";
 import { COLORS } from "@/constants/colors";
-import { IUser } from "@/types/user";
+import { IUser, PayloadRole } from "@/types/user";
 import { AdminPanelSettings, ArrowForward, Key, Security, ToggleOff, ToggleOn } from "@mui/icons-material";
 import { Box, Button, Paper, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { useEffect, useState } from "react";
-import ChangePasswordMobile from "../Mobile/ChangePasswordMobile";
 import ChangePasswordDesktop from "./ChangePasswordDesktop";
 import useNotification from "@/hooks/useNotification";
-import { activateAccount, disableAccount } from "@/services/user-service";
+import { activateAccount, changeRoleAccount, disableAccount, resetAccount } from "@/services/user-service";
+import DialogConfirmPassword from "@/views/Manage/Account/components/DialogConfirmPassword";
 
 interface UpdateAccountDesktopProps{
     onClose: () => void;
@@ -24,6 +24,8 @@ const UpdateAccountDesktop = (props: UpdateAccountDesktopProps) => {
     const md = useMediaQuery(theme.breakpoints.down('md'));
     const [formData, setFormData] = useState<{name: string, account: string, role: string}>({ name: '', account: '', role: '' });
     const [openChangePassword, setOpenChangePassword] = useState(false);
+    const [openConfirmPassword, setOpenConfirmPassword] = useState(false);
+    const [data, setData] = useState<{name: string, account: string, password: string}>({ name: '', account: '', password: ''})
 
     useEffect(() => {
         setFormData({
@@ -60,8 +62,42 @@ const UpdateAccountDesktop = (props: UpdateAccountDesktopProps) => {
         }
     }
 
-    const handleChangeInput = (name: string, value: any) => {
+    const handleChangeInput = async(name: string, value: any) => {
+        setFormData((prev) => ({ ...prev, role: value }))
+        try {
+            const payload: PayloadRole = {
+                role: value
+            }
+            const res = await changeRoleAccount(user.id, payload)
+            notify({
+                message: res.message,
+                severity: 'success'
+            })
+            handleClose()
+        } catch (error: any) {
+            notify({
+                message: error.message,
+                severity: 'error'
+            })
+        }
+    }
 
+    const handleResetPassword = async(id: string) => {
+        try {
+            const res = await resetAccount(id);
+            const data = res.data as any as {name: string, account: string, password: string}
+            setData(data)
+            notify({
+                message: res.message,
+                severity: 'success'
+            })
+            setOpenConfirmPassword(true)
+        } catch (error: any) {
+            notify({
+                message: error.message,
+                severity: 'error'
+            })
+        }
     }
 
     return(
@@ -94,6 +130,7 @@ const UpdateAccountDesktop = (props: UpdateAccountDesktopProps) => {
                         </Typography>
                         <Box display='flex' gap={2}>
                             <Button
+                                onClick={() => handleResetPassword(user.id)}
                                 variant="outlined"
                                 sx={{ border: `1px solid ${COLORS.PRIMARY}`, color: COLORS.PRIMARY, borderRadius: 3, px: 2 }}
                             >
@@ -118,7 +155,7 @@ const UpdateAccountDesktop = (props: UpdateAccountDesktopProps) => {
                                             name="name"
                                             value={formData.name}
                                             type="text"
-                                            onChange={handleChangeInput}
+                                            onChange={() => {}}
                                             margin="dense"
                                             disabled={true}
                                         />
@@ -130,7 +167,7 @@ const UpdateAccountDesktop = (props: UpdateAccountDesktopProps) => {
                                             name="account"
                                             value={formData.account}
                                             type="text"
-                                            onChange={handleChangeInput}
+                                            onChange={() => {}}
                                             margin="dense"
                                             disabled={true}
                                         />
@@ -141,10 +178,9 @@ const UpdateAccountDesktop = (props: UpdateAccountDesktopProps) => {
                                             label=""
                                             name="role"
                                             options={[
-                                                { id: 1, value: 'admin', label: 'Quản trị viên'},
-                                                { id: 2, value: 'mod', label: 'Quản lý'},
-                                                { id: 3, value: 'specialist', label: 'Chuyên viên'},
-                                                { id: 4, value: 'employee', label: 'Nhân viên'}
+                                                { id: 1, value: 'mod', label: 'Quản lý'},
+                                                { id: 2, value: 'specialist', label: 'Chuyên viên'},
+                                                { id: 3, value: 'employee', label: 'Nhân viên'}
                                             ]}
                                             value={formData.role}
                                             onChange={handleChangeInput}
@@ -211,14 +247,17 @@ const UpdateAccountDesktop = (props: UpdateAccountDesktopProps) => {
                 </>
             )}
             {openChangePassword && (
-                md ? (
-                    <ChangePasswordMobile/>
-                ) : (
-                    <ChangePasswordDesktop
-                        onClose={() => { setOpenChangePassword(false) }}
-                        user={user}
-                    />
-                )
+                <ChangePasswordDesktop
+                    onClose={() => { setOpenChangePassword(false) }}
+                    user={user}
+                />
+            )}
+            {openConfirmPassword && data && (
+                <DialogConfirmPassword
+                    open={openConfirmPassword}
+                    user={data}
+                    handleClose={() => { setOpenConfirmPassword(false)}}
+                />
             )}
         </Box>
     )

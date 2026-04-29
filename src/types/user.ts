@@ -22,6 +22,12 @@ export interface FormDataUser{
     address: string
 }
 
+export interface FormDataPassword{
+    currentPassword: string,
+    password: string,
+    passwordConfirm: string
+}
+
 // Body
 export interface PayloadUser{
     avatarUrl: string,
@@ -35,6 +41,15 @@ export interface PayloadUser{
     email: string | null,
     phone: string | null,
     address: string | null
+}
+
+export interface PayloadPassword{
+    currentPassword: string,
+    password: string
+}
+
+export interface PayloadRole{
+    role: string
 }
 
 //Output

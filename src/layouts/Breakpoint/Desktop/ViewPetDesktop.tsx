@@ -1,11 +1,14 @@
+import IconButton from "@/components/IconButton/IconButton";
 import CommonImage from "@/components/Image/index";
 import { COLORS } from "@/constants/colors";
-import { IPet, IPetDeworming, IPetRegularVetCheckup } from "@/types/pet";
+import { IPet } from "@/types/pet";
 import DateTime from "@/utils/DateTime";
 import { getFrequencyPetLabel } from "@/utils/labelEntoVni";
-import { ArrowForward, Edit, HealthAndSafety, MedicalServices, PestControl, RestaurantMenu, Vaccines } from "@mui/icons-material";
+import UpdateNutritionalPlan from "@/views/Manage/Pets/components/UpdateNutritionalPlan";
+import { Add, ArrowForward, Edit, HealthAndSafety, MedicalServices, PestControl, RestaurantMenu, Vaccines } from "@mui/icons-material";
 import { Box, Chip, Paper, Stack, Step, StepContent, StepLabel, Stepper, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
+import { useState } from "react";
 
 interface ViewPetDesktopProps{
     pet: IPet,
@@ -16,6 +19,17 @@ interface ViewPetDesktopProps{
 
 const ViewPetDesktop = (props: ViewPetDesktopProps) => {
     const { pet, onOpenVaccination, onOpenDeworming, onOpenRegularVetCheckup } = props;
+    const [openUpdateNutritionalPlan, setOpenUpdateNutritionalPlan] = useState(false)
+
+    // Chỉnh sửa dinh dưỡng đặc biệt
+    const handleOpenUpdateNutritionalPlan = () => {
+        setOpenUpdateNutritionalPlan(true)
+    }
+
+    const handleCloseUpdateNutritionalPlan = () => {
+        setOpenUpdateNutritionalPlan(false)
+    }
+
 
     return(
         <Box p={2}>
@@ -68,7 +82,15 @@ const ViewPetDesktop = (props: ViewPetDesktopProps) => {
                             </Stack>
                         </Box>
                     </Paper>
-                    <Typography mt={3} variant="h6" fontWeight={600}>Hình ảnh của {pet.name}</Typography>
+                    <Stack mt={3} direction='row' display='flex' justifyContent='space-between'>
+                        <Typography variant="h6" fontWeight={600}>Hình ảnh của {pet.name}</Typography>
+                        <IconButton
+                            tooltip="Thêm"
+                            icon={<Add/>}
+                            backgroundColor={COLORS.PRIMARY}
+                            sx={{ bgcolor: COLORS.PRIMARY, borderRadius: '50%', width: 25, height: 25 }}
+                        />
+                    </Stack>
                     <Grid container spacing={2} mt={1}>
                         {pet.petImages.length > 0  && pet.petImages.map((img, idx) => (
                             <Grid key={idx} size={{ md: 6 }}>
@@ -271,12 +293,17 @@ const ViewPetDesktop = (props: ViewPetDesktopProps) => {
                                 <RestaurantMenu/>
                                 <Typography fontWeight={600}>Thông tin chế độ dinh dưỡng đặc biệt</Typography>
                             </Stack>
-                            <Stack onClick={() => {}} sx={{ cursor: 'pointer', fontStyle: 'italic' }} direction='row'>
+                            <Stack onClick={handleOpenUpdateNutritionalPlan} sx={{ cursor: 'pointer', fontStyle: 'italic' }} direction='row'>
                                 <Typography fontWeight={600} variant="caption">Chỉnh sửa</Typography>
                                 <Edit sx={{ width: 15, height: 15 }}/>
                             </Stack>
                         </Box>
-                        {pet.petSpecialNutritionalPlan !== null && (
+                        {openUpdateNutritionalPlan && (
+                            <UpdateNutritionalPlan
+                                onClose={handleCloseUpdateNutritionalPlan}
+                            />
+                        )}
+                        {!openUpdateNutritionalPlan && pet.petSpecialNutritionalPlan !== null && (
                             <Grid container spacing={2}>
                                 <Grid size={{ md: 6 }}>
                                     <Typography fontWeight={600} variant="subtitle2">THỨC ĂN</Typography>

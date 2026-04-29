@@ -291,7 +291,10 @@ const InformationDesktop = (props: InformationDesktopProps) => {
             )}
             {openProfile.open && openProfile.type === 'password' && (
                 md ? (
-                    <ChangePasswordMobile/>
+                    <ChangePasswordMobile
+                        onClose={() => setOpenProfile({ open: false, type: 'password' })}
+                        user={profile}
+                    />
                 ) : (
                     <ChangePasswordDesktop
                         onClose={() => setOpenProfile({ open: false, type: 'password' })}

@@ -10,11 +10,12 @@ interface ListPetsInDashboardProps{
     onClick: () => void;
     label?: string,
     onDetailPet: (id: string) => void;
-    listData: IPet[]
+    listData: IPet[],
+    isShowButton?: boolean
 }
 
 const ListPetsInDashboard = (props: ListPetsInDashboardProps) => {
-    const { label = "Danh sách thú cưng", onClick, onDetailPet, listData } = props;
+    const { label = "Danh sách thú cưng", onClick, onDetailPet, listData, isShowButton = true } = props;
     const theme = useTheme();
     const md = useMediaQuery(theme.breakpoints.down('md'));
     const petsList = md ? listData.slice(0,1) : listData.slice(0,4)
@@ -49,13 +50,15 @@ const ListPetsInDashboard = (props: ListPetsInDashboardProps) => {
                                     </Stack>
                                 </Box>
                             </Box>
-                            <Button
-                                onClick={() => onDetailPet(pet.id)}
-                                fullWidth
-                                sx={{ mt: 1, borderRadius: 2, bgcolor: COLORS.PRIMARY }}
-                            >
-                                Xem chi tiết
-                            </Button>
+                            {isShowButton && (
+                                <Button
+                                    onClick={() => onDetailPet(pet.id)}
+                                    fullWidth
+                                    sx={{ mt: 1, borderRadius: 2, bgcolor: COLORS.PRIMARY }}
+                                >
+                                    Xem chi tiết
+                                </Button>
+                            )}
                         </CardData>
                     </Grid>
                 ))}

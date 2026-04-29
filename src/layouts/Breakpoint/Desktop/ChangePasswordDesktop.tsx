@@ -1,10 +1,15 @@
 import { COLORS } from "@/constants/colors";
-import { IUser } from "@/types/user";
+import { FormDataPassword, IUser, PayloadPassword } from "@/types/user";
 import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import password from "@/assets/images/users/password.png"
+import password_img from "@/assets/images/users/password.png"
 import { FormatListBulleted, GppGood, Key, Lightbulb, Lock, RadioButtonUnchecked } from "@mui/icons-material";
 import InputText from "@/components/InputText";
+import { useState } from "react";
+import { FormErrorsPassword } from "@/types/errors";
+import useNotification from "@/hooks/useNotification";
+import { changePasswordAccount } from "@/services/user-service";
+import { STATUS_CODE } from "@/constants/statusCode";
 
 const DATA = [
     {
@@ -40,10 +45,78 @@ interface ChangePasswordDesktopPros{
 
 const ChangePasswordDesktop = (props: ChangePasswordDesktopPros) => {
     const { onClose, user } = props;
-
+    const notify = useNotification();
+    const [formData, setFormData] = useState<FormDataPassword>({ currentPassword: '', password: '', passwordConfirm: '' });
+    const [errors, setErrors] = useState<FormErrorsPassword>({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [newPassword, setNewPassword] = useState<string | null>(null)
+    
+    const reset = () => {
+        setFormData({ currentPassword: '', password: '', passwordConfirm: '' });
+        setErrors({})
+    }
     const handleClose = () => {
-        onClose()
+        onClose();
+        reset()
     };
+
+    const validate = (): boolean => {
+        const newErrors: FormErrorsPassword = {};
+        if(!formData.currentPassword) newErrors.currentPassword = "Vui lòng nhập mật khẩu hiện tại";
+        if(!formData.password) newErrors.password = "Vui lòng nhập mật khẩu mới";
+        if(!formData.passwordConfirm) newErrors.passwordConfirm = "Vui lòng nhập xác nhận mật khẩu mới";
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    }
+ 
+    const handleInputChange = (name: string, value: any) => {
+        setFormData((prev) => ({ ...prev, [name]: value }))
+        if(name === 'password' && typeof value === "string"){
+            setNewPassword(value)
+        }
+        if(name === 'passwordConfirm' && typeof value === "string"){
+            if(value !== newPassword){
+                setErrors(prev => ({
+                    ...prev,
+                    passwordConfirm: 'Mật khẩu và mật khẩu nhập lại không khớp'
+                }))
+            }
+
+        }
+        if (errors[name as keyof typeof errors]) {
+            setErrors((prev) => ({ ...prev, [name]: undefined }));
+        }
+    }
+
+    const handleSave = async() => {
+        if(!validate()){
+            return;
+        }
+        setIsSubmitting(true);
+        try {
+            const payload: PayloadPassword = {
+                currentPassword: formData.currentPassword,
+                password: formData.password
+            }
+            const res = await changePasswordAccount(user.id, payload);
+            notify({
+                message: res.message,
+                severity: 'success'
+            })
+            handleClose()
+        } catch (error: any) {
+            if(error.statusCode === STATUS_CODE.BAD_REQUEST){
+                setErrors((prev) => ({ ...prev, currentPassword: error.message}))
+            }else{
+                notify({
+                    message: error.message,
+                    severity: 'error'
+                })                
+            }
+        } finally {
+            setIsSubmitting(false)
+        }
+    }
 
     return(
         <Box>
@@ -83,10 +156,12 @@ const ChangePasswordDesktop = (props: ChangePasswordDesktopPros) => {
                                 label=""
                                 placeholder="Nhập mật khẩu hiện tại"
                                 name="currentPassword"
-                                value={''}
-                                onChange={() => {}}
+                                value={formData.currentPassword}
+                                onChange={handleInputChange}
                                 type="text"
                                 margin="dense"
+                                error={!!errors.currentPassword}
+                                helperText={errors.currentPassword}
                             />
                         </Box>
                         <Box my={2} display='flex' flexDirection='column'>
@@ -98,10 +173,12 @@ const ChangePasswordDesktop = (props: ChangePasswordDesktopPros) => {
                                 label=""
                                 placeholder="Nhập mật khẩu mới"
                                 name="password"
-                                value={''}
-                                onChange={() => {}}
+                                value={formData.password}
+                                onChange={handleInputChange}
                                 type="text"
                                 margin="dense"
+                                error={!!errors.password}
+                                helperText={errors.password}
                             />
                         </Box>
                         <Box display='flex' flexDirection='column'>
@@ -113,14 +190,17 @@ const ChangePasswordDesktop = (props: ChangePasswordDesktopPros) => {
                                 label=""
                                 placeholder="Nhập xác nhận mật khẩu mới"
                                 name="passwordConfirm"
-                                value={''}
-                                onChange={() => {}}
+                                value={formData.passwordConfirm}
+                                onChange={handleInputChange}
                                 type="text"
                                 margin="dense"
+                                error={!!errors.passwordConfirm}
+                                helperText={errors.passwordConfirm}
                             />
                         </Box>
                         <Box mt={4} display='flex' gap={2}>
                             <Button
+                                onClick={handleSave}
                                 sx={{
                                     borderRadius: 5, py: 1, width: 200,
                                     bgcolor: COLORS.PRIMARY
@@ -129,6 +209,7 @@ const ChangePasswordDesktop = (props: ChangePasswordDesktopPros) => {
                                 Cập nhật mật khẩu
                             </Button>
                             <Button
+                                onClick={handleClose}
                                 variant="outlined"
                                 sx={{
                                     borderRadius: 5, py: 1, width: 150,
@@ -168,7 +249,7 @@ const ChangePasswordDesktop = (props: ChangePasswordDesktopPros) => {
                             borderRadius: 3, 
                             width: '100%', height: 300,
                             objectFit: 'cover',
-                            backgroundImage: `url(${password})`,
+                            backgroundImage: `url(${password_img})`,
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
                         }}
