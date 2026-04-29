@@ -110,7 +110,7 @@ export default function ForgotPassword() {
           Submit
         </LoadingButton>
         <Button
-          onClick={() => navigate(`/${ROUTE_PATH.AUTH}/${ROUTE_PATH.LOGIN}`)}
+          onClick={() => navigate(`/`)}
           variant='outlined'
           fullWidth
           sx={{ mt: 2 }}

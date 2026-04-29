@@ -1,19 +1,19 @@
 import { Box, useMediaQuery, useTheme } from "@mui/material";
-import { useFetchData } from "@/hooks/useFetchData";
-import { getTasks, getTasksForSpecialist } from "@/services/task-service";
+import { getTasksForSpecialist } from "@/services/task-service";
 import { ITask } from "@/types/task";
 import ViewData from "@/views/components/ViewData";
 import { useEffect } from "react";
 import CardListPets from "@/views/components/CardListPets";
 import TableListPets from "@/views/components/TableListPets";
+import { useFetchTaskByDate } from "@/hooks/useFetchTaskByDate";
 
-const TasksProcessInDashboard = ({ isReload, onHandle, onClick }: { isReload: boolean, onHandle: (id: string, type: string ) => void, onClick: () => void }) => {
+const TasksProcessInDashboard = ({ isReload, onHandle, onClick, date }: { isReload: boolean, onHandle: (id: string, type: string ) => void, onClick: () => void, date: any }) => {
     const theme = useTheme();
     const md = useMediaQuery(theme.breakpoints.down('md'));
-    const { listData, fetchData, page, rowsPerPage, handlePageChange, total, setPage  } = useFetchData<ITask>(getTasksForSpecialist, md ? 2 : 5)
+    const { listData, fetchData, page, rowsPerPage, handlePageChange, total, setPage  } = useFetchTaskByDate<ITask>(getTasksForSpecialist, md ? 2 : 5, date)
     useEffect(() => {
       if(isReload){
-        fetchData(1, rowsPerPage)
+        fetchData(1, rowsPerPage, date)
       }
     }, [isReload])
 

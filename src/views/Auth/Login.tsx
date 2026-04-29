@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 
-import { Email, Lock, Visibility, VisibilityOff } from '@mui/icons-material';
+import { Email, Lock, Notifications, PasswordOutlined, Visibility, VisibilityOff } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import {
   Alert,
@@ -14,6 +14,7 @@ import {
   FormControlLabel,
   IconButton,
   InputAdornment,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import ControllerTextField from '@/components/ControllerField/ControllerTextField';
@@ -31,6 +32,8 @@ import { useAppDispatch } from '@/store';
 import { setAccessToken } from '@/utils/AuthHelper';
 import Logger from '@/utils/Logger';
 import { COLORS } from '@/constants/colors';
+import { ERROR_TYPE } from '@/constants/errorMessage';
+import { ApiError } from '@/types/errors';
 
 export const ID_USER = 'user_id'
 
@@ -54,7 +57,7 @@ export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const notify = useNotification();
-  const [_error, setError] = useState('');
+  const [_error, setError] = useState<ApiError | null>(null);
   const [showPassword, setShowPassword] = useBoolean(false);
   const [remember, setRemember] = useState(false);
 
@@ -73,29 +76,44 @@ export default function Login() {
       const userProfile = respAuth.data?.user;
       if (accessToken && userProfile) {
         setAccessToken(accessToken);
-        // Xét trường is_change_type
-        if(userProfile.isReset && userProfile.isDefaultType === -1){
-          localStorage.setItem(ID_USER, String(userProfile.id));
-          navigate('/' + ROUTE_PATH.CHANGE_PASSWORD)
-        }else{
-          // 3. Cập nhật state của Redux/Context
-          // Thông tin user đã có sẵn từ response login, không cần gọi /me nữa
-          dispatch(setProfile(userProfile));
-          dispatch(setIsAuth(true));
-          // 4. Thông báo và chuyển hướng
-          notify({
-            message: t('login_success'),
-            severity: 'success',
-          });
+        // Cập nhật state của Redux/Context
+        // Thông tin user đã có sẵn từ response login, không cần gọi /me nữa
+        dispatch(setProfile(userProfile));
+        dispatch(setIsAuth(true));
+        // Thông báo và chuyển hướng
+        notify({
+          message: t('login_success'),
+          severity: 'success',
+        });
 
-          navigate('/' + ROUTE_PATH.MANAGE, { replace: true });   
-        }
+        navigate('/' + ROUTE_PATH.MANAGE, { replace: true });  
+        // // Xét trường is_reset
+        // if(userProfile.isReset){
+        //   localStorage.setItem(ID_USER, String(userProfile.id));
+        //   navigate('/' + ROUTE_PATH.CHANGE_PASSWORD)
+        // }else{
+        //   // 3. Cập nhật state của Redux/Context
+        //   // Thông tin user đã có sẵn từ response login, không cần gọi /me nữa
+        //   dispatch(setProfile(userProfile));
+        //   dispatch(setIsAuth(true));
+        //   // 4. Thông báo và chuyển hướng
+        //   notify({
+        //     message: t('login_success'),
+        //     severity: 'success',
+        //   });
+
+        //   navigate('/' + ROUTE_PATH.MANAGE, { replace: true });   
+        // }
       } else {
-        setError(respAuth.message || 'Login failed, no access token returned.');
+        notify({
+          message: respAuth.message || 'Login failed, no access token returned.',
+          severity: 'error'
+        });
       }
     } catch (error: any) {
-      Logger.log(error);
-      setError(error.message)
+      console.log("error", error);
+      
+      setError(error)
     } finally {
       setLoading.off();
     }
@@ -103,7 +121,7 @@ export default function Login() {
 
   return (
     <Page title='Pet- Đăng nhập'>
-      <Box>
+      <Box display='flex' justifyContent='space-between'>
         <Typography
           component='h1'
           variant='h4'
@@ -112,10 +130,24 @@ export default function Login() {
         >
           Welcome to PET!
         </Typography>
+        {/* {_error && (_error.type === ERROR_TYPE.CHANGED_PASSWORD || _error.type === ERROR_TYPE.RESET_PASSWORD) && (
+          <Tooltip title="Link đặt lại mật khẩu">
+            <IconButton
+              sx={{
+                '&: hover': {
+                  bgcolor: 'transparent'
+                }
+              }}
+            >
+              <PasswordOutlined/>
+            </IconButton>
+          </Tooltip>          
+        )} */}
+
       </Box>
       {_error && (
         <Alert variant='filled' severity='error'>
-          {_error}
+          {_error.message}
         </Alert>
       )}
       <Box
@@ -172,22 +204,19 @@ export default function Login() {
           prefixIcon={Lock}
         />
         <div>
-          {/* <Box>
-            <Typography
-              color='primary'
-              component={RouterLink}
-              to={`/${ROUTE_PATH.AUTH}/${ROUTE_PATH.FORGOT_PASSWORD}`}
-              sx={{ textAlign: 'end', display: 'block' }}
-            >
-              Quên mật khẩu?
-            </Typography>
-          </Box> */}
-          {/* <FormControlLabel
-            label={'Remember me'}
-            control={
-              <Checkbox checked={remember} onChange={(e) => setRemember(e.target.checked)} />
-            }
-          /> */}
+          {/* {_error && _error.type === ERROR_TYPE.INCORRECT_PASSWORD && (
+            <Box>
+              <Typography
+                color='primary'
+                component={RouterLink}
+                to={`/${ROUTE_PATH.FORGOT_PASSWORD}`}
+                sx={{ textAlign: 'end', display: 'block' }}
+              >
+                Quên mật khẩu?
+              </Typography>
+            </Box>            
+          )} */}
+
         </div>
         <LoadingButton loading={_loading} type='submit' variant='contained' fullWidth sx={{ bgcolor: COLORS.PRIMARY }}>
           Đăng nhập

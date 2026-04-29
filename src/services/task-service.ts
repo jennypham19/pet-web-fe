@@ -17,6 +17,21 @@ export interface TotalData{
     totalStaff: number
 }
 
+export interface ImagesTask{
+    dueDate: string,
+    images: {
+        id: string,
+        nameImage: string,
+        urlImage: string
+    }[]
+}
+
+export interface GetParamsForSpecialist {
+    page: number,
+    limit: number,
+    selectedDate?: any,
+}
+
 // Lấy danh sách
 export const getTasks = async(getParams: GetParams): Promise<HttpResponse<PaginatedResponse<ITask>>> => {
     const url = `${prefix}/list-tasks`;
@@ -40,14 +55,12 @@ export const getTasks = async(getParams: GetParams): Promise<HttpResponse<Pagina
 }
 
 // Lấy danh sách cho chuyên viên
-export const getTasksForSpecialist = async(getParams: GetParams): Promise<HttpResponse<PaginatedResponse<ITask>>> => {
+export const getTasksForSpecialist = async(getParams: GetParamsForSpecialist): Promise<HttpResponse<PaginatedResponse<ITask>>> => {
     const url = `${prefix}/list-tasks-for-specialist`;
     const params: Record<string, any> = {
         page: getParams.page,
-        limit: getParams.limit
-    }
-    if(getParams.searchTerm && getParams.searchTerm.trim()){
-        params.searchTerm = getParams.searchTerm
+        limit: getParams.limit,
+        selectedDate: getParams.selectedDate
     }
     const response = await HttpClient.get<{
         success: boolean,
@@ -82,7 +95,17 @@ export const deleteTask = (id: string) => {
     return HttpClient.delete(`${prefix}/task-deleted/${id}`)
 }
 
-// // lấy tổng công việc, công việc ngày hôm nay, tổng nhân sự (chuyên viên + nhân viên đang hoạt động)
+// lấy tổng công việc, công việc ngày hôm nay, tổng nhân sự (chuyên viên + nhân viên đang hoạt động)
 export const getTotalTaskAndStaff = () => {
     return HttpClient.get<HttpResponse<TotalData>>(`${prefix}/total-task-and-staff`)
+}
+
+// lấy hình ảnh gắn với công việc
+export const getListImagesTask = () => {
+    return HttpClient.get<HttpResponse<ImagesTask>>(`${prefix}/list-images-task`)
+}
+
+// Lấy danh sách hình ảnh khi click vào ngày
+export const getListImagesByDate = (params: { date: string }) => {
+    return HttpClient.get<HttpResponse<ImagesTask>>(`${prefix}/list-images-task-by-date`, {params})
 }

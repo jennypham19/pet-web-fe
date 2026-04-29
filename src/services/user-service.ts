@@ -1,5 +1,5 @@
 import type { HttpResponse } from '@/types/common';
-import { FormDataAccount, IUser, PayloadUser } from '@/types/user';
+import { FormDataAccount, IUser, PayloadPassword, PayloadRole, PayloadUser } from '@/types/user';
 import HttpClient from '@/utils/HttpClient';
 import { GetParams, PaginatedResponse } from './base-service';
 
@@ -76,4 +76,19 @@ export const disableAccount = async(id: string) => {
 // kich hoạt tài khoản
 export const activateAccount = async(id: string) => {
     return HttpClient.patch<HttpResponse>(`${prefix}/user-account-activated/${id}`)
+}
+
+// Đổi mật khẩu
+export const changePasswordAccount = async(id: string, payload: PayloadPassword) => {
+    return HttpClient.put<HttpResponse>(`${prefix}/account-password-changed/${id}`, payload as any)
+}
+
+// thay đổi vai trò
+export const changeRoleAccount = async(id: string, payload: PayloadRole) => {
+    return HttpClient.patch<HttpResponse>(`${prefix}/account-role-changed/${id}`, payload as any)
+}
+
+// reset mật khẩu
+export const resetAccount = async(id: string) => {
+    return HttpClient.patch<HttpResponse<{name: string, account: string, password: string}>>(`${prefix}/user-password-reset/${id}`)
 }

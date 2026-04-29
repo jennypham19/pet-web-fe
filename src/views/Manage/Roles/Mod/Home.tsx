@@ -17,11 +17,15 @@ import { useFetchData } from "@/hooks/useFetchData";
 import { IPet } from "@/types/pet";
 import { getPets } from "@/services/pet-service";
 import DeleteConfirmTask from "../../Tasks/components/DeleteConfirmTask";
-import { ITask } from "@/types/task";
-import { getTasks } from "@/services/task-service";
+import NavigateBack from "@/views/components/NavigateBack";
 
+interface DashboardInModProps{
+  date: any
+  onBack: () => void;
+}
 
-const DashboardInMod = () => {
+const DashboardInMod = (props: DashboardInModProps) => {
+    const { date, onBack } = props
     const navigate = useNavigate();
     const theme = useTheme();
     const md = useMediaQuery(theme.breakpoints.down('md'));
@@ -78,41 +82,24 @@ const DashboardInMod = () => {
 
     return (
       <Box>
-        <Box p={1} bgcolor='#fff'>
-          <SearchBox
-            initialValue=''
-            onSearch={() => {}}
-            detailPanel={
-              <>
-                <IconButton
-                  tooltip='Thông báo'
-                  handleFunt={() => {}}
-                  icon={<Notifications sx={{ color: '#fff' }} />}
-                  backgroundColor={COLORS.PRIMARY}
-                />
-                <IconButton
-                  tooltip='Bộ lọc'
-                  handleFunt={() => {}}
-                  icon={<FilterAlt sx={{ color: '#fff' }} />}
-                  backgroundColor={COLORS.PRIMARY}
-                />
-              </>
-            }
+        <Box p={1.5} bgcolor='#fff' display='flex' justifyContent='space-between'>
+          <NavigateBack
+            title="Quay lại trang lịch"
+            onBack={onBack}
+          />
+          <Button
+            onClick={() => {
+              setOpenTask({ open: true, type: 'add' });
+            }}
+            variant='contained'
+            sx={{ bgcolor: COLORS.PRIMARY, borderRadius: 2, px: 1.5, py: 1, fontWeight: 500 }}
+            endIcon={<Add />}
           >
-            <Button
-              onClick={() => {
-                setOpenTask({ open: true, type: 'add' });
-              }}
-              variant='contained'
-              sx={{ bgcolor: COLORS.PRIMARY, borderRadius: 2, px: 1.5, py: 1, fontWeight: 500 }}
-              endIcon={<Add />}
-            >
-              Tạo công việc
-            </Button>
-          </SearchBox>
+            Tạo công việc
+          </Button>
         </Box>
-        <ListPetsInDashboard listData={listPets} onClick={() => { navigate('/pet/manage/pet')}} onDetailPet={() => {}}/>
-        <TasksProcessInDashboard onClick={() => { navigate(`/pet/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_TASK}`)}} isReload={isReload} onHandle={handleButton}/>
+        <ListPetsInDashboard isShowButton={false} listData={listPets} onClick={() => { navigate('/manage/pet')}} onDetailPet={() => {}}/>
+        <TasksProcessInDashboard date={date} onClick={() => { navigate(`/${ROUTE_PATH.MANAGE}/${ROUTE_PATH.MANAGE_TASK}`)}} isReload={isReload} onHandle={handleButton}/>
         {openTask.open && openTask.type === 'add' && (
           <CreateTask open={openTask.open} onClose={handleCloseOpenTask} onOpenDialogConfirm={() => { setOpenDialogConfirm(true)}} />
         )}

@@ -113,7 +113,10 @@ const ManagementAccount = () => {
             )}
             {openUpdateAccount && user && (
                 md ? (
-                    <UpdateAccountMobile/>
+                    <UpdateAccountMobile
+                        user={user}
+                        onClose={() => { setOpenUpdateAccount(false); setUser(null) }}
+                    />
                 ) : (
                     <UpdateAccountDesktop
                         user={user}
