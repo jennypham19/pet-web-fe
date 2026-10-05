@@ -7,6 +7,7 @@ import { CSSObject, Theme, useTheme } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import SelectLanguage from './SelectLanguage';
 import Profile from './Sidebar/Profile';
+import NotificationBell from './NotificationBell';
 import { useSidebarTilte } from '@/contexts/SidebarTitleContext';
 
 interface Props {
@@ -73,6 +74,7 @@ const Header = (props: Props) => {
           <Typography fontWeight={700} display='flex' justifyContent="center" alignItems='center'>{title.toUpperCase()}</Typography>
         </Stack>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <NotificationBell />
           <SelectLanguage />
           <Profile />
         </Box>

@@ -11,6 +11,7 @@ import DialogProvider from './contexts/Dialog';
 import InitLoadingProvider from './contexts/InitLoadingProvider';
 import { NotificationProvider } from './contexts/Notification';
 import { SettingsProvider } from './contexts/Settings';
+import SocketProvider from './contexts/SocketProvider';
 
 import './i18n';
 
@@ -31,7 +32,9 @@ const App = () => {
                   adapterLocale={i18n.language}
                   localeText={DateTimeLocaleText()}
                 >
-                  <Routers />
+                  <SocketProvider>
+                    <Routers />
+                  </SocketProvider>
                 </LocalizationProvider>
               </InitLoadingProvider>
             </DialogProvider>
