@@ -89,15 +89,27 @@ const AccountContent = (props: AccountContentProps) => {
                                     </Stack>
                                 </Box>
                                 {data.role !== ROLE.ADMIN && (
-                                    <Button 
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            onOpenUpdate(data)
-                                        }}
-                                        sx={{ mt: 1, borderRadius: 4, bgcolor: COLORS.PRIMARY }} fullWidth
-                                    >
-                                        Chỉnh sửa
-                                    </Button>
+                                    <Box display='flex' justifyContent='space-between' width='100%' gap={2} flexDirection='row'>
+                                        <Button 
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                onOpenUpdate(data)
+                                            }}
+                                            sx={{ mt: 1, borderRadius: 4, bgcolor: COLORS.PRIMARY }} fullWidth
+                                        >
+                                            Chỉnh sửa
+                                        </Button>
+                                        <Button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                // Handle delete action
+                                            }}
+                                            variant="outlined"
+                                            sx={{ mt: 1, borderRadius: 4, border: `1px solid ${COLORS.PRIMARY}`, color: COLORS.PRIMARY }} fullWidth
+                                        >
+                                            Xóa
+                                        </Button>
+                                    </Box>
                                 )}
                             </Box>
                         </CardData>

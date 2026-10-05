@@ -1,12 +1,13 @@
 import Backdrop from "@/components/Backdrop";
 import { useFetchData } from "@/hooks/useFetchData";
 import useNotification from "@/hooks/useNotification";
-import { activateAccount, disableAccount, getListAccounts } from "@/services/user-service";
+import { activateAccount, disableAccount, getListAccounts, resetAccount } from "@/services/user-service";
 import { IUser } from "@/types/user";
 import CardListAccounts from "@/views/components/CardListAccounts";
 import TableListAccounts from "@/views/components/TableListAccounts";
 import { Box, useMediaQuery, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
+import DialogConfirmPassword from "../DialogConfirmPassword";
 
 interface ListAccountsContentProps{
 
@@ -18,6 +19,8 @@ const ListAccountsContent = (props: ListAccountsContentProps) => {
     const md = useMediaQuery(theme.breakpoints.down('md'));
     const notify = useNotification();
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [data, setData] = useState<{name: string, account: string, password: string}>({ name: '', account: '', password: ''})
+    const [openConfirmPassword, setOpenConfirmPassword] = useState(false);
 
     const { searchTerm, listData, fetchData, page, rowsPerPage, handlePageChange, handleSearch, total, setPage } = useFetchData<IUser>(getListAccounts, md ? 2 : 5)
     
@@ -64,15 +67,40 @@ const ListAccountsContent = (props: ListAccountsContentProps) => {
                 break;
         }
     }
+    
+    const handleResetPassword = async(id: string) => {
+        try {
+            const res = await resetAccount(id);
+            const data = res.data as any as {name: string, account: string, password: string}
+            setData(data)
+            notify({
+                message: res.message,
+                severity: 'success'
+            })
+            setOpenConfirmPassword(true)
+        } catch (error: any) {
+            notify({
+                message: error.message,
+                severity: 'error'
+            })
+        }
+    }
     return(
         <Box>
             {md ? (
                 <CardListAccounts total={total} users={listData} page={page} rowsPerPage={rowsPerPage} onChangePage={handlePageChange} onHandle={handleIconButton}/>
             ) : (
-                <TableListAccounts total={total} users={listData} page={page} rowsPerPage={rowsPerPage} onChangePage={handlePageChange} onHandle={handleIconButton}/>
+                <TableListAccounts onHandleRessetPassword={handleResetPassword} total={total} users={listData} page={page} rowsPerPage={rowsPerPage} onChangePage={handlePageChange} onHandle={handleIconButton}/>
             )}
 
             {isSubmitting && (<Backdrop open={isSubmitting} />)}
+            {openConfirmPassword && data && (
+                <DialogConfirmPassword
+                    open={openConfirmPassword}
+                    user={data}
+                    handleClose={() => { setOpenConfirmPassword(false)}}
+                />
+            )}
         </Box>
     )
 }
