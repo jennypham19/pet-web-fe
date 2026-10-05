@@ -71,6 +71,11 @@ const ViewTask = (props: ViewTaskProps) => {
         }
     }
 
+    // Lấy ngày hiện tại để hiển thị button xóa ảnh
+    const currentDate = new Date().toISOString().split('T')[0]; // Lấy ngày hiện tại theo định dạng YYYY-MM-DD
+    console.log(currentDate);
+    
+
     return(
         <DialogComponent
             dialogKey={open}
@@ -130,19 +135,22 @@ const ViewTask = (props: ViewTaskProps) => {
                                                 alt={`${img.nameImage}_${index}`}
                                                 sx={{ width: 100, height: 100, borderRadius: 2 }}
                                             />
-                                            <IconButton
-                                                size="small"
-                                                onClick={() => handleOpenDeleteImage({ id: img.id, nameImage: img.nameImage })}
-                                                sx={{
-                                                    position: 'absolute',
-                                                    top: 2,
-                                                    right: 2,
-                                                    bgcolor: 'rgba(255,255,255,0.85)',
-                                                    '&:hover': { bgcolor: '#fff' }
-                                                }}
-                                            >
-                                                <Delete fontSize="small" color="error" />
-                                            </IconButton>
+                                            {currentDate && (
+                                                <IconButton
+                                                    size="small"
+                                                    onClick={() => handleOpenDeleteImage({ id: img.id, nameImage: img.nameImage })}
+                                                    sx={{
+                                                        position: 'absolute',
+                                                        top: 2,
+                                                        right: 2,
+                                                        bgcolor: 'rgba(255,255,255,0.85)',
+                                                        '&:hover': { bgcolor: '#fff' }
+                                                    }}
+                                                >
+                                                    <Delete fontSize="small" color="error" />
+                                                </IconButton>                                                
+                                            )}
+
                                         </Box>
                                     </Grid>
                                 ))}
