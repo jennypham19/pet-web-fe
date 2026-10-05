@@ -95,6 +95,11 @@ export const deleteTask = (id: string) => {
     return HttpClient.delete(`${prefix}/task-deleted/${id}`)
 }
 
+// quản lý xóa 1 ảnh của công việc (kèm lý do)
+export const deleteTaskImage = (imageId: string, reason: string) => {
+    return HttpClient.delete(`${prefix}/task-image-deleted/${imageId}`, { data: { reason } })
+}
+
 // lấy tổng công việc, công việc ngày hôm nay, tổng nhân sự (chuyên viên + nhân viên đang hoạt động)
 export const getTotalTaskAndStaff = () => {
     return HttpClient.get<HttpResponse<TotalData>>(`${prefix}/total-task-and-staff`)
