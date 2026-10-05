@@ -49,8 +49,9 @@ const ManagementAccount = () => {
     }, [location, setOpenSidebarEmp])
 
     const handleClick = (open: boolean, value: string) => {
-        setOpenSidebarEmp({ open: open, type: value })
-    }
+        value === 'account' && fetchData(1, md ? 2 : 9);
+        setOpenSidebarEmp({ open: open, type: value });
+    };
 
     return(
         <Page title="Quản lý tài khoản">

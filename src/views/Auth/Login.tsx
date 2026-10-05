@@ -3,18 +3,15 @@ import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-import { Email, Lock, Notifications, PasswordOutlined, Visibility, VisibilityOff } from '@mui/icons-material';
+import { Email, Lock, Visibility, VisibilityOff } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import {
   Alert,
   Box,
-  Checkbox,
-  FormControlLabel,
   IconButton,
   InputAdornment,
-  Tooltip,
   Typography,
 } from '@mui/material';
 import ControllerTextField from '@/components/ControllerField/ControllerTextField';
@@ -25,14 +22,11 @@ import useBoolean from '@/hooks/useBoolean';
 import useNotification from '@/hooks/useNotification';
 import { loginSchema } from '@/schemas/auth-schema';
 import { signIn } from '@/services/auth-service';
-import { getCurrentUser } from '@/services/user-service';
 import { setIsAuth } from '@/slices/auth';
 import { setProfile } from '@/slices/user';
 import { useAppDispatch } from '@/store';
 import { setAccessToken } from '@/utils/AuthHelper';
-import Logger from '@/utils/Logger';
 import { COLORS } from '@/constants/colors';
-import { ERROR_TYPE } from '@/constants/errorMessage';
 import { ApiError } from '@/types/errors';
 
 export const ID_USER = 'user_id'

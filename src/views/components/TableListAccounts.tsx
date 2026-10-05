@@ -14,11 +14,12 @@ interface TableListAccountsProps{
     onChangePage: (newPage: number) => void,
     page: number,
     rowsPerPage: number,
-    total:  number
+    total:  number,
+    onHandleRessetPassword: (id: string) => void
 }
 
 const TableListAccounts = (props: TableListAccountsProps) => {
-    const { users, onHandle, onChangePage, page, rowsPerPage, total } = props;
+    const { users, onHandle, onChangePage, page, rowsPerPage, total, onHandleRessetPassword } = props;
     const start = total === 0 ? 0 : (page - 1) * rowsPerPage + 1;
     const end = start + users.length - 1;
     return(
@@ -60,18 +61,25 @@ const TableListAccounts = (props: TableListAccountsProps) => {
                                 color={getActiveAccountColor(user.isActived).color}
                             />
                         </Grid>
-                        <Grid sx={{ flex: 1, textAlign: 'center', p: 2, borderBottom: users.length - 1 > index ? '1px solid' : 'none' }}>
-                            <IconButton
-                                tooltip={user.isActived === 1 ? "Vô hiệu hóa" : 'Kích hoạt'}
-                                icon={user.isActived === 1 ? <ToggleOff color="error"/> : <ToggleOn color="success"/>}
-                                handleFunt={() => onHandle(user.id, user.isActived)}
-                            />
-                            <IconButton
-                                tooltip="Reset mật khẩu"
-                                icon={<Password/>}
-                                handleFunt={() => {}}
-                            />
-                        </Grid>
+                        {user.role !== ROLE.ADMIN ? ( 
+                            <Grid sx={{ flex: 1, textAlign: 'center', p: 2, borderBottom: users.length - 1 > index ? '1px solid' : 'none' }}>
+                                <IconButton
+                                    tooltip={user.isActived === 1 ? "Vô hiệu hóa" : 'Kích hoạt'}
+                                    icon={user.isActived === 1 ? <ToggleOff color="error"/> : <ToggleOn color="success"/>}
+                                    handleFunt={() => onHandle(user.id, user.isActived)}
+                                />
+                                <IconButton
+                                    tooltip="Reset mật khẩu"
+                                    icon={<Password/>}
+                                    handleFunt={() => onHandleRessetPassword(user.id)}
+                                />
+                            </Grid>
+                        ) : (
+                            <Grid sx={{ flex: 1, textAlign: 'center', p: 2, borderBottom: users.length - 1 > index ? '1px solid' : 'none' }}>
+                                
+                            </Grid>        
+                        )
+                        }   
                     </Grid>
                 )
             })}
