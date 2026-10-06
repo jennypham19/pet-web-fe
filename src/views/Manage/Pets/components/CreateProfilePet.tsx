@@ -310,6 +310,7 @@ const CreateProfilePet = (props: CreateProfilePetProps) => {
                         mb: 2,
                         bgcolor: 'grey.500',
                         borderRadius: '50%',
+                        border: errorInfoPet.avartar ? '2px solid red' : 'none',
                       }}
                     />
                     <Button

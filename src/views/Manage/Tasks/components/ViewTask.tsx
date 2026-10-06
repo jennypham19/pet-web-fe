@@ -9,6 +9,7 @@ import { Box, Button, Chip, IconButton, Stack, TextField, Typography } from "@mu
 import { Delete } from "@mui/icons-material";
 import Grid from "@mui/material/Grid2";
 import { useEffect, useState } from "react";
+import dayjs from "dayjs";
 import useNotification from "@/hooks/useNotification";
 import { COLORS } from "@/constants/colors";
 
@@ -71,10 +72,8 @@ const ViewTask = (props: ViewTaskProps) => {
         }
     }
 
-    // Lấy ngày hiện tại để hiển thị button xóa ảnh
-    const currentDate = new Date().toISOString().split('T')[0]; // Lấy ngày hiện tại theo định dạng YYYY-MM-DD
-    console.log(currentDate);
-    
+    // Chỉ cho phép xóa ảnh của công việc trong ngày hôm nay
+    const isToday = task?.hour ? dayjs(task.hour).isSame(dayjs(), 'day') : false;
 
     return(
         <DialogComponent
@@ -135,7 +134,7 @@ const ViewTask = (props: ViewTaskProps) => {
                                                 alt={`${img.nameImage}_${index}`}
                                                 sx={{ width: 100, height: 100, borderRadius: 2 }}
                                             />
-                                            {currentDate && (
+                                            {isToday && (
                                                 <IconButton
                                                     size="small"
                                                     onClick={() => handleOpenDeleteImage({ id: img.id, nameImage: img.nameImage })}
